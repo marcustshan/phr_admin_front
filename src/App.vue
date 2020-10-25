@@ -1,0 +1,33 @@
+<template>
+  <v-app id="inspire">
+    <Header v-if="!isLoginView" />
+    <v-main>
+      <router-view />
+    </v-main>
+
+    <Loading />
+  </v-app>
+</template>
+
+<script>
+import Header from './components/common/Header'
+import Loading from './components/common/Loading'
+
+export default {
+  name: 'App',
+  components: {
+    Header,
+    Loading
+  },
+  computed: {
+    isLoginView () {
+      return this.$route.name === 'login'
+    }
+  },
+  data: () => ({
+  }),
+  created () {
+    console.log(this)
+  }
+}
+</script>

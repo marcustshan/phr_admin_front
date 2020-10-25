@@ -1,0 +1,5 @@
+/* 좌측 navigation 상단 영역 */
+.site-logo { height: 64px; display: flex; align-items: center; padding: 0 0.625rem; }
+
+/* login form */
+.login-form { max-width: 500px; }
