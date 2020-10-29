@@ -9,6 +9,7 @@
           <v-card-text>
             <v-form>
               <v-text-field
+                id="id"
                 v-model="user.id"
                 light="light"
                 prepend-icon="person"
@@ -16,6 +17,7 @@
                 type="text"
               ></v-text-field>
               <v-text-field
+                id="password"
                 v-model="user.password"
                 light="light"
                 prepend-icon="lock"
@@ -56,9 +58,31 @@ export default {
   }),
   methods: {
     fnLogin () {
-      this.$axios.post('/login', this.user).then((response) => {
-        console.log(response)
+      this.$axios.post('/login', this.user).then(response => {
+        if (response.data.code === '0') {
+          this.$store.dispatch('setUserInfo', response.data.user)
+          if (this.user.rememberId) {
+            localStorage.setItem('PHR_REMEMBER_ID', this.user.id)
+          }
+
+          this.$axios.get('/menu/list').then(response => {
+            this.$store.dispatch('setMenus', response.data)
+            this.$router.push({ name: 'main' })
+          })
+        } else {
+          this.$dialog.alert(response.data.msg)
+        }
       })
+    }
+  },
+  mounted () {
+    const userId = localStorage.getItem('PHR_REMEMBER_ID')
+    if (userId && userId.length > 0) {
+      this.user.rememberId = true
+      this.user.id = userId
+      document.getElementById('password').focus()
+    } else {
+      document.getElementById('id').focus()
     }
   }
 }

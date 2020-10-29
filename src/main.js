@@ -4,6 +4,9 @@ import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify'
 
+import VuejsDialog from 'vuejs-dialog'
+import 'vuejs-dialog/dist/vuejs-dialog.min.css'
+
 import axios from 'axios'
 
 // 공통 CSS
@@ -17,10 +20,12 @@ router.beforeEach((to, from, next) => {
     return
   }
 
+  /*
   if (to.name.indexOf('login') < 0 && !store.getters.isLogged) {
     next({ path: '/login' })
     return
   }
+  */
 
   next()
 })
@@ -42,7 +47,6 @@ service.interceptors.request.use(
   },
   (error) => {
     store.dispatch('setNowLoading', false)
-    alert(error.message, 'Choose Lunch')
     Promise.reject(error)
   }
 )
@@ -55,11 +59,16 @@ service.interceptors.response.use(
   },
   (error) => {
     store.dispatch('setNowLoading', false)
-    alert(error.message, 'Choose Lunch')
     return Promise.reject(error)
   }
 )
 Vue.prototype.$axios = service
+
+Vue.use(VuejsDialog, {
+  html: true,
+  okText: '확인',
+  cancelText: '취소'
+})
 
 new Vue({
   router,

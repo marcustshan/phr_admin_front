@@ -18,7 +18,7 @@ const routes = [
     component: main,
     name: 'main',
     meta: {
-      title: '메인',
+      title: '메인화면',
       breadcrumb: 'Main'
     }
   },

@@ -1,4 +1,14 @@
+const webpack = require('webpack')
+
 module.exports = {
+  configureWebpack: {
+    plugins: [
+      new webpack.ProvidePlugin({
+        _: 'lodash',
+        moment: 'moment'
+      })
+    ]
+  },
   transpileDependencies: [
     'vuetify'
   ],

@@ -27,7 +27,6 @@ export default {
   data: () => ({
   }),
   created () {
-    console.log(this)
   }
 }
 </script>
