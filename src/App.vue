@@ -1,5 +1,5 @@
 <template>
-  <v-app id="inspire">
+  <v-app class="app-container">
     <Header v-if="!isLoginView" />
     <v-main>
       <router-view />

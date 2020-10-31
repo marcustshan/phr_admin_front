@@ -42,11 +42,11 @@ const service = axios.create({
 // 요청(request) 인터셉터
 service.interceptors.request.use(
   (config) => {
-    store.dispatch('setNowLoading', true)
+    store.dispatch('setShowProgress', true)
     return config
   },
   (error) => {
-    store.dispatch('setNowLoading', false)
+    store.dispatch('setShowProgress', false)
     Promise.reject(error)
   }
 )
@@ -54,11 +54,11 @@ service.interceptors.request.use(
 // 응답(response) 인터셉터
 service.interceptors.response.use(
   (response) => {
-    store.dispatch('setNowLoading', false)
+    store.dispatch('setShowProgress', false)
     return Promise.resolve(response)
   },
   (error) => {
-    store.dispatch('setNowLoading', false)
+    store.dispatch('setShowProgress', false)
     return Promise.reject(error)
   }
 )

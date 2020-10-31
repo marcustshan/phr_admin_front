@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="whole_dim" @click="fnDimClick" v-show="nowLoading || showLayerPopup"></div>
-    <div class="loading_container" v-show="nowLoading">
+    <div class="whole_dim" @click="fnDimClick" v-show="showProgress || showLayerPopup"></div>
+    <div class="loading_container" v-show="showProgress">
       <div class="loader"></div>
     </div>
   </div>
@@ -11,8 +11,8 @@
 export default {
   name: 'CommonLoading',
   computed: {
-    nowLoading () {
-      return this.$store.state.common.nowLoading
+    showProgress () {
+      return this.$store.state.common.showProgress
     },
     showLayerPopup () {
       return this.$store.state.common.showLayerPopup

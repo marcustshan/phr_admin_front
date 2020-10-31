@@ -1,12 +1,12 @@
 <template>
   <div>
-    공지사항 목록
+    공지사항 쓰기
   </div>
 </template>
 
 <script>
 export default {
-  name: 'NoticeList',
+  name: 'NoticeWrite',
   data: () => ({
   }),
   create () {

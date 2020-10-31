@@ -1,7 +1,7 @@
 <template>
-  <v-container>
-    메인 화면이여
-  </v-container>
+  <div>
+    메인 화면 입니다.
+  </div>
 </template>
 
 <script>

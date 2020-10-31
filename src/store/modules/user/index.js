@@ -4,7 +4,7 @@
 
 // user.js
 const state = {
-  userInfo: {},
+  userInfo: { id: 'tshan', password: '1234', name: '한태식' },
   isLogged: false
 }
 
@@ -27,6 +27,7 @@ const mutations = {
 }
 
 export default {
+  namespaced: true,
   state,
   getters,
   actions,
