@@ -7,6 +7,7 @@
         label="제목"
         required
         :readonly="isModify"
+        autofocus
       ></v-text-field>
 
       <v-textarea

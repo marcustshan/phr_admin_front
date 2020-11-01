@@ -77,8 +77,8 @@
         </v-chip>
       </template>
       <template v-slot:[`item.deleteNotice`]="{ item }">
-        <v-btn color="red" dark @click="deleteNotice(item.noticeSeq)">
-          <v-icon dark left>block</v-icon>
+        <v-btn color="red" outlined dark @click="deleteNotice(item.noticeSeq)">
+          <v-icon left>delete_outline</v-icon>
           삭제
         </v-btn>
       </template>
