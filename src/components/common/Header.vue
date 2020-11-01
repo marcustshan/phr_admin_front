@@ -54,49 +54,53 @@
 
       <v-divider />
 
-      <v-list dense>
-        <template v-for="(parentMenu, parentMenuIndex) in showMenus">
-          <div :key="parentMenuIndex">
-            <div
-              class="subtitle-2 font-weight-black px-4 py-2"
-              :class="parentMenuIndex !== 0 ? 'border-top' : ''"
-            >
-              <v-icon v-if="parentMenu.iconFont" left color="#5c4037">
-                {{ parentMenu.iconFont }}
-              </v-icon>
-              {{ parentMenu.name }}
-            </div>
-            <template v-for="(menu, menuIndex) in parentMenu.children">
-              <v-list-group
-                :value="isCurrentMenu(menu)"
-                class="not-submenu mb-1"
-                :key="menuIndex"
-                append-icon=""
-                no-action
-                :ripple="false"
+      <div class="menu-container">
+        <v-list dense>
+          <template v-for="(parentMenu, parentMenuIndex) in showMenus">
+            <div :key="parentMenuIndex">
+              <div
+                class="subtitle-2 font-weight-black px-4 py-2"
+                :class="parentMenuIndex !== 0 ? 'border-top' : ''"
               >
-                <v-list-item
-                  slot="activator"
-                  :to="menu.path"
+                <v-icon v-if="parentMenu.iconFont" left color="#5c4037">
+                  {{ parentMenu.iconFont }}
+                </v-icon>
+                {{ parentMenu.name }}
+              </div>
+              <template v-for="(menu, menuIndex) in parentMenu.children">
+                <v-list-group
+                  :value="isCurrentMenu(menu)"
+                  class="not-submenu mb-1"
+                  :key="menuIndex"
+                  append-icon=""
+                  no-action
                   :ripple="false"
-                  @click.native.stop
                 >
-                  <v-list-item-content>
-                    <v-list-item-title>
-                      <span>{{ menu.name }}</span>
-                    </v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-list-group>
-            </template>
-          </div>
-        </template>
-      </v-list>
+                  <v-list-item
+                    slot="activator"
+                    :to="menu.path"
+                    :ripple="false"
+                    @click.native.stop
+                  >
+                    <v-list-item-content>
+                      <v-list-item-title>
+                        <span>{{ menu.name }}</span>
+                      </v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list-group>
+              </template>
+            </div>
+          </template>
+        </v-list>
+      </div>
     </v-navigation-drawer>
 
     <v-app-bar app>
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-      <v-toolbar-title>{{ currentMenuName }}</v-toolbar-title>
+      <v-toolbar-title class="mr-10">공공 PHR 관리자</v-toolbar-title>
+      <v-divider vertical class="mx-10"></v-divider>
+      <v-toolbar-title class="ml-10">{{ currentMenuName }}</v-toolbar-title>
       <v-row no-gutters>
         <v-col cols="12" class="text-right">
           <v-btn icon @click="logout" title="로그아웃" color="blue-grey">
@@ -110,6 +114,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+
 export default {
   name: 'CommonHeader',
   data: () => ({

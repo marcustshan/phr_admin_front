@@ -2,10 +2,11 @@
   <v-app class="app-container">
     <Header v-if="!isLoginView" />
     <v-main>
-      <router-view />
+      <transition name="router-anim" :enter-active-class="`animated slideInUp`">
+        <router-view></router-view>
+      </transition>
+      <Loading />
     </v-main>
-
-    <Loading />
   </v-app>
 </template>
 

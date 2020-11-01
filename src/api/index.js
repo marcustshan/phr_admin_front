@@ -19,12 +19,14 @@ let errorCount = 0
 service.interceptors.request.use(
   (config) => {
     // Progress 를 돌려야되는 경우  true (default)
+    store.dispatch('common/setShowProgress', true)
     service.defaults.headers.Progress = true
 
     return config
   },
   (error) => {
     // Do something with request error
+    store.dispatch('common/setShowProgress', false)
     Promise.reject(error)
   }
 )
@@ -40,6 +42,7 @@ service.interceptors.response.use(
         pageSize: parseInt(response.headers['X-Data-Per-Page'.toLowerCase()] || '10', 10)
       }
     }
+    store.dispatch('common/setShowProgress', false)
     return Promise.resolve(response)
   },
   (error) => {
@@ -75,6 +78,8 @@ service.interceptors.response.use(
         errorCount = 0
       }).catch(() => {})
     }
+
+    store.dispatch('common/setShowProgress', false)
 
     return Promise.reject(error)
   }

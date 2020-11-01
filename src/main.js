@@ -7,6 +7,9 @@ import vuetify from './plugins/vuetify'
 import VuejsDialog from 'vuejs-dialog'
 import 'vuejs-dialog/dist/vuejs-dialog.min.css'
 
+// global components
+import GlobalComponents from './globalComponents'
+
 import axios from 'axios'
 
 // 공통 CSS
@@ -42,11 +45,11 @@ const service = axios.create({
 // 요청(request) 인터셉터
 service.interceptors.request.use(
   (config) => {
-    store.dispatch('setShowProgress', true)
+    store.dispatch('common/setShowProgress', true)
     return config
   },
   (error) => {
-    store.dispatch('setShowProgress', false)
+    store.dispatch('common/setShowProgress', false)
     Promise.reject(error)
   }
 )
@@ -54,11 +57,11 @@ service.interceptors.request.use(
 // 응답(response) 인터셉터
 service.interceptors.response.use(
   (response) => {
-    store.dispatch('setShowProgress', false)
+    store.dispatch('common/setShowProgress', false)
     return Promise.resolve(response)
   },
   (error) => {
-    store.dispatch('setShowProgress', false)
+    store.dispatch('common/setShowProgress', false)
     return Promise.reject(error)
   }
 )
@@ -69,6 +72,8 @@ Vue.use(VuejsDialog, {
   okText: '확인',
   cancelText: '취소'
 })
+
+Vue.use(GlobalComponents)
 
 new Vue({
   router,

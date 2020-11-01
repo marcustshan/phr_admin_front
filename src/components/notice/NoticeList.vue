@@ -43,7 +43,7 @@
             검색
           </v-btn>
           <v-btn class="ml-3" outlined rounded color="teal darken-1" @click="writeNotice">
-            <v-icon left>edit</v-icon>
+            <v-icon left>pencil-outlined</v-icon>
             등록
           </v-btn>
         </v-col>
@@ -67,20 +67,6 @@
       </template>
       <template v-slot:[`item.createdDate`]="{ item }">
         {{ getDateFormat(item.createdDate) }}
-      </template>
-      <template v-slot:[`item.hitCount`]="{ item }">
-        <v-chip
-          class="ma-2"
-          color="gray"
-        >
-          {{ item.hitCount }}
-        </v-chip>
-      </template>
-      <template v-slot:[`item.deleteNotice`]="{ item }">
-        <v-btn color="red" dark @click="deleteNotice(item.noticeSeq)">
-          <v-icon dark left>block</v-icon>
-          삭제
-        </v-btn>
       </template>
     </v-data-table>
 
@@ -115,12 +101,11 @@ export default {
   },
   data: () => ({
     headers: [
-      { text: '번호', value: 'noticeSeq', align: 'center' },
+      { text: '순번', value: 'noticeSeq', align: 'center' },
       { text: '제목', value: 'title', align: 'center' },
       { text: '작성자', value: 'writerName', align: 'center' },
       { text: '작성일', value: 'createdDate', align: 'center' },
-      { text: '조회수', value: 'hitCount', align: 'center' },
-      { text: '삭제', value: 'deleteNotice', align: 'center' }
+      { text: '조회수', value: 'hitCount', align: 'center' }
     ],
     noticeList: [],
     searchParam: {
@@ -136,16 +121,8 @@ export default {
     this.getNoticeList()
   },
   methods: {
-    deleteNotice (noticeSeq) {
-      this.$dialog.confirm('삭제 하시겠습니까?').then(() => {
-        noticeService.deleteNotice(noticeSeq).then(() => {
-          this.$dialog.alert('삭제 되었습니다.')
-          this.getNoticeList()
-        })
-      })
-    },
     writeNotice () {
-      this.$router.push({ path: '/notice/write' })
+      this.$router.push('/notice/write')
     },
     pageChange (pageNum) {
       if (this.searchParam.page !== pageNum) {
@@ -156,10 +133,11 @@ export default {
     clearSearchParam () {
       this.searchParam.searchTitle = ''
       this.searchParam.searchWriter = ''
-      this.searchParam.searchDate = null
+      this.searchParam.searchDate = ''
     },
     getNoticeList () {
       noticeService.getNoticeList(this.searchParam).then(response => {
+        console.log(response)
         this.noticeList = response.data
         this.searchParam.total = response.pagination.total
       })

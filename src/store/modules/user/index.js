@@ -4,7 +4,7 @@
 
 // user.js
 const state = {
-  userInfo: { id: 'tshan', password: '1234', name: '한태식' },
+  userInfo: { id: 'tshan', name: '한태식' },
   isLogged: false
 }
 

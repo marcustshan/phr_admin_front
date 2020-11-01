@@ -1,13 +1,14 @@
 <template>
   <div class="content-container">
-    메인 화면 입니다.
+    메뉴 {{ $route.params.menuName }}
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Main',
-  components: {
+  name: 'Menu',
+  created () {
+    console.log(this.$route)
   }
 }
 </script>

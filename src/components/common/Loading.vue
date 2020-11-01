@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="whole_dim" @click="fnDimClick" v-show="showProgress || showLayerPopup"></div>
+    <div class="whole_dim" v-show="showProgress || showLayerPopup"></div>
     <div class="loading_container" v-show="showProgress">
       <div class="loader"></div>
     </div>
@@ -19,9 +19,6 @@ export default {
     }
   },
   methods: {
-    fnDimClick () {
-      this.EventBus.emit('DIM_CLICK', {})
-    }
   }
 }
 </script>

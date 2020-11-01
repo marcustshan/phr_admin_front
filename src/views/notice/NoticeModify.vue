@@ -1,13 +1,17 @@
 <template>
   <div class="content-container">
-    메인 화면 입니다.
+    공지사항 수정
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Main',
-  components: {
+  name: 'NoticeModify',
+  data: () => ({
+  }),
+  create () {
+  },
+  methods: {
   }
 }
 </script>

@@ -8,6 +8,8 @@ const Login = () => import('Views/Login')
 // 메인 화면
 const Main = () => import('Views/Main')
 
+const Menu = () => import('Views/Menu')
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -32,6 +34,15 @@ const routes = [
     meta: {
       title: '로그인',
       breadcrumb: 'Login'
+    }
+  },
+  {
+    path: '/menu/:menuName',
+    component: Menu,
+    name: 'menu',
+    meta: {
+      title: '메뉴',
+      breadcrumb: 'Menu'
     }
   }
 ]

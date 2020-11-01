@@ -1,8 +1,11 @@
+// 공지사항 View
+const NoticeView = () => import('Views/notice/NoticeView')
+
 // 공지사항 목록
 const NoticeList = () => import('Views/notice/NoticeList')
 
-// 공지사항 상세 or 수정
-const NoticeDetail = () => import('Views/notice/NoticeDetail')
+// 공지사항 수정
+// const NoticeModify = () => import('Views/notice/NoticeModify')
 
 // 공지사항 등록
 const NoticeWrite = () => import('Views/notice/NoticeWrite')
@@ -11,7 +14,7 @@ export default {
   path: '/notice',
   name: 'notice',
   redirect: '/notice/list',
-  component: NoticeList,
+  component: NoticeView,
   meta: {
     title: '공지사항',
     breadcrumb: '공지사항'
@@ -28,13 +31,13 @@ export default {
       }
     },
     {
-      path: 'detail/:seq',
-      component: NoticeDetail,
-      name: 'noticeDetail',
+      path: 'modify/:noticeSeq',
+      component: NoticeWrite,
+      name: 'noticeModify',
       meta: {
         requiresAuth: false,
         auth: true,
-        title: '공지사항 상세'
+        title: '공지사항 수정'
       }
     },
     {

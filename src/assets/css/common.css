@@ -10,5 +10,18 @@
   box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
 }
 
+/* 좌측 Menu Container */
+.menu-container {max-height: calc(100% - 65px - 56px); overflow-y: auto;}
+
+/* Content Container */
+.content-container {min-height: 100%; background-color: #F4F7FA; padding: 20px 40px;}
+
+/* Table Header */
+.v-data-table-header th {background-color: #fafafa !important; color: #464D69 !important; font-weight: 600 !important; border-right: 1px solid #ccc;}
+
+/* Table Body */
+.v-data-table__wrapper table td {border-right: 1px solid #ccc;}
+.v-data-table__wrapper table td a {text-decoration: none; color: #111;}
+
 /* login form */
 .login-form { max-width: 500px; }
