@@ -58,14 +58,17 @@ export default {
   }),
   methods: {
     fnLogin () {
-      this.$axios.post('/login', this.user).then(response => {
+      console.log(this.$axios)
+      this.$axios.post('/api/login', this.user).then(response => {
         if (response.data.code === '0') {
-          this.$store.dispatch('setUserInfo', response.data.user)
+          this.$store.dispatch('user/setUserInfo', response.data.user)
           if (this.user.rememberId) {
             localStorage.setItem('PHR_REMEMBER_ID', this.user.id)
+          } else {
+            localStorage.removeItem('PHR_REMEMBER_ID')
           }
 
-          this.$axios.get('/menu/list').then(response => {
+          this.$axios.get('/api/menu/list').then(response => {
             this.$store.dispatch('setMenus', response.data)
             this.$router.push({ name: 'main' })
           })
