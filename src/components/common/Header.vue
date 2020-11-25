@@ -158,8 +158,10 @@ export default {
   created () {},
   methods: {
     logout () {
-      this.$store.dispatch('setUserInfo', {})
-      this.$router.push({ name: 'login' })
+      this.$dialog.confirm('로그아웃 하시겠습니까?').then(() => {
+        this.$store.dispatch('setUserInfo', {})
+        this.$router.push({ name: 'login' })
+      })
     },
     isCurrentMenu (menu) {
       const fullPath = this.$route.fullPath
