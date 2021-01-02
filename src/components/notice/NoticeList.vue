@@ -82,7 +82,7 @@
 </template>
 
 <script>
-import noticeService from 'Api/modules/notice.service'
+import noticeService from 'Api/notice/notice.service'
 import dayjs from 'dayjs'
 import DatePicker from 'Components/date/DatePicker'
 

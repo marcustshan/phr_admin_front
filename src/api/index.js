@@ -1,13 +1,14 @@
 import Vue from 'vue'
 import axios from 'axios'
 import store from '@/store'
+import xjs from 'xml-js'
 
-const service = axios.create({
-  baseURL: '', // api의 base_url
+const api = axios.create({
+  baseURL: '/api/admin', // api의 base_url
   headers: {
     Accept: 'application/json',
-    'Content-Type': 'application/json;charset=utf-8',
-    Progress: true // default 는 true 로 돌게 한다.
+    'Content-Type': 'text/xml; charset=utf-8',
+    SoapAction: 'http://tempuri.org/IMGPHRService/ServiceReturnCustomType'
   },
   timeout: process.env.NODE_ENV === 'production' ? 60000 : 120000 // 요청 제한 시간 (운영: 1분 | 개발: 2분)
 })
@@ -16,33 +17,32 @@ const service = axios.create({
 let errorCount = 0
 
 // 요청(request) 인터셉터
-service.interceptors.request.use(
+api.interceptors.request.use(
   (config) => {
-    // Progress 를 돌려야되는 경우  true (default)
-    store.dispatch('common/setShowProgress', true)
-    service.defaults.headers.Progress = true
-
+    store.dispatch('common/setShowLoading', true)
     return config
   },
   (error) => {
     // Do something with request error
-    store.dispatch('common/setShowProgress', false)
+    store.dispatch('common/setShowLoading', false)
     Promise.reject(error)
   }
 )
 
 // 응답(response) 인터셉터
-service.interceptors.response.use(
+api.interceptors.response.use(
   (response) => {
-    // 페이징 객체 설정
-    if (response.headers) {
-      response.pagination = {
-        page: parseInt(response.headers['X-Current-Page'.toLowerCase()] || '1', 10),
-        total: parseInt(response.headers['X-Total-Count'.toLowerCase()] || '0', 10),
-        pageSize: parseInt(response.headers['X-Data-Per-Page'.toLowerCase()] || '10', 10)
+    store.dispatch('common/setShowLoading', false)
+    response.data = JSON.parse(soapUtil.parseResponse(response.data))
+    if (response.data) {
+      if (response.data.RESULT && response.data.RESULT.length > 0) {
+        if (response.data.RESULT[0]['NO-DATA'] && response.data.RESULT[0]['NO-DATA'].length > 0) {
+          response.data = undefined
+        } else {
+          response.data = response.data.RESULT
+        }
       }
     }
-    store.dispatch('common/setShowProgress', false)
     return Promise.resolve(response)
   },
   (error) => {
@@ -79,10 +79,86 @@ service.interceptors.response.use(
       }).catch(() => {})
     }
 
-    store.dispatch('common/setShowProgress', false)
+    store.dispatch('common/setShowLoading', false)
 
     return Promise.reject(error)
   }
 )
 
-export default service
+const soapUtil = {
+  STYPE: {
+    GETQUERY: 'GETQUERY',
+    SETQUERY: 'SETQUERY',
+    RESTFUL: 'RESTFUL_PHR_GW'
+  },
+  ServiceUserID: 'PPHR',
+  syncQuery: async (sType, qType, sEncYn, sQid, params) => {
+    const envelope = soapUtil.createQueryEnvelope(sType, qType, sEncYn, sQid, soapUtil.ServiceUserID, params)
+    // axios의 baseURL에 설정되어 있기 때문에 빈 URL로 통신함
+    const response = await api.post('', envelope)
+    return response
+  },
+  query: (sType, qType, sEncYn, sQid, params) => {
+    const envelope = soapUtil.createQueryEnvelope(sType, qType, sEncYn, sQid, soapUtil.ServiceUserID, params)
+    // axios의 baseURL에 설정되어 있기 때문에 빈 URL로 통신함
+    return api.post('', envelope)
+  },
+  createQueryEnvelope: (sType, qType, sEncYn, sQid, sUserID, params) => {
+    let sParams = ''
+    if (Array.isArray(params)) {
+      const paramsLength = params.length
+      for (let i = 0; i < paramsLength; i++) {
+        for (const key in params[i]) {
+          sParams += `"${key}":"${params[i][key]}",`
+        }
+      }
+    } else {
+      for (const key in params) {
+        sParams += `"${key}":"${params[key]}",`
+      }
+    }
+    sParams = sParams.substring(0, sParams.length - 1)
+
+    return `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/">
+              <soapenv:Header/>
+              <soapenv:Body>
+                <tem:ServiceReturnCustomType>
+                <tem:sType>${sType}</tem:sType>
+                <tem:sInputType>JSON</tem:sInputType>
+                <tem:sOutputType>JSON</tem:sOutputType>
+                <tem:sEncYn>${sEncYn}</tem:sEncYn>
+                <tem:sParam>
+                <![CDATA[
+                  {
+                    "Table":[
+                      {
+                        "QID":"${sQid}",
+                        "QTYPE":"${qType}",
+                        "USERID":"${sUserID}",
+                        "EXECTYPE":"FILL",
+                        "TABLENAME":"RESULT",
+                        ${sParams}
+                      }
+                    ]
+                  }
+                ]]>
+                </tem:sParam>
+                <tem:sToken><![CDATA[]]></tem:sToken>
+                <tem:sVerifyYn><![CDATA[N]]></tem:sVerifyYn>
+                </tem:ServiceReturnCustomType>
+              </soapenv:Body>
+            </soapenv:Envelope>
+            `
+  },
+  parseResponse: (data) => {
+    if (data != null) {
+      const jsBody = xjs.xml2js(data, { compact: true, spaces: 4 })
+      const jsonBody = jsBody['s:Envelope']['s:Body'].ServiceReturnCustomTypeResponse.ServiceReturnCustomTypeResult._text
+      return jsonBody
+    } else {
+      return null
+    }
+  }
+}
+
+export { api, soapUtil }

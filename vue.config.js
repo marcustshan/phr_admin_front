@@ -24,10 +24,10 @@ module.exports = {
   ],
   devServer: {
     proxy: {
-      '/api/': {
-        target: 'http://localhost:8090'
+      '/api/admin': {
+        target: 'http://175.106.94.17:8080/MGPHR_Service/MGPHR_Service.svc?wsdl'
       }
     },
-    port: 8080
+    port: 8090
   }
 }

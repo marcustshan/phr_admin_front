@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import noticeService from 'Api/modules/notice.service'
+import noticeService from 'Api/notice/notice.service'
 
 export default {
   name: 'NoticeWrite',

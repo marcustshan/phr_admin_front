@@ -6,48 +6,38 @@
 const state = {
   menus: [
     {
-      name: '메인화면',
+      name: '대시보드',
       path: '/main',
-      showMenu: false
+      showMenu: true
     },
     {
-      name: '게시판 관리',
+      name: '사용자 관리',
+      path: '/users',
+      showMenu: true
+    },
+    {
+      name: '공지사항',
       path: '/notice',
-      children: [
-        { name: '공지사항', path: '/notice', showMenu: true }
-      ],
       showMenu: true
     },
     {
-      name: '메뉴1',
-      path: '/',
-      children: [
-        { name: '메뉴1 - 1', path: '/menu/11', showMenu: true },
-        { name: '메뉴1 - 2', path: '/menu/12', showMenu: true },
-        { name: '메뉴1 - 3', path: '/menu/13', showMenu: true },
-        { name: '메뉴1 - 4', path: '/menu/14', showMenu: true },
-        { name: '메뉴1 - 5', path: '/menu/15', showMenu: true },
-        { name: '메뉴1 - 6', path: '/menu/16', showMenu: true },
-        { name: '메뉴1 - 7', path: '/menu/17', showMenu: true },
-        { name: '메뉴1 - 8', path: '/menu/18', showMenu: true },
-        { name: '메뉴1 - 9', path: '/menu/19', showMenu: true }
-      ],
+      name: '자주 묻는 질문',
+      path: '/faq',
       showMenu: true
     },
     {
-      name: '메뉴2',
-      path: '/',
-      children: [
-        { name: '메뉴2 - 1', path: '/menu/21', showMenu: true },
-        { name: '메뉴2 - 2', path: '/menu/22', showMenu: true },
-        { name: '메뉴2 - 3', path: '/menu/23', showMenu: true },
-        { name: '메뉴2 - 4', path: '/menu/24', showMenu: true },
-        { name: '메뉴2 - 5', path: '/menu/25', showMenu: true },
-        { name: '메뉴2 - 6', path: '/menu/26', showMenu: true },
-        { name: '메뉴2 - 7', path: '/menu/27', showMenu: true },
-        { name: '메뉴2 - 8', path: '/menu/28', showMenu: true },
-        { name: '메뉴2 - 9', path: '/menu/29', showMenu: true }
-      ],
+      name: '버전 관리',
+      path: '/version',
+      showMenu: true
+    },
+    {
+      name: '마이 페이지',
+      path: '/mypage',
+      showMenu: true
+    },
+    {
+      name: '관리자 계정 관리',
+      path: '/manager',
       showMenu: true
     }
   ]

@@ -2,10 +2,15 @@
   <v-container fill-height>
     <v-layout align-center justify-center>
       <v-flex class="login-form text-xs-center">
-        <div class="display-1 mb-3 text-center">
-          <v-icon class="mr-2" large="large">work</v-icon> PHR Admin
+        <div class="display-1 mb-3 text-center subtitle-1 font-weight-bold">
+          <img class="phr_icon" src="@/assets/img/phr_icon.png" />
+          <br>
+          나의건강기록
         </div>
         <v-card light="light">
+          <v-card-title class="login_form_title justify-center white--text">
+            관리자 시스템
+          </v-card-title>
           <v-card-text>
             <v-form>
               <v-text-field
@@ -27,11 +32,11 @@
               <v-checkbox
                 v-model="user.rememberId"
                 light="light"
-                label="아이디 기억"
+                label="아이디 저장"
                 hide-details="hide-details"
               ></v-checkbox>
               <v-btn
-                class="mt-5"
+                class="mt-5 login_button white--text"
                 @click.prevent="fnLogin"
                 block="block"
                 type="submit"
@@ -54,12 +59,13 @@ export default {
       id: '',
       password: '',
       rememberId: false
-    }
+    },
+    loginSucceed: false
   }),
   methods: {
     fnLogin () {
-      console.log(this.$axios)
-      this.$axios.post('/api/login', this.user).then(response => {
+      /*
+      this.$axios.post('/login', this.user).then(response => {
         if (response.data.code === '0') {
           this.$store.dispatch('user/setUserInfo', response.data.user)
           if (this.user.rememberId) {
@@ -67,15 +73,12 @@ export default {
           } else {
             localStorage.removeItem('PHR_REMEMBER_ID')
           }
-
-          this.$axios.get('/api/menu/list').then(response => {
-            this.$store.dispatch('setMenus', response.data)
-            this.$router.push({ name: 'main' })
-          })
         } else {
           this.$dialog.alert(response.data.msg)
         }
       })
+      */
+      this.loginSucceed = true
     }
   },
   mounted () {
@@ -90,3 +93,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+ img.phr_icon { width: 80px; height: 80px; }
+ .login_form_title { background-color: #43425D; }
+ .login_button { width: 50% !important; background-color: #43425D !important; }
+</style>
