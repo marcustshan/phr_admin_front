@@ -16,7 +16,7 @@ const routes = [
   NoticeRoutes,
   {
     path: '/',
-    redirect: '/main'
+    redirect: '/login'
   },
   {
     path: '/main',

@@ -1,50 +1,51 @@
 <template>
   <v-container fill-height>
     <v-layout align-center justify-center>
-      <v-flex class="login-form text-xs-center">
-        <div class="display-1 mb-3 text-center subtitle-1 font-weight-bold">
-          <img class="phr_icon" src="@/assets/img/phr_icon.png" />
+      <v-flex class="login_form_container text-xs-center">
+        <div class="display-1 mb-3 text-center icon_container">
+          <img class="phr_icon" src="@/assets/img/logo_phr_big.png" alt="PHR" />
           <br>
           나의건강기록
         </div>
-        <v-card light="light">
-          <v-card-title class="login_form_title justify-center white--text">
-            관리자 시스템
-          </v-card-title>
-          <v-card-text>
-            <v-form>
-              <v-text-field
-                id="id"
-                v-model="user.id"
-                light="light"
-                prepend-icon="person"
-                label="아이디"
-                type="text"
-              ></v-text-field>
-              <v-text-field
-                id="password"
-                v-model="user.password"
-                light="light"
-                prepend-icon="lock"
-                label="비밀번호"
-                type="password"
-              ></v-text-field>
-              <v-checkbox
-                v-model="user.rememberId"
-                light="light"
-                label="아이디 저장"
-                hide-details="hide-details"
-              ></v-checkbox>
-              <v-btn
-                class="mt-5 login_button white--text"
-                @click.prevent="fnLogin"
-                block="block"
-                type="submit"
-                >로그인</v-btn
-              >
-            </v-form>
-          </v-card-text>
-        </v-card>
+        <v-card-title class="login_form_title justify-center white--text mt-10">
+          관리자 시스템
+        </v-card-title>
+        <v-form class="pa-10 login_form" ref="form">
+          <v-text-field
+            id="id"
+            :rules="idRules"
+            v-model="user.id"
+            light="light"
+            prepend-icon="person"
+            label="아이디"
+            type="text"
+          ></v-text-field>
+          <v-text-field
+            id="password"
+            class="mt-2"
+            :rules="passwordRules"
+            v-model="user.password"
+            light="light"
+            prepend-icon="lock"
+            label="비밀번호"
+            type="password"
+          ></v-text-field>
+          <!--
+          <v-checkbox
+            v-model="user.rememberId"
+            light="light"
+            label="아이디 저장"
+            hide-details="hide-details"
+          ></v-checkbox>
+          -->
+          <v-btn
+            class="mt-8 py-6 login_button white--text"
+            @click.prevent="fnLogin"
+            depressed
+            type="submit"
+            >로그인
+          </v-btn>
+        </v-form>
       </v-flex>
     </v-layout>
   </v-container>
@@ -60,10 +61,19 @@ export default {
       password: '',
       rememberId: false
     },
-    loginSucceed: false
+    loginSucceed: false,
+    idRules: [
+      v => !!v || '아이디를 입력해주세요.'
+    ],
+    passwordRules: [
+      v => !!v || '비밀번호를 입력해주세요.'
+    ]
   }),
   methods: {
     fnLogin () {
+      if (!this.$refs.form.validate()) {
+        return
+      }
       /*
       this.$axios.post('/login', this.user).then(response => {
         if (response.data.code === '0') {
@@ -79,6 +89,7 @@ export default {
       })
       */
       this.loginSucceed = true
+      this.$router.push('/main')
     }
   },
   mounted () {
@@ -95,7 +106,9 @@ export default {
 </script>
 
 <style scoped>
- img.phr_icon { width: 80px; height: 80px; }
- .login_form_title { background-color: #43425D; }
- .login_button { width: 50% !important; background-color: #43425D !important; }
+  .icon_container { font-size: 25px !important; color: #000; }
+  .login_form_container { max-width: 640px; }
+  .login_form { background-color: #fff; text-align: center; }
+  .login_form_title { background-color: #43425D; }
+  .login_button { width: 50% !important; background-color: #43425D !important; }
 </style>

@@ -1,0 +1,146 @@
+@charset "utf-8";
+
+/* base */
+* {padding:0; margin:0; box-sizing: border-box; font-family:'NanumSquare', 맑은고딕, Malgun Gothic, dotum, gulim, sans-serif; outline:none;}
+
+main {display:block;}
+
+img {vertical-align:top; border:none;}
+table {width:100%; border-collapse: collapse;}
+caption, .haze {position:absolute; left:0; top:0; width:1px; height:1px;  clip:rect(1px, 1px, 1px, 1px); overflow:hidden}
+dl,ul,ol,menu,li{list-style:none;}
+button {background:none; border:none; cursor: pointer; outline:0;}
+fieldset {border:none;}
+em {font-style:normal}
+a {text-decoration:none;}
+input[type="password"] {font-family:맑은고딕, Malgun Gothic, dotum, gulim, sans-serif; }
+
+/*layout*/
+html, body {height:100%; overflow:hidden;}
+#wrap {display:flex; flex-direction: column; height: 100%;}
+
+header {display:flex; justify-content: space-between; align-items: center; width:100%; height:70px; min-width:1300px; line-height:70px; padding:0 20px 0 25px; color:#Fff; background:#000;}
+header .logo {font-size:20px; line-height:40px;}
+header .logo img {margin-right:10px; vertical-align:middle;}
+header .logo em {margin-right:15px; font-size:22px; font-weight:800;}
+header > p span {display:inline-block; padding:0 18px; margin-right:10px; font-size:16px; line-height:24px; vertical-align:middle; border-right:1px solid #fff;}
+header > p a {display:inline-block; padding:0 20px 0 35px; font-size:14px; height:30px; line-height:30px; color:#fff; background:url(../img/ico_logout.png) no-repeat 10px center;}
+
+#content {display: flex;  flex: 1; height:calc(100% - 70px); border:1px solid black;}
+#content .nav { display: flex;  flex: none;  width: 260px; min-height:700px; overflow: hidden; overflow-y:auto; background-color: #43425d;}
+#content nav a {position:relative; display:block; width:260px; padding:20px 25px; font-size:18px; line-height:24px; font-weight:600; color:#fff; word-break: break-all;}
+#content nav a.on {background:#3c3b54;}
+#content nav a.on:before {position:absolute; top:0; left:0; display:block; width:6px; height:100%; background:#a3a0fb; content:'';}
+.main {overflow: auto; width:calc(100% - 260px); height:100%; background:#f0f0f7;}
+.main > .inner { min-height:577px; min-width:1100px; max-width:1660px;  padding:0 75px 65px 75px; }
+.main > .inner h1 {padding:35px 0; font-size:26px;; font-weight:800; color:#3c3b54}
+.main > .inner > .content {width:100%; padding:25px 20px; background:#fff; }
+
+
+/*layer-popup*/
+.layer-popup {display: none; align-items: center;  justify-content: center;  position: fixed; left: 0; top: 0;  width: 100%; height: 100%; z-index: 100; background:rgba(0, 0, 0, 0.5)}
+.layer-inner {position: relative; background: #fff; border-radius:6px; outline:0;}
+.layer-inner h1 {height:58px; padding:15px 20px; font-size:20px; line-height:28px;}
+.layer-con {min-width:530px; padding:30px 20px 20px;background:url(../img/bg_popup.png) repeat-x left top;}
+.layer-popup .close {position:absolute; top:14px; right:14px; width:30px; height:30px; text-indent:-9999px; background:url(../img/ico_x.gif) no-repeat center center;}
+
+.layer-con .txt {min-height:50px;  line-height:30px; }
+.layer-con .btns {padding:20px 0 0 0; text-align:right; font-size:0;}
+.layer-con .btns button {min-width:120px; padding:0 15px; line-height:40px; margin-left:20px; font-size:16px; font-weight:600; color:#0065fe; border:1px solid #cdcdd1; border-radius:5px; }
+.layer-con .btns button.em {color:#fff; background:#2684fe; border-color:#0065fe; }
+.layer-con .board_write + .btns {text-align:center}
+
+/*borard*/
+.board_list {width:100%;}
+
+.board_func {display:flex; justify-content: space-between; height:60px; padding-bottom:20px;}
+.board_func > div {display:flex;}
+.board_func > div > * {margin-left:20px;}
+.board_func .total {font-size:20px; line-height:40px; font-weight:600; color:#3c3b54;}
+.board_func .search input {width:356px; height:40px; padding:9px 10px; line-height:30px;border:1px solid #a3a6b4; border-top-left-radius: 5px;  border-bottom-left-radius: 5px;}
+.board_func .search button {width:45px; height:40px; vertical-align:top; margin-left:-1px; border:1px solid #a3a6b4;  border-top-right-radius: 5px;  border-bottom-right-radius: 5px; background:url(../img/ico_search.png) no-repeat center center;} 
+
+.board_list > table {width:100%;}
+.board_list > table thead th {position:relative; height:45px; padding:10px; font-size:16px; line-height:25px; font-weight:600; color:#a3a6b4; background:#f5f6fa;}
+.board_list > table thead th:before {display:inline-block; width:1px; height:1px;content:'';}
+.board_list > table thead th:not(:last-child):after {position:absolute; right:5px; top:50%; margin-top:-12px; display:block; width:1px; height:24px; background:#a3a6b4; content:'';}
+.board_list > table thead th .align {position:absolute; right:15px; top:50%; transform: translateY(-50%);  display:inline-block; width:8px; height:20px; line-height:10px; text-align:center; }
+.board_list > table thead th .align button {width:8px; height:10px; line-height:10px; vertical-align:top; background:url(../img/ico_tri.png) no-repeat left center; }
+.board_list > table thead th .align button.down {transform: rotate(-180deg);}
+.board_list > table thead th .align button:disabled {opacity:0.5;}
+
+.board_list > table thead th button {width:10px;}
+.board_list > table tbody td {padding:12px 20px;  text-align:center; line-height:26px; font-size:16px; color:#3c3b54; border-bottom:1px solid #f5f6fa; }
+.board_list > table tbody td.lt {text-align:left;}
+.board_list > table .modify {color:#0065fe; text-decoration:underline;}
+.board_list > table .delete {color:#f12504; text-decoration:underline;}
+
+@media screen and (max-width: 1620px) {
+    .board_list > table thead th .align {position:static; vertical-align:middle; transform: translateY(0);}
+  }
+
+.paging {display:flex; justify-content:center; width:100%; padding:50px 0 30px 0; }
+.paging > button {width:40px; height:40px; margin:0 10px; text-align:center; line-height:40px;font-size:16px; color:#3c3b54; border-radius:5px; }
+.paging > button.on {color:#fff; background:#3c3b54;}
+.paging > button.prev {background:url(../img/btn_next.png) no-repeat center center; transform: rotate(-180deg);}
+.paging > button.next {background:url(../img/btn_next.png) no-repeat center center;}
+.paging > button:disabled {opacity:0.3;}
+
+.board_write {display:flex; flex-direction:column; align-content:flex-start; min-height:970px; height:100px;}
+
+.row {display:flex; padding:15px 0; border-top:1px solid #a3a6b4; margin: 0;}
+.row:first-child, .board_write fieldset legend + .row {border-color:#21212e;}
+.row > p { flex:1; display:flex;}
+.row.half p:first-child {flex:none; width:50%;}
+.row > p:nth-child(2n) {padding-left:20px;}
+.row p > * {flex:1;}
+.row.auto  p > * {flex:none; }
+.row p > label, .row p > .label {flex:none; display:block; width:160px; height:45px; padding:0 20px; line-height:45px; font-size:16px; color:#666666; font-weight:600; background:#f6f6f6;}
+.row p > input[type="text"], .row p > input[type="password"]  {padding:10px 20px; line-height:23px; font-size:16px; color:#3c3b54; border:1px solid #d6d6d6;}
+.row p > input[type="text"]:focus, .row p > input[type="password"]:focus {border-color:#a3a0fb;}
+.row p select { padding:0 0 0 20px; line-height:45px; font-size:16px; color:#3c3b54; border:1px solid #d6d6d6;}
+.row p select option {line-height:45px; }
+
+.board_write fieldset {position:relative;}
+.board_write fieldset legend {padding:5px 0 0 30px; height:35px; font-size:20px;  line-height:1; font-weight:600; color:#3c3b54; background:url(../img/bg_legend.gif) no-repeat left 5px; }
+
+.noti {font-size:16px; color:#f12504;}
+.board_write .noti {position:absolute; left:0; bottom:-31px;}
+.board_write .guide {margin-top:150px; font-size:16px; line-height:26px;}
+.board_write .guide strong {display:block; font-weight:600; padding-bottom:10px; color:#43425d;}
+
+.board_write .btns {margin-top:auto; display:flex; justify-content: center; padding:45px 0 40px; text-align:center;}
+.board_write .btns button {margin:0 10px;}
+
+.radio {position:relative; display:flex;}
+.radio input[type="radio"] {position:absolute; left:0; top:0; opacity:0;}
+.radio label {display:block; flex:1; height:45px; line-height:43px; font-size:16px; text-align:center; cursor:pointer; border:1px solid #d6d6d6;}
+.radio input[type="radio"]:checked + label {line-height:41px; background:#f1f1fd; border:2px solid #a3a0fb;}
+
+.version_box {display:flex;}
+.version_box span {display:inline-block; width:3.5%; text-align:center; background:url(../img/bg_seperate_pointer.png) no-repeat center bottom;}
+.version_box input[type="text"] {flex-grow:0;  width:31%; padding:10px 20px; line-height:23px; text-align:center; font-size:16px; color:#3c3b54; border:1px solid #d6d6d6;}
+.version_box input[type="text"]:focus {border-color:#afadfc;}
+
+.date_chk {position:relative; display:flex; height:45px; width:207px; border:1px solid #d6d6d6}
+.date_chk input {width:151px; height:40px; padding:10px; line-height:18px; font-size:16px; margin-top:2px; vertical-align:bottom; border:none;}
+.date_chk button {width: 50px; height:38px; vertical-align:middle; background:url(../img/ico_calendar.png) no-repeat 15px center;}
+
+.layer-con .board_write {width:850px; min-height:auto; height:auto;}
+
+/*btns*/
+.btn1 {display:block; min-width:120px; height:40px; padding:0 10px; text-align:center; line-height:38px; font-size:16px; font-weight:600; color:#fff; background:#43425d; border:1px solid #21212e; border-radius: 5px;}
+
+.btn2 {display:inline-block; width:280px; height:45px; line-height:43px; font-size:16px; font-weight:600; color:#43425d;  border:1px solid #21212e;}
+.btn2.em {color:#fff; background:#43425d;}
+
+/*로그인*/
+#login {display:flex; width:100%; height:100%; background:#f0f0f7;}
+#login .inner {margin:auto; width:640px; height:630px; }
+#login h1 {height:215px; text-align:center; font-size:25px;  font-weight:400; color:#000;}
+#login h1 img {display:block; margin:0 auto 15px;}
+#login fieldset {position:relative; padding-bottom:45px; text-align:center; background:#fff;}
+#login fieldset legend {width:100%; height:70px; line-height:70px; text-align:center; color:#fff; font-size:20px; font-weight:600; background:#43425d;}
+#login fieldset > div {padding:35px 35px 65px; text-align:left;}
+#login fieldset > div .row:first-child {border:none;}
+#login fieldset .noti {position:absolute; left:35px; bottom:135px;}

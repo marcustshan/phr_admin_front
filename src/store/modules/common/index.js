@@ -6,8 +6,8 @@ const state = {
   prod_baseUrl: '/api',
   dev_baseUrl: '/api',
   timeout: 10000,
-  showProgress: false,
-  showLayerPopup: false
+  showLoading: false,
+  showDialog: false
 }
 
 const getters = {
@@ -20,11 +20,11 @@ const actions = {
   setBaseUrl(context, value) {
     context.commit('setBaseUrl', value)
   },
-  setShowProgress(context, value) {
-    context.commit('setShowProgress', value)
+  setShowLoading(context, value) {
+    context.commit('setShowLoading', value)
   },
-  setShowLayerPopup(context, value) {
-    context.commit('setShowLayerPopup', value)
+  setShowDialog(context, value) {
+    context.commit('setShowDialog', value)
   }
 }
 
@@ -32,11 +32,11 @@ const mutations = {
   setBaseUrl(state, baseUrl) {
     state.baseUrl = baseUrl
   },
-  setShowProgress(state, showProgress) {
-    state.showProgress = showProgress
+  setShowLoading(state, showLoading) {
+    state.showLoading = showLoading
   },
-  setShowLayerPopup(state, showLayerPopup) {
-    state.showLayerPopup = showLayerPopup
+  setShowDialog(state, showDialog) {
+    state.showDialog = showDialog
   }
 }
 

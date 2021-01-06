@@ -5,11 +5,13 @@
 // menu
 const state = {
   menus: [
+    /*
     {
       name: '대시보드',
       path: '/main',
       showMenu: true
     },
+    */
     {
       name: '사용자 관리',
       path: '/users',

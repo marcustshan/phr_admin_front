@@ -1,17 +1,15 @@
+img {vertical-align:top; border:none;}
+table {width:100%; border-collapse: collapse;}
+caption, .haze {position:absolute; left:0; top:0; width:1px; height:1px;  clip:rect(1px, 1px, 1px, 1px); overflow:hidden}
+dl,ul,ol,menu,li{list-style:none;}
+button {background:none; border:none; cursor: pointer; outline:0;}
+fieldset {border:none;}
+em {font-style:normal}
+a {text-decoration:none;}
+input[type="password"] {font-family:맑은고딕, Malgun Gothic, dotum, gulim, sans-serif; }
+
 /* App Container */
-.app-container {background-color: #f5f5f5 !important;}
-
-/* 좌측 navigation */
-.navigation {background-color: #f5f5f5 !important;}
-
-/* 좌측 navigation 상단 영역 */
-.site-logo {
-  height: 64px; display: flex; align-items: center; padding: 0 0.625rem; background-color: #f5f5f5; background-image: url('../img/한국보건의료정보원.png'); background-repeat: no-repeat; background-position: center center; background-size: 80%;
-  box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
-}
-
-/* 좌측 Menu Container */
-.menu-container {max-height: calc(100% - 65px - 56px); overflow-y: auto;}
+.app-container {background-color: #f0f0f7 !important;}
 
 /* Content Container */
 .content-container {min-height: 100%; background-color: #F4F7FA; padding: 20px 40px;}
