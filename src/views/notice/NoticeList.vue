@@ -115,11 +115,10 @@ export default {
   },
   data: () => ({
     headers: [
-      { text: '번호', value: 'noticeSeq', align: 'center' },
-      { text: '제목', value: 'title', align: 'center' },
+      { text: '번호', value: 'NTC_ID', align: 'center' },
+      { text: '제목', value: 'NTC_SJ', align: 'center' },
       { text: '작성자', value: 'writerName', align: 'center' },
-      { text: '작성일', value: 'createdDate', align: 'center' },
-      { text: '조회수', value: 'hitCount', align: 'center' },
+      { text: '작성일', value: 'FSR_DTM', align: 'center' },
       { text: '삭제', value: 'deleteNotice', align: 'center' }
     ],
     noticeList: [],
