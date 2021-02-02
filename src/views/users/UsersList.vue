@@ -65,21 +65,14 @@
       disable-hover
       class="bordered condensed click-row history-table"
     >
-      <template v-slot:[`item.title`]="{ item }">
-        <router-link :to="`/notice/modify/${item.noticeSeq}`">
-          {{ item.title }}
-        </router-link>
+      <template v-slot:item.review = {item}>
+        {{item.review === 'Y' ? '동의' : '미동의'}}
       </template>
-      <template v-slot:[`item.createdDate`]="{ item }">
-        {{ getDateFormat(item.createdDate) }}
+      <template v-slot:item.indus = {item}>
+        {{item.indus === 'Y' ? '동의' : '미동의'}}
       </template>
-      <template v-slot:[`item.hitCount`]="{ item }">
-        <v-chip
-          class="ma-2"
-          color="gray"
-        >
-          {{ item.hitCount }}
-        </v-chip>
+      <template v-slot:item.disease = {item}>
+        {{item.disease === 'Y' ? '동의' : '미동의'}}
       </template>
     </v-data-table>
 
@@ -98,7 +91,7 @@
 import DatePicker from 'Components/date/DatePicker'
 
 export default {
-  name: 'NoticeList',
+  name: 'UsersList',
   components: {
     DatePicker
   },
@@ -112,15 +105,15 @@ export default {
   },
   data: () => ({
     headers: [
-      { text: '아이디', value: 'NTC_ID', align: 'center' },
-      { text: '이름', value: 'NTC_SJ', align: 'center' },
-      { text: '성별', value: 'writerName', align: 'center' },
-      { text: '생년월일', value: 'FSR_DTM', align: 'center' },
-      { text: '가입일시', value: 'deleteNotice', align: 'center' },
-      { text: '접속일시', value: 'deleteNotice', align: 'center' },
-      { text: '건강보험 심사평가원', value: 'deleteNotice', align: 'center' },
-      { text: '건강보험 공단', value: 'deleteNotice', align: 'center' },
-      { text: '질병관리형', value: 'deleteNotice', align: 'center' }
+      { text: '아이디', value: 'id', align: 'center' },
+      { text: '이름', value: 'name', align: 'center' },
+      { text: '성별', value: 'sex', align: 'center' },
+      { text: '생년월일', value: 'birth', align: 'center' },
+      { text: '가입일시', value: 'joinDate', align: 'center' },
+      { text: '접속일시', value: 'loginDate', align: 'center' },
+      { text: '건강보험 심사평가원', value: 'review', align: 'center' },
+      { text: '건강보험 공단', value: 'indus', align: 'center' },
+      { text: '질병관리형', value: 'disease', align: 'center' }
     ],
     usersList: [],
     searchParam: {
@@ -137,6 +130,9 @@ export default {
   }),
   created () {
   },
+  mounted () {
+    this.getUsersList()
+  },
   methods: {
     pageChange (pageNum) {
       if (this.searchParam.page !== pageNum) {
@@ -149,6 +145,9 @@ export default {
     },
     getUsersList () {
       console.log(this.searchParam.q)
+      const tempList = { seq: 1, id: 'Phr01', name: '홍**', sex: '남', birth: '88****', joinDate: '2020-10-22 13:30', loginDate: '2020-10-20 14:30', review: 'Y', indus: 'Y', disease: 'N' }
+      this.usersList.push(tempList)
+      this.searchParam.total = 1
     }
   }
 }
