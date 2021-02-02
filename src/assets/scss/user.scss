@@ -1,0 +1,41 @@
+//border
+$border-basic: 1px solid rgba(0,0,0,0.12)!important;
+
+// table border
+.bordered table {
+  border-collapse: separate;
+  border-spacing: 0;
+  thead {
+    tr {
+      &:first-child th {
+        border-top: $border-basic;
+      }
+      td, th {
+        border-left: $border-basic;
+        &:last-child {
+          border-right: $border-basic;
+        }
+      }
+    }
+  }
+  tbody {
+    tr {
+      td, th {
+        border-left: $border-basic;
+        &:last-child {
+          border-right: $border-basic;
+        }
+      }
+    }
+    tr:first-child {
+      td, th {
+        border-top: $border-basic;
+      }
+    }
+    tr:last-child {
+      td, th {
+        border-bottom: $border-basic;
+      }
+    }
+  }
+}

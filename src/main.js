@@ -7,13 +7,19 @@ import vuetify from './plugins/vuetify'
 import VuejsDialog from 'vuejs-dialog'
 import 'vuejs-dialog/dist/vuejs-dialog.min.css'
 
+import VueBreadcrumbs from 'vue2-breadcrumbs'
+
 // global components
 import GlobalComponents from './globalComponents'
 
 import axios from 'axios'
 
+import './lib/VuetifyCss'
+
 // 공통 CSS
 require('./assets/css/common.css')
+
+Vue.use(VueBreadcrumbs)
 
 Vue.config.productionTip = false
 
