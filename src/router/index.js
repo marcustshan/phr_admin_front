@@ -4,6 +4,9 @@ import VueRouter from 'vue-router'
 import NoticeRoutes from './modules/notice'
 import UsersRoutes from './modules/users'
 import FaqRoutes from './modules/faq'
+import VersionRoutes from './modules/version'
+import MypageRoutes from './modules/mypage'
+import ManagerRoutes from './modules/manager'
 
 // 로그인 화면
 const Login = () => import('Views/Login')
@@ -18,6 +21,9 @@ const routes = [
   NoticeRoutes,
   UsersRoutes,
   FaqRoutes,
+  VersionRoutes,
+  MypageRoutes,
+  ManagerRoutes,
   {
     path: '/',
     redirect: '/login'

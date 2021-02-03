@@ -105,7 +105,7 @@
 
     <v-app-bar app class="back_black white--text" :height="70">
       <v-app-bar-nav-icon @click="drawer = !drawer" class="white--text"></v-app-bar-nav-icon>
-      <v-toolbar-title class="mr-10">{{ pageTitle }}</v-toolbar-title>
+      <v-toolbar-title class="mr-10">관리자 시스템</v-toolbar-title>
       <v-row no-gutters>
         <v-col cols="12" class="text-right">
           <p>
@@ -140,18 +140,6 @@ export default {
     },
     showMenus () {
       return _.filter(this.menus, { showMenu: true })
-    },
-    pageTitle () {
-      let pageTitle = ''
-      console.log(this.$breadcrumbs)
-      for (const breadcrumb of this.$breadcrumbs) {
-        if (breadcrumb.meta) {
-          if (breadcrumb.meta.title) {
-            pageTitle = breadcrumb.meta.title
-          }
-        }
-      }
-      return pageTitle
     },
     currentMenuName () {
       return this.$route.meta.title
