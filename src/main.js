@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify'
+import VueCryptojs from 'vue-cryptojs'
 
 import VuejsDialog from 'vuejs-dialog'
 import 'vuejs-dialog/dist/vuejs-dialog.min.css'
@@ -20,6 +21,8 @@ import './lib/VuetifyCss'
 require('./assets/css/common.css')
 
 Vue.use(VueBreadcrumbs)
+
+Vue.use(VueCryptojs)
 
 Vue.config.productionTip = false
 

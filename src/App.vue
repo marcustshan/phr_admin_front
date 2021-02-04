@@ -27,7 +27,6 @@ export default {
     },
     pageTitle () {
       let pageTitle = ''
-      console.log(this.$breadcrumbs)
       for (const breadcrumb of this.$breadcrumbs) {
         if (breadcrumb.meta) {
           if (breadcrumb.meta.title) {

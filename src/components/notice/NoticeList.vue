@@ -137,7 +137,6 @@ export default {
     },
     getNoticeList () {
       noticeService.getNoticeList(this.searchParam).then(response => {
-        console.log(response)
         this.noticeList = response.data
         this.searchParam.total = response.pagination.total
       })

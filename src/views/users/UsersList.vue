@@ -59,22 +59,80 @@
       :no-data-text="'검색 결과가 없습니다.'"
       :headers="headers"
       :items="usersList"
-      item-key="chgHisSeq"
+      item-key="USR_ID"
       hide-default-footer
-      disable-sort
       disable-hover
       class="bordered condensed click-row history-table"
     >
-      <template v-slot:item.review = {item}>
-        {{item.review === 'Y' ? '동의' : '미동의'}}
+      <template v-slot:item.no="{ index }">
+        {{index}}
       </template>
-      <template v-slot:item.indus = {item}>
-        {{item.indus === 'Y' ? '동의' : '미동의'}}
+      <template v-slot:item.USR_GND_CD = {item}>
+        {{item.USR_GND_CD === 'M' ? '남' : '여'}}
       </template>
-      <template v-slot:item.disease = {item}>
-        {{item.disease === 'Y' ? '동의' : '미동의'}}
+      <template v-slot:item.LSH_LGN_DTM = {item}>
+        <span @click="goDetailPage(item)" class="blue--text pointer text-decoration-underline">
+          {{item.LSH_LGN_DTM}}
+        </span>
+      </template>
+      <template v-slot:item.HIRA_AGR_YN = {item}>
+        <span @click="item.HIRA_AGR_YN === 'Y' ? openDialog('HIRA_AGR', item) : ''" :class="item.HIRA_AGR_YN === 'Y' ? 'blue--text pointer text-decoration-underline' : ''">
+          {{item.HIRA_AGR_YN === 'Y' ? '동의' : '미동의'}}
+        </span>
+      </template>
+      <template v-slot:item.NHIS_AGR_YN = {item}>
+          <span @click="item.NHIS_AGR_YN === 'Y' ? openDialog('NHIS_AGR', item) : ''" :class="item.NHIS_AGR_YN === 'Y' ? 'blue--text pointer text-decoration-underline' : ''">
+          {{item.NHIS_AGR_YN === 'Y' ? '동의' : '미동의'}}
+        </span>
+      </template>
+      <template v-slot:item.KDCA_AGR_YN = {item}>
+        <span @click="item.KDCA_AGR_YN === 'Y' ? openDialog('KDCA_AGR', item) : ''" :class="item.KDCA_AGR_YN === 'Y' ? 'blue--text pointer text-decoration-underline' : ''">
+          {{item.KDCA_AGR_YN === 'Y' ? '동의' : '미동의'}}
+        </span>
       </template>
     </v-data-table>
+
+    <!-- 사용자 동의기관 Dialog -->
+    <v-dialog
+      v-model="dialog"
+      width="600"
+    >
+      <v-card>
+        <v-card-title class="headline grey lighten-2 justify-center">
+          사용자 동의기관
+        </v-card-title>
+        <v-card-text class="pt-4">
+          <v-row>
+            <v-col sm="12">
+              <v-simple-table dense>
+                <thead class="detailTable">
+                  <tr>
+                    <th class="text-center">사용자</th>
+                    <td>{{ dialogForm.name }}({{ dialogForm.id }})</td>
+                    <th class="text-center">동의기관</th>
+                    <td>{{ dialogForm.organ }}</td>
+                  </tr>
+                  <tr style="height: 50px">
+                    <th class="text-center">동의일시</th>
+                    <td colspan="3">{{ dialogForm.agreeDt }}</td>
+                  </tr>
+                  <tr style="height: 150px">
+                    <th class="text-center">연계항목</th>
+                    <td colspan="3">{{ dialogForm.list }}</td>
+                  </tr>
+                </thead>
+              </v-simple-table>
+            </v-col>
+          </v-row>
+        </v-card-text>
+
+        <v-card-actions class="justify-center">
+          <v-btn @click="dialog = false" color="primary">
+            확인
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
 
     <v-pagination
       :value="searchParam.page"
@@ -88,13 +146,10 @@
 </template>
 
 <script>
-import DatePicker from 'Components/date/DatePicker'
+import usersService from 'Api/users/users.service'
 
 export default {
   name: 'UsersList',
-  components: {
-    DatePicker
-  },
   computed: {
     pages () {
       if (this.searchParam.size == null || this.searchParam.total == null || this.searchParam.total === 0) {
@@ -105,16 +160,25 @@ export default {
   },
   data: () => ({
     headers: [
-      { text: '아이디', value: 'id', align: 'center' },
-      { text: '이름', value: 'name', align: 'center' },
-      { text: '성별', value: 'sex', align: 'center' },
-      { text: '생년월일', value: 'birth', align: 'center' },
-      { text: '가입일시', value: 'joinDate', align: 'center' },
-      { text: '접속일시', value: 'loginDate', align: 'center' },
-      { text: '건강보험 심사평가원', value: 'review', align: 'center' },
-      { text: '건강보험 공단', value: 'indus', align: 'center' },
-      { text: '질병관리형', value: 'disease', align: 'center' }
+      { text: 'No', value: 'no', align: 'center', sortable: false },
+      { text: '아이디', value: 'USR_ID', align: 'center' },
+      { text: '이름', value: 'USR_NM', align: 'center' },
+      { text: '성별', value: 'USR_GND_CD', align: 'center' },
+      { text: '생년월일', value: 'USR_DOB_DT', align: 'center' },
+      { text: '가입일시', value: 'JOIN_DTM', align: 'center' },
+      { text: '접속일시', value: 'LSH_LGN_DTM', align: 'center' },
+      { text: '건강보험 심사평가원', value: 'HIRA_AGR_YN', align: 'center', sortable: false },
+      { text: '건강보험 공단', value: 'NHIS_AGR_YN', align: 'center', sortable: false },
+      { text: '질병관리형', value: 'KDCA_AGR_YN', align: 'center', sortable: false }
     ],
+    dialog: false,
+    dialogForm: {
+      id: null,
+      name: null,
+      agreeDt: null,
+      organ: null,
+      list: ''
+    },
     usersList: [],
     searchParam: {
       q: {
@@ -143,11 +207,44 @@ export default {
     clearSearchParam () {
       this.searchParam.q = {}
     },
+    // 접속일시 팝업
+    goDetailPage (item) {
+      console.log(item)
+      this.$router.push({ path: '/users/detail', name: 'usersDetail', params: { item: item } })
+    },
+    // 동의 기관 팝업
+    openDialog (type, item) {
+      this.dialogForm = {}
+      this.dialogForm.id = item.USR_ID
+      this.dialogForm.name = item.USR_NM
+
+      if (type === 'HIRA_AGR') {
+        // 건강보험심사평가원
+        this.dialogForm.organ = '건강보험심사평가원'
+        this.dialogForm.list = '투약이력, 진료이력'
+      } else if (type === 'NHIS_AGR') {
+        // 건강보험 공단
+        this.dialogForm.organ = '건강보험 공단'
+        this.dialogForm.list = '건강검진'
+      } else if (type === 'KDCA_AGR') {
+        // 질병관리청
+        this.dialogForm.organ = '질병관리청'
+        this.dialogForm.list = '예방접종'
+      }
+      this.dialogForm.agreeDt = item[type + '_DT']
+      this.dialog = !this.dialog
+    },
+    // 사용자 목록 조회
     getUsersList () {
-      console.log(this.searchParam.q)
-      const tempList = { seq: 1, id: 'Phr01', name: '홍**', sex: '남', birth: '88****', joinDate: '2020-10-22 13:30', loginDate: '2020-10-20 14:30', review: 'Y', indus: 'Y', disease: 'N' }
-      this.usersList.push(tempList)
-      this.searchParam.total = 1
+      usersService.getUsersList(this.searchParam).then(response => {
+        if (response.data) {
+          if (typeof response.data === 'object' && Object.keys(response.data).length < 1) {
+            response.data = []
+          }
+          this.usersList = response.data
+          this.searchParam.total = response.pagination.total
+        }
+      })
     }
   }
 }

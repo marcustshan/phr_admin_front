@@ -52,3 +52,19 @@ $border-basic: 1px solid rgba(0,0,0,0.12)!important;
     background-color: #fff;
   }
 }
+
+.pointer {
+  cursor: pointer;
+}
+
+
+.detailTable tr {
+  border: $border-basic;
+  th {
+    border: $border-basic;
+    background-color: #f6f6f6;
+  }
+  td {
+    border: $border-basic;
+  }
+}

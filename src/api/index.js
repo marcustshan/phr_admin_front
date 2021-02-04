@@ -19,7 +19,9 @@ let errorCount = 0
 // 요청(request) 인터셉터
 api.interceptors.request.use(
   (config) => {
-    store.dispatch('common/setShowLoading', true)
+    if (!config.noShowProgress) {
+      store.dispatch('common/setShowLoading', true)
+    }
     return config
   },
   (error) => {
@@ -32,15 +34,24 @@ api.interceptors.request.use(
 // 응답(response) 인터셉터
 api.interceptors.response.use(
   (response) => {
-    store.dispatch('common/setShowLoading', false)
+    if (!response.config.noShowProgress) {
+      store.dispatch('common/setShowLoading', false)
+    }
+
     response.data = JSON.parse(soapUtil.parseResponse(response.data))
     if (response.data) {
-      if (response.data.RESULT && response.data.RESULT.length > 0) {
-        if (response.data.RESULT[0]['NO-DATA'] && response.data.RESULT[0]['NO-DATA'].length > 0) {
-          response.data = undefined
+      if (response.data.RESULT) {
+        if (response.data.RESULT.length > 0) {
+          if (response.data.RESULT[0]['NO-DATA'] && response.data.RESULT[0]['NO-DATA'].length > 0) {
+            response.data = undefined
+          } else {
+            response.data = response.data.RESULT
+          }
         } else {
-          response.data = response.data.RESULT
+          response.data = []
         }
+      } else if (response.data.Table && response.data.Table.length > 0 && response.data.Table[0].ERROR_YN === 'Y') {
+        response.data = undefined
       }
     }
     return Promise.resolve(response)
@@ -86,6 +97,7 @@ api.interceptors.response.use(
 )
 
 const soapUtil = {
+  CRYPTO_KEY: 'ed9e5271e381825e2f4856cfe6dfba23',
   STYPE: {
     GETQUERY: 'GETQUERY',
     SETQUERY: 'SETQUERY',
@@ -98,26 +110,52 @@ const soapUtil = {
     const response = await api.post('', envelope)
     return response
   },
-  query: (sType, qType, sEncYn, sQid, params) => {
+  query: (sType, qType, sEncYn, sQid, params, options) => {
     const envelope = soapUtil.createQueryEnvelope(sType, qType, sEncYn, sQid, soapUtil.ServiceUserID, params)
     // axios의 baseURL에 설정되어 있기 때문에 빈 URL로 통신함
-    return api.post('', envelope)
+    return api.post('', envelope, options)
   },
   createQueryEnvelope: (sType, qType, sEncYn, sQid, sUserID, params) => {
-    let sParams = ''
+    const tableParam = {
+      Table: []
+    }
+    const paramItemFormat = {
+      QID: sQid,
+      QTYPE: qType,
+      USERID: sUserID,
+      EXECTYPE: 'FILL',
+      TABLENAME: 'RESULT'
+    }
+
     if (Array.isArray(params)) {
       const paramsLength = params.length
       for (let i = 0; i < paramsLength; i++) {
+        const paramItem = _.cloneDeep(paramItemFormat)
         for (const key in params[i]) {
-          sParams += `"${key}":"${params[i][key]}",`
+          paramItem[key] = params[i][key]
         }
+        tableParam.Table.push(paramItem)
       }
     } else {
+      const paramItem = _.cloneDeep(paramItemFormat)
       for (const key in params) {
-        sParams += `"${key}":"${params[key]}",`
+        paramItem[key] = params[key]
       }
+      tableParam.Table.push(paramItem)
     }
-    sParams = sParams.substring(0, sParams.length - 1)
+
+    const tableParamString = JSON.stringify(tableParam)
+
+    /*
+    if (window.roomVm && window.roomVm.$jsInterface) {
+      tableParamString = window.roomVm.$jsInterface.getEncryptText(tableParamString)
+    } else {
+      tableParamString = Vue.CryptoJS.AES.encrypt(tableParamString, Vue.CryptoJS.enc.Utf8.parse(soapUtil.CRYPTO_KEY), {
+        iv: Vue.CryptoJS.enc.Utf8.parse(soapUtil.CRYPTO_KEY.substr(0, 16)),
+        mode: Vue.CryptoJS.mode.CBC
+      }).toString()
+    }
+     */
 
     return `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/">
               <soapenv:Header/>
@@ -126,22 +164,9 @@ const soapUtil = {
                 <tem:sType>${sType}</tem:sType>
                 <tem:sInputType>JSON</tem:sInputType>
                 <tem:sOutputType>JSON</tem:sOutputType>
-                <tem:sEncYn>${sEncYn}</tem:sEncYn>
+                <tem:sEncYn>N</tem:sEncYn>
                 <tem:sParam>
-                <![CDATA[
-                  {
-                    "Table":[
-                      {
-                        "QID":"${sQid}",
-                        "QTYPE":"${qType}",
-                        "USERID":"${sUserID}",
-                        "EXECTYPE":"FILL",
-                        "TABLENAME":"RESULT",
-                        ${sParams}
-                      }
-                    ]
-                  }
-                ]]>
+                <![CDATA[${tableParamString}]]>
                 </tem:sParam>
                 <tem:sToken><![CDATA[]]></tem:sToken>
                 <tem:sVerifyYn><![CDATA[N]]></tem:sVerifyYn>
@@ -154,11 +179,33 @@ const soapUtil = {
     if (data != null) {
       const jsBody = xjs.xml2js(data, { compact: true, spaces: 4 })
       const jsonBody = jsBody['s:Envelope']['s:Body'].ServiceReturnCustomTypeResponse.ServiceReturnCustomTypeResult._text
+
+      // if (window.roomVm && window.roomVm.$jsInterface) {
+      //   jsonBody = window.roomVm.$jsInterface.getDecryptText(jsonBody)
+      // } else {
+      //   jsonBody = Vue.CryptoJS.AES.decrypt(jsonBody, Vue.CryptoJS.enc.Utf8.parse(soapUtil.CRYPTO_KEY), {
+      //     iv: Vue.CryptoJS.enc.Utf8.parse(soapUtil.CRYPTO_KEY.substr(0, 16)),
+      //     mode: Vue.CryptoJS.mode.CBC
+      //   }).toString(Vue.CryptoJS.enc.Utf8)
+      // }
+
       return jsonBody
     } else {
       return null
     }
   }
 }
+
+/* 공지사항 조회 예시 */
+/*
+const sServiceUrl = '/MGPHR_Service/MGPHR_Service.svc?wsdl'
+const sServiceUserID = 'PPHR'
+nzsServiceManager.methods.query(sServiceUrl
+  , 'GETQUERY'
+  , 'N'
+  , 'PC_PHR_GET_NTC'
+  , sServiceUserID
+  , [{ IN_USR_SYS_ID: '1' }])
+*/
 
 export { api, soapUtil }

@@ -8,7 +8,6 @@
 export default {
   name: 'Menu',
   created () {
-    console.log(this.$route)
   }
 }
 </script>

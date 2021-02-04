@@ -76,7 +76,12 @@
           {{ item.hitCount }}
         </v-chip>
       </template>
-      <template v-slot:[`item.deleteNotice`]="{ item }">
+      <template v-slot:item.modify="{ item }">
+        <v-btn small color="accent" rounded outlined @click="modifyNotice(item)">
+          <v-icon small>check</v-icon>수정
+        </v-btn>
+      </template>
+      <template v-slot:[`item.delete`]="{ item }">
         <v-btn color="red" outlined dark @click="deleteNotice(item.noticeSeq)">
           <v-icon left>delete_outline</v-icon>
           삭제
@@ -98,13 +103,9 @@
 <script>
 import noticeService from 'Api/notice/notice.service'
 import dayjs from 'dayjs'
-import DatePicker from 'Components/date/DatePicker'
 
 export default {
   name: 'NoticeList',
-  components: {
-    DatePicker
-  },
   computed: {
     pages () {
       if (this.searchParam.size == null || this.searchParam.total == null || this.searchParam.total === 0) {
@@ -115,11 +116,14 @@ export default {
   },
   data: () => ({
     headers: [
-      { text: '번호', value: 'NTC_ID', align: 'center' },
+      { text: 'No', value: 'NTC_ID', align: 'center' },
       { text: '제목', value: 'NTC_SJ', align: 'center' },
-      { text: '작성자', value: 'writerName', align: 'center' },
-      { text: '작성일', value: 'FSR_DTM', align: 'center' },
-      { text: '삭제', value: 'deleteNotice', align: 'center' }
+      { text: '등록자', value: 'writerName', align: 'center' },
+      { text: '등록일시', value: 'FSR_DTM', align: 'center' },
+      { text: '팝업공지', value: 'popupYn', align: 'center' },
+      { text: '상단공지', value: 'upYn', align: 'center' },
+      { text: '수정', value: 'modify', align: 'center' },
+      { text: '삭제', value: 'delete', align: 'center' }
     ],
     noticeList: [],
     searchParam: {
@@ -135,6 +139,10 @@ export default {
     this.getNoticeList()
   },
   methods: {
+    // 공지사항 수정
+    modifyNotice () {
+    },
+    // 공지사항 삭제
     deleteNotice (noticeSeq) {
       this.$dialog.confirm('삭제 하시겠습니까?').then(() => {
         noticeService.deleteNotice(noticeSeq).then(() => {
@@ -143,6 +151,7 @@ export default {
         })
       })
     },
+    // 공지사항 등록
     writeNotice () {
       this.$router.push({ path: '/notice/write' })
     },

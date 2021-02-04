@@ -193,7 +193,6 @@ export default {
       return false
     },
     getCurrentMenuClass (menu) {
-      console.log(this.isCurrentMenu(menu))
       if (this.isCurrentMenu(menu)) {
         return 'font-weight-bold current_menu'
       }
