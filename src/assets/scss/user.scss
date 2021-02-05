@@ -57,7 +57,7 @@ $border-basic: 1px solid rgba(0,0,0,0.12)!important;
   cursor: pointer;
 }
 
-
+// 상세 테이블
 .detailTable tr {
   border: $border-basic;
   th {
@@ -66,5 +66,30 @@ $border-basic: 1px solid rgba(0,0,0,0.12)!important;
   }
   td {
     border: $border-basic;
+  }
+}
+
+// 공지사항
+.notice {
+  tr {
+    th {
+      //width: 19.5%;
+      width: 15%;
+    }
+    td {
+      width: 25%;
+    }
+    .small {
+      width: 15%;
+    }
+  }
+}
+
+.inputForm {
+  .row {
+    border-bottom: $border-basic;
+    .v-input {
+      padding-top: 3px;
+    }
   }
 }

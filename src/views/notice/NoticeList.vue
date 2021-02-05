@@ -60,29 +60,13 @@
       disable-hover
       class="bordered condensed click-row history-table"
     >
-      <template v-slot:[`item.title`]="{ item }">
-        <router-link :to="`/notice/modify/${item.noticeSeq}`">
-          {{ item.title }}
-        </router-link>
-      </template>
-      <template v-slot:[`item.createdDate`]="{ item }">
-        {{ getDateFormat(item.createdDate) }}
-      </template>
-      <template v-slot:[`item.hitCount`]="{ item }">
-        <v-chip
-          class="ma-2"
-          color="gray"
-        >
-          {{ item.hitCount }}
-        </v-chip>
-      </template>
       <template v-slot:item.modify="{ item }">
         <v-btn small color="accent" rounded outlined @click="modifyNotice(item)">
           <v-icon small>check</v-icon>수정
         </v-btn>
       </template>
       <template v-slot:[`item.delete`]="{ item }">
-        <v-btn color="red" outlined dark @click="deleteNotice(item.noticeSeq)">
+        <v-btn color="red" outlined dark @click="deleteNotice(item.NTC_ID)">
           <v-icon left>delete_outline</v-icon>
           삭제
         </v-btn>
@@ -104,6 +88,25 @@
 import noticeService from 'Api/notice/notice.service'
 import dayjs from 'dayjs'
 
+const IN_FORM = {
+  IN_NTC_ID: null,
+  IN_ADM_SYS_ID: null,
+  IN_NTC_ST_CD: null,
+  IN_NTC_SJ: null,
+  IN_NTC_CN: null,
+  IN_NTC_IMG_URL: null,
+  IN_NTC_EXP_YN: null,
+  IN_NTC_PRD_STR: null,
+  IN_PUP_EXP_YN: null,
+  IN_PUP_EXP_STR: null,
+  IN_PUP_EXP_END: null,
+  IN_TOP_EXP_YN: null,
+  IN_TOP_EXP_STR: null,
+  IN_TOP_EXP_END: null,
+  IN_PSH_ALR_YN: null,
+  IN_SAVE_TYP: 'D' // 삭제
+}
+
 export default {
   name: 'NoticeList',
   computed: {
@@ -112,16 +115,20 @@ export default {
         return 1
       }
       return Math.ceil(this.searchParam.total / this.searchParam.size)
+    },
+    user () {
+      return this.$store.state.user.userInfo
     }
   },
   data: () => ({
+    inForm: _.cloneDeep(IN_FORM),
     headers: [
       { text: 'No', value: 'NTC_ID', align: 'center' },
       { text: '제목', value: 'NTC_SJ', align: 'center' },
-      { text: '등록자', value: 'writerName', align: 'center' },
+      { text: '등록자', value: 'ADM_ID', align: 'center' },
       { text: '등록일시', value: 'FSR_DTM', align: 'center' },
-      { text: '팝업공지', value: 'popupYn', align: 'center' },
-      { text: '상단공지', value: 'upYn', align: 'center' },
+      { text: '팝업공지', value: 'PUP_EXP_YN', align: 'center' },
+      { text: '상단공지', value: 'TOP_EXP_YN', align: 'center' },
       { text: '수정', value: 'modify', align: 'center' },
       { text: '삭제', value: 'delete', align: 'center' }
     ],
@@ -140,14 +147,18 @@ export default {
   },
   methods: {
     // 공지사항 수정
-    modifyNotice () {
+    modifyNotice (item) {
+      this.$router.push({ path: `/notice/modify/${item.NTC_ID}` })
     },
     // 공지사항 삭제
     deleteNotice (noticeSeq) {
+      this.inForm.IN_NTC_ID = noticeSeq
+      this.inForm.IN_ADM_SYS_ID = this.user.id
       this.$dialog.confirm('삭제 하시겠습니까?').then(() => {
-        noticeService.deleteNotice(noticeSeq).then(() => {
-          this.$dialog.alert('삭제 되었습니다.')
-          this.getNoticeList()
+        noticeService.modifyNotice(this.inForm).then(() => {
+          this.$dialog.alert('삭제 되었습니다.').then(() => {
+            this.getNoticeList()
+          })
         })
       })
     },
@@ -166,10 +177,17 @@ export default {
       this.searchParam.searchWriter = ''
       this.searchParam.searchDate = null
     },
+    // 공지사항 조회
     getNoticeList () {
       noticeService.getNoticeList(this.searchParam).then(response => {
-        this.noticeList = response.data
-        this.searchParam.total = response.pagination.total
+        if (response.data) {
+          if (typeof response.data === 'object' && Object.keys(response.data).length < 1) {
+            response.data = []
+          }
+          this.noticeList = response.data
+          // TODO paging
+          // this.searchParam.total = response.pagination.total
+        }
       })
     },
     getDateFormat (date) {

@@ -24,7 +24,7 @@ export default {
       meta: {
         requiresAuth: false,
         auth: true,
-        title: '사용자관리 목록'
+        title: '사용자관리'
       }
     },
     {

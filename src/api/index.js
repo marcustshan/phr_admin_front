@@ -39,6 +39,7 @@ api.interceptors.response.use(
     }
 
     response.data = JSON.parse(soapUtil.parseResponse(response.data))
+    console.log('index response : ', response.data)
     if (response.data) {
       if (response.data.RESULT) {
         if (response.data.RESULT.length > 0) {

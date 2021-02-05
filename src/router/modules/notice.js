@@ -27,7 +27,7 @@ export default {
       meta: {
         requiresAuth: false,
         auth: true,
-        title: '공지사항 목록'
+        title: '공지사항'
       }
     },
     {
@@ -37,7 +37,7 @@ export default {
       meta: {
         requiresAuth: false,
         auth: true,
-        title: '공지사항 수정'
+        title: '공지사항 > 수정'
       }
     },
     {
@@ -47,7 +47,7 @@ export default {
       meta: {
         requiresAuth: false,
         auth: true,
-        title: '공지사항 등록'
+        title: '공지사항 > 등록'
       }
     }
   ]

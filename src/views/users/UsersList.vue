@@ -209,7 +209,6 @@ export default {
     },
     // 접속일시 팝업
     goDetailPage (item) {
-      console.log(item)
       this.$router.push({ path: '/users/detail', name: 'usersDetail', params: { item: item } })
     },
     // 동의 기관 팝업
@@ -242,7 +241,8 @@ export default {
             response.data = []
           }
           this.usersList = response.data
-          this.searchParam.total = response.pagination.total
+          // TODO paging
+          // this.searchParam.total = response.pagination.total
         }
       })
     }

@@ -10,6 +10,9 @@ import 'vuejs-dialog/dist/vuejs-dialog.min.css'
 
 import VueBreadcrumbs from 'vue2-breadcrumbs'
 
+// Global Mixin
+import GlobalMixin from './globalMixin'
+
 // global components
 import GlobalComponents from './globalComponents'
 
@@ -20,9 +23,14 @@ import './lib/VuetifyCss'
 // 공통 CSS
 require('./assets/css/common.css')
 
+// require('./assets/css/phr.css')
+
 Vue.use(VueBreadcrumbs)
 
 Vue.use(VueCryptojs)
+
+// Global Mixin
+Vue.mixin(GlobalMixin)
 
 Vue.config.productionTip = false
 

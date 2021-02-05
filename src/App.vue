@@ -27,11 +27,9 @@ export default {
     },
     pageTitle () {
       let pageTitle = ''
-      for (const breadcrumb of this.$breadcrumbs) {
-        if (breadcrumb.meta) {
-          if (breadcrumb.meta.title) {
-            pageTitle = breadcrumb.meta.title
-          }
+      if (this.$route.meta) {
+        if (this.$route.meta.title) {
+          pageTitle = this.$route.meta.title
         }
       }
       return pageTitle
