@@ -5,7 +5,7 @@
         <v-row @keypress.enter="getFaqList">
           <v-col cols="3">
             <v-text-field
-              v-model="searchParam.q.title"
+              v-model="searchParam.title"
               append-icon="search"
               clearable
               label="제목"
@@ -27,6 +27,10 @@
             <v-icon left>search</v-icon>
             검색
           </v-btn>
+          <v-btn class="ml-3" outlined rounded color="teal darken-1" @click="writeFaq">
+            <v-icon left>edit</v-icon>
+            등록
+          </v-btn>
         </v-col>
       </v-row>
     </div>
@@ -41,13 +45,16 @@
       disable-hover
       class="bordered condensed click-row history-table"
     >
+      <template v-slot:item.FAQ_ST_CD = {item}>
+          {{item.FAQ_ST_CD === 'A' ? '계정' : '서비스이용'}}
+      </template>
       <template v-slot:item.modify="{ item }">
         <v-btn small color="accent" rounded outlined @click="modifyFaq(item)">
           <v-icon small>check</v-icon>수정
         </v-btn>
       </template>
       <template v-slot:item.delete="{ item }">
-        <v-btn color="red" outlined dark @click="deleteFaq(item.hisSeq)">
+        <v-btn color="red" outlined dark @click="deleteFaq(item.FAQ_ID)">
           <v-icon left>delete_outline</v-icon>
           삭제
         </v-btn>
@@ -66,6 +73,19 @@
 </template>
 
 <script>
+import faqService from 'Api/faq/faq.service'
+
+const IN_FORM = {
+  IN_FAQ_SJ: null,
+  IN_FAQ_CN: null,
+  IN_FAQ_ST_CD: null,
+  IN_FAQ_EXP_YN: null,
+  IN_DEL_YN: null,
+  IN_FAQ_ID: null,
+  IN_ADM_SYS_ID: null,
+  IN_SAVE_TYP: 'D'
+}
+
 export default {
   name: 'FaqList',
   computed: {
@@ -74,51 +94,77 @@ export default {
         return 1
       }
       return Math.ceil(this.searchParam.total / this.searchParam.size)
+    },
+    user () {
+      return this.$store.state.user.userInfo
     }
   },
   data: () => ({
+    inForm: _.cloneDeep(IN_FORM),
     headers: [
-      { text: 'No', value: 'hisSeq', align: 'center' },
-      { text: '유형', value: 'type', align: 'center' },
-      { text: '질문 제목', value: 'title', align: 'center' },
-      { text: '등록일시', value: 'date', align: 'center' },
+      { text: 'No', value: 'FAQ_ID', align: 'center' },
+      { text: '유형', value: 'FAQ_ST_CD', align: 'center' },
+      { text: '질문 제목', value: 'FAQ_SJ', align: 'center' },
+      { text: '등록일시', value: 'FSR_DTM', align: 'center' },
       { text: '수정', value: 'modify', align: 'center' },
       { text: '삭제', value: 'delete', align: 'center' }
     ],
     faqList: [],
     searchParam: {
-      q: {
-        title: null
-      },
+      title: null,
       page: 1,
       size: 10,
       total: 0
     }
   }),
-  created () {
-  },
   mounted () {
+    // faq 목록 조회
     this.getFaqList()
   },
   methods: {
+    // 페이지 변경
     pageChange (pageNum) {
       if (this.searchParam.page !== pageNum) {
         this.searchParam.page = pageNum
         this.getFaqList()
       }
     },
+    // 검색조건 초기화
     clearSearchParam () {
-      this.searchParam.q = {}
+      this.searchParam.title = null
     },
-    modifyFaq () {
+    // 자주묻는 질문 수정
+    modifyFaq (item) {
+      this.$router.push({ path: `/faq/modify/${item.FAQ_ID}` })
     },
-    deleteFaq () {
+    // faq 삭제
+    deleteFaq (faqSeq) {
+      this.inForm.IN_FAQ_ID = faqSeq
+      this.inForm.IN_ADM_SYS_ID = this.user.id
+      this.$dialog.confirm('삭제 하시겠습니까?').then(() => {
+        faqService.modifyFaq(this.inForm).then(() => {
+          this.$dialog.alert('삭제 되었습니다.').then(() => {
+            this.getFaqList()
+          })
+        })
+      })
     },
+    // faq 등록
+    writeFaq () {
+      this.$router.push({ path: '/faq/write' })
+    },
+    // faq 목록 조회
     getFaqList () {
-      console.log(this.searchParam.q)
-      const tempList = { hisSeq: 1, type: '일반', title: '테스트', date: '2021-02-02' }
-      this.faqList.push(tempList)
-      this.searchParam.total = 1
+      faqService.getFaqList(this.searchParam).then(response => {
+        if (response.data) {
+          if (typeof response.data === 'object' && Object.keys(response.data).length < 1) {
+            response.data = []
+          }
+          this.faqList = response.data
+          // TODO paging
+          // this.searchParam.total = response.pagination.total
+        }
+      })
     }
   }
 }

@@ -5,7 +5,7 @@
         <v-row @keypress.enter="getNoticeList">
           <v-col cols="3">
             <v-text-field
-              v-model="searchParam.searchTitle"
+              v-model="searchParam.title"
               append-icon="search"
               clearable
               label="제목"
@@ -14,7 +14,7 @@
           </v-col>
           <v-col cols="3">
             <v-text-field
-              v-model="searchParam.searchWriter"
+              v-model="searchParam.writer"
               append-icon="search"
               clearable
               label="작성자"
@@ -23,7 +23,7 @@
           </v-col>
           <v-col cols="3">
             <date-picker
-              v-model="searchParam.searchDate"
+              v-model="searchParam.date"
               label="작성일"
             ></date-picker>
           </v-col>
@@ -134,15 +134,15 @@ export default {
     ],
     noticeList: [],
     searchParam: {
-      searchTitle: '',
-      searchWriter: '',
-      searchDate: '',
+      title: '',
+      writer: '',
+      date: '',
       page: 1,
       size: 10,
       total: 0
     }
   }),
-  created () {
+  mounted () {
     this.getNoticeList()
   },
   methods: {
@@ -173,9 +173,9 @@ export default {
       }
     },
     clearSearchParam () {
-      this.searchParam.searchTitle = ''
-      this.searchParam.searchWriter = ''
-      this.searchParam.searchDate = null
+      this.searchParam.title = ''
+      this.searchParam.writer = ''
+      this.searchParam.date = null
     },
     // 공지사항 조회
     getNoticeList () {

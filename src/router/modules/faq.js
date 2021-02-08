@@ -4,6 +4,9 @@ const FaqView = () => import('Views/faq/FaqView')
 // 자주묻는 질문 목록
 const FaqList = () => import('Views/faq/FaqList')
 
+// 자주묻는 질문 등록, 수정
+const FaqWrite = () => import('Views/faq/FaqWrite')
+
 export default {
   path: '/faq',
   name: 'faq',
@@ -22,6 +25,26 @@ export default {
         requiresAuth: false,
         auth: true,
         title: '자주 묻는 질문'
+      }
+    },
+    {
+      path: 'modify/:faqSeq',
+      component: FaqWrite,
+      name: 'faqModify',
+      meta: {
+        requiresAuth: false,
+        auth: true,
+        title: '자주 묻는 질문 > 수정'
+      }
+    },
+    {
+      path: 'write',
+      component: FaqWrite,
+      name: 'faqWrite',
+      meta: {
+        requiresAuth: false,
+        auth: true,
+        title: '자주 묻는 질문 > 등록'
       }
     }
   ]
