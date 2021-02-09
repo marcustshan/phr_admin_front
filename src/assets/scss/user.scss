@@ -43,11 +43,12 @@ $border-basic: 1px solid rgba(0,0,0,0.12)!important;
 .mainTitle {
   font-size: 26px;
   font-weight: 800;
-  margin: 2% 0%;
+  //margin: 2% 0%;
+  margin: 2% 0% 1%;
 }
 
 .mainWrap {
-  margin: 0px 4% 7%;
+  margin: 0% 2% 7%;
   .content-container {
     background-color: #fff;
   }

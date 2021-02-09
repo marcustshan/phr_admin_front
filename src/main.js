@@ -26,8 +26,6 @@ import './lib/VuetifyCss'
 // 공통 CSS
 require('./assets/css/common.css')
 
-// require('./assets/css/phr.css')
-
 Vue.use(VueBreadcrumbs)
 
 Vue.use(VueCryptojs)

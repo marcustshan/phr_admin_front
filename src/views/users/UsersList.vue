@@ -2,14 +2,13 @@
   <div class="content-container">
     <div>
       <v-form lazy-validation>
-        <v-row @keypress.enter="getUsersList">
+        <v-row @keypress.enter="getUsersList" dense>
           <v-col cols="3">
             <v-text-field
               v-model="searchParam.q.id"
               append-icon="search"
               clearable
               label="아이디"
-              hide-details
             ></v-text-field>
           </v-col>
           <v-col cols="3">
@@ -18,7 +17,6 @@
               append-icon="search"
               clearable
               label="이름"
-              hide-details
             ></v-text-field>
           </v-col>
           <v-col cols="3">
@@ -27,7 +25,6 @@
               append-icon="search"
               clearable
               label="성별"
-              hide-details
             ></v-text-field>
           </v-col>
           <v-col cols="3">
@@ -39,15 +36,15 @@
         </v-row>
       </v-form>
       <v-row justify="space-between">
-        <v-col cols="4" align-self="center" class="pr-0">
+        <v-col cols="4" align-self="center">
           <div class="black--text">총 {{searchParam.total}} 건 {{searchParam.page}} / {{pages}} 페이지</div>
         </v-col>
-        <v-col cols="7" align-self="center" class="text-right pl-0">
-          <v-btn outlined rounded color="green" @click="clearSearchParam">
+        <v-col cols="7" align-self="center" class="text-right">
+          <v-btn small outlined rounded color="green" @click="clearSearchParam">
             <v-icon left>refresh</v-icon>
             초기화
           </v-btn>
-          <v-btn class="ml-3" outlined rounded color="primary" @click="getUsersList">
+          <v-btn small class="ml-3" outlined rounded color="primary" @click="getUsersList">
             <v-icon left>search</v-icon>
             검색
           </v-btn>

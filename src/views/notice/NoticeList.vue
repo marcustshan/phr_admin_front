@@ -2,14 +2,13 @@
   <div class="content-container">
     <div>
       <v-form lazy-validation>
-        <v-row @keypress.enter="getNoticeList">
+        <v-row @keypress.enter="getNoticeList" dense>
           <v-col cols="3">
             <v-text-field
               v-model="searchParam.q.title"
               append-icon="search"
               clearable
               label="제목"
-              hide-details
             ></v-text-field>
           </v-col>
           <v-col cols="3">
@@ -18,7 +17,6 @@
               append-icon="search"
               clearable
               label="작성자"
-              hide-details
             ></v-text-field>
           </v-col>
           <v-col cols="3">
@@ -30,19 +28,19 @@
         </v-row>
       </v-form>
       <v-row justify="space-between">
-        <v-col cols="4" align-self="center" class="pr-0">
+        <v-col cols="4" align-self="center">
           <div class="black--text">총 {{searchParam.total}} 건 {{searchParam.page}} / {{pages}} 페이지</div>
         </v-col>
-        <v-col cols="7" align-self="center" class="text-right pl-0">
-          <v-btn outlined rounded color="green" @click="clearSearchParam">
+        <v-col cols="7" align-self="center" class="text-right">
+          <v-btn small outlined rounded color="green" @click="clearSearchParam">
             <v-icon left>refresh</v-icon>
             초기화
           </v-btn>
-          <v-btn class="ml-3" outlined rounded color="primary" @click="getNoticeList">
+          <v-btn small class="ml-3" outlined rounded color="primary" @click="getNoticeList">
             <v-icon left>search</v-icon>
             검색
           </v-btn>
-          <v-btn class="ml-3" outlined rounded color="teal darken-1" @click="writeNotice">
+          <v-btn small class="ml-3" outlined rounded color="teal darken-1" @click="writeNotice">
             <v-icon left>edit</v-icon>
             등록
           </v-btn>
@@ -66,7 +64,7 @@
         </v-btn>
       </template>
       <template v-slot:[`item.delete`]="{ item }">
-        <v-btn color="red" outlined dark @click="deleteNotice(item.NTC_ID)">
+        <v-btn small color="red" outlined dark @click="deleteNotice(item.NTC_ID)">
           <v-icon left>delete_outline</v-icon>
           삭제
         </v-btn>

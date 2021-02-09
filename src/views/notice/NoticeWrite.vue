@@ -17,7 +17,7 @@
       </v-row>
 
       <div class="inputForm">
-        <v-row class="pt-3 pb-3">
+        <v-row>
           <v-col md="4" cols="2" class="font-weight-bold">
             <v-icon left color="#43425d">label</v-icon>
             <v-label>공지사항</v-label>
