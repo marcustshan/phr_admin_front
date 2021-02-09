@@ -74,13 +74,21 @@
       :no-data-text="'검색 결과가 없습니다.'"
       :headers="headers"
       :items="detailList"
-      item-key="chgHisSeq"
+      item-key="no"
       hide-default-footer
       disable-sort
       disable-hover
       class="bordered condensed click-row history-table"
     >
     </v-data-table>
+
+    <v-row>
+      <v-col cols="12" class="text-right">
+        <router-link to="/users/list">
+          <v-btn outlined color="brown lighten-2">목록</v-btn>
+        </router-link>
+      </v-col>
+    </v-row>
 
     <v-pagination
       :value="searchParam.page"

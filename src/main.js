@@ -10,6 +10,9 @@ import 'vuejs-dialog/dist/vuejs-dialog.min.css'
 
 import VueBreadcrumbs from 'vue2-breadcrumbs'
 
+import VueTimepicker from 'vue2-timepicker'
+import 'vue2-timepicker/dist/VueTimepicker.css'
+
 // Global Mixin
 import GlobalMixin from './globalMixin'
 
@@ -28,6 +31,8 @@ require('./assets/css/common.css')
 Vue.use(VueBreadcrumbs)
 
 Vue.use(VueCryptojs)
+
+Vue.use(VueTimepicker)
 
 // Global Mixin
 Vue.mixin(GlobalMixin)

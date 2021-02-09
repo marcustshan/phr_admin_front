@@ -24,10 +24,23 @@ const globalMixin = {
       ],
       numberRules: [
         v => (!v || /^[0-9\\,]+$/.test(v)) || '숫자만 입력 가능합니다.'
+      ],
+      versionRules: [
+        v => (!v || /^[0-9\\.]+$/.test(v)) || '숫자만 입력 가능합니다.'
+      ],
+      siteRules: [
+        v => (!v || /^[0-9a-zA-Z\\.]+$/.test(v)) || '영문, 숫자만 입력 가능합니다.'
       ]
     }
   },
   methods: {
+    isEmpty (value) {
+      if (this.trimAll(value) === '' || value === null || value === undefined || (value !== null && typeof value === 'object' && !Object.keys(value).length)) {
+        return true
+      } else {
+        return false
+      }
+    },
     replaceAll (value, target, to) {
       return !value ? '' : value.split(target).join(to)
     },

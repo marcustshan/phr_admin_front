@@ -45,6 +45,10 @@
             <v-icon left>search</v-icon>
             검색
           </v-btn>
+          <v-btn class="ml-3" outlined rounded color="teal darken-1" @click="writeVersion">
+            <v-icon left>edit</v-icon>
+            등록
+          </v-btn>
         </v-col>
       </v-row>
     </div>
@@ -53,19 +57,19 @@
       :no-data-text="'검색 결과가 없습니다.'"
       :headers="headers"
       :items="versionList"
-      item-key="hisSeq"
+      item-key="VER_ID"
       hide-default-footer
       disable-sort
       disable-hover
       class="bordered condensed click-row history-table"
     >
       <template v-slot:item.modify="{ item }">
-        <v-btn small color="accent" rounded outlined @click="modifyFaq(item)">
+        <v-btn small color="accent" rounded outlined @click="modifyVersion(item)">
           <v-icon small>check</v-icon>수정
         </v-btn>
       </template>
       <template v-slot:item.delete="{ item }">
-        <v-btn color="red" outlined dark @click="deleteFaq(item.hisSeq)">
+        <v-btn color="red" outlined dark @click="deleteVersion(item.VER_ID)">
           <v-icon left>delete_outline</v-icon>
           삭제
         </v-btn>
@@ -84,6 +88,25 @@
 </template>
 
 <script>
+import versionService from 'Api/version/version.service'
+
+const IN_FORM = {
+  IN_VER_NM: null, // 버전명
+  IN_VER_CODE: null, // 버전코드
+  IN_PRGM_MGMT_NO: null, // 프로그램 관리번호
+  IN_PRGM_NM: null, // 프로그램 명
+  IN_MOB_TP_CD: null, // 모바일 코드 (Android, IOS)
+  IN_DTB_MODE: null, // 배포모드(운영,개발)
+  IN_FRC_UPD_YN: null, // 강제 업데이트 여부
+  IN_UPD_AVL_DTM: null, // 업데이트 가능일시
+  IN_VER_REG_DT: null, // 버전 등록일시
+  IN_PRGM_LSH_CNTE: null, // 업데이트 상세 내용
+  IN_USE_YN: null, // 사용여부
+  IN_ADM_SYS_ID: null, // 관리자 시스템 ID
+  IN_UPD_URL: null, // 업데이트 주소
+  IN_SAVE_TYP: 'D'
+}
+
 export default {
   name: 'versionList',
   computed: {
@@ -92,30 +115,34 @@ export default {
         return 1
       }
       return Math.ceil(this.searchParam.total / this.searchParam.size)
+    },
+    user () {
+      return this.$store.state.user.userInfo
     }
   },
   data: () => ({
+    inForm: _.cloneDeep(IN_FORM),
     headers: [
-      { text: 'No', value: 'hisSeq', align: 'center' },
-      { text: '유형', value: 'type', align: 'center' },
-      { text: '버전', value: 'version', align: 'center' },
-      { text: '배포모드', value: 'mode', align: 'center' },
-      { text: '등록일시', value: 'regDate', align: 'center' },
+      { text: 'No', value: 'VER_ID', align: 'center' },
+      { text: '유형', value: 'MOB_TP_CD', align: 'center' },
+      { text: '버전', value: 'VER_NM', align: 'center' },
+      { text: '배포모드', value: 'DTB_MODE', align: 'center' },
+      { text: '등록일시', value: 'FSR_DTM', align: 'center' },
       { text: '수정', value: 'modify', align: 'center' },
       { text: '삭제', value: 'delete', align: 'center' }
     ],
     versionList: [],
     searchParam: {
       q: {
-        title: null
+        type: null,
+        version: null,
+        mode: null
       },
       page: 1,
       size: 10,
       total: 0
     }
   }),
-  created () {
-  },
   mounted () {
     this.getVersionList()
   },
@@ -129,15 +156,37 @@ export default {
     clearSearchParam () {
       this.searchParam.q = {}
     },
-    modifyFaq () {
+    modifyVersion (item) {
+      this.$router.push({ path: `/version/modify/${item.VER_ID}` })
     },
-    deleteFaq () {
+    // 버전관리 삭제
+    deleteVersion (versionSeq) {
+      this.inForm.IN_VER_ID = versionSeq
+      this.inForm.IN_ADM_SYS_ID = this.user.id
+      this.$dialog.confirm('삭제 하시겠습니까?').then(() => {
+        versionService.modifyVersion(this.inForm).then(() => {
+          this.$dialog.alert('삭제 되었습니다.').then(() => {
+            this.getVersionList()
+          })
+        })
+      })
     },
+    // 버전관리 등록
+    writeVersion () {
+      this.$router.push({ path: '/version/write' })
+    },
+    // 버전관리 목록 조회
     getVersionList () {
-      console.log(this.searchParam.q)
-      const tempList = { hisSeq: 1, type: 'Android11', version: '00.01.01', mode: '개발', regDate: '2021-02-02 13:30' }
-      this.versionList.push(tempList)
-      this.searchParam.total = 1
+      versionService.getVersionList(this.searchParam).then(response => {
+        if (response.data) {
+          if (typeof response.data === 'object' && Object.keys(response.data).length < 1) {
+            response.data = []
+          }
+          this.versionList = response.data
+          // TODO paging
+          // this.searchParam.total = response.pagination.total
+        }
+      })
     }
   }
 }

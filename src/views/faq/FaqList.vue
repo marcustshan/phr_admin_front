@@ -39,7 +39,7 @@
       :no-data-text="'검색 결과가 없습니다.'"
       :headers="headers"
       :items="faqList"
-      item-key="hisSeq"
+      item-key="FAQ_ID"
       hide-default-footer
       disable-sort
       disable-hover
@@ -76,14 +76,14 @@
 import faqService from 'Api/faq/faq.service'
 
 const IN_FORM = {
-  IN_FAQ_SJ: null,
-  IN_FAQ_CN: null,
-  IN_FAQ_ST_CD: null,
-  IN_FAQ_EXP_YN: null,
-  IN_DEL_YN: null,
-  IN_FAQ_ID: null,
-  IN_ADM_SYS_ID: null,
-  IN_SAVE_TYP: 'D'
+  IN_FAQ_SJ: null, // FAQ 제목
+  IN_FAQ_CN: null, // FAQ 내용
+  IN_FAQ_ST_CD: null, // 질문유형 코드
+  IN_FAQ_EXP_YN: null, // FAQ 노출 유무
+  IN_DEL_YN: null, // 삭제여부
+  IN_FAQ_ID: null, // FAQ ID
+  IN_ADM_SYS_ID: null, // 관리자 시스템 ID
+  IN_SAVE_TYP: 'D' // 저장타입
 }
 
 export default {

@@ -1,15 +1,15 @@
 <template>
   <div class="content-container">
-    <v-form ref="form" lazy-validation class="mt-10">
+    <v-form ref="form" lazy-validation>
       <v-row>
         <v-col md="12">
           <v-simple-table dense>
             <thead class="detailTable">
             <tr>
               <th class="text-center">등록자</th>
-              <td colspan="3">{{ user.id }}</td>
+              <td>{{ user.id }}</td>
               <th class="text-center">등록일시</th>
-              <td colspan="3">{{ today }}</td>
+              <td>{{ today }}</td>
             </tr>
             </thead>
           </v-simple-table>
@@ -18,7 +18,7 @@
 
       <div class="inputForm">
         <v-row class="pt-3 pb-3">
-          <v-col md="4" cols="2">
+          <v-col md="4" cols="2" class="font-weight-bold">
             <v-icon left color="#43425d">label</v-icon>
             <v-label>공지사항</v-label>
           </v-col>
@@ -58,6 +58,7 @@
               format="YYYY-MM-DD"
               label="게시일"
               hide-details
+              :required="form.NTC_EXP_YN === 'Y' ? true : false"
               :disabled="form.NTC_EXP_YN === 'Y' ? false : true"
             ></date-picker>
           </v-col>
@@ -78,6 +79,7 @@
             <date-picker
               v-model="form.PUP_EXP_STR"
               :disabled="form.PUP_EXP_YN === 'Y' ? false : true"
+              :required="form.PUP_EXP_YN === 'Y' ? true : false"
               format="YYYY-MM-DD"
               label="시작일"
               hide-details
@@ -88,6 +90,7 @@
               v-model="form.PUP_EXP_END"
               :min="form.PUP_EXP_STR"
               :disabled="form.PUP_EXP_YN === 'Y' ? false : true"
+              :required="form.PUP_EXP_YN === 'Y' ? true : false"
               format="YYYY-MM-DD"
               label="종료일"
               hide-details
@@ -110,6 +113,7 @@
             <date-picker
               v-model="form.TOP_EXP_STR"
               :disabled="form.TOP_EXP_YN === 'Y' ? false : true"
+              :required="form.TOP_EXP_YN === 'Y' ? true : false"
               format="YYYY-MM-DD"
               label="시작일"
               hide-details
@@ -120,6 +124,7 @@
               v-model="form.TOP_EXP_END"
               :min="form.TOP_EXP_STR"
               :disabled="form.TOP_EXP_YN === 'Y' ? false : true"
+              :required="form.TOP_EXP_YN === 'Y' ? true : false"
               format="YYYY-MM-DD"
               label="종료일"
               hide-details

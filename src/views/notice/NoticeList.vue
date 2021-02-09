@@ -5,7 +5,7 @@
         <v-row @keypress.enter="getNoticeList">
           <v-col cols="3">
             <v-text-field
-              v-model="searchParam.title"
+              v-model="searchParam.q.title"
               append-icon="search"
               clearable
               label="제목"
@@ -14,7 +14,7 @@
           </v-col>
           <v-col cols="3">
             <v-text-field
-              v-model="searchParam.writer"
+              v-model="searchParam.q.writer"
               append-icon="search"
               clearable
               label="작성자"
@@ -23,7 +23,7 @@
           </v-col>
           <v-col cols="3">
             <date-picker
-              v-model="searchParam.date"
+              v-model="searchParam.q.date"
               label="작성일"
             ></date-picker>
           </v-col>
@@ -54,7 +54,7 @@
       :no-data-text="'검색 결과가 없습니다.'"
       :headers="headers"
       :items="noticeList"
-      item-key="chgHisSeq"
+      item-key="NTC_ID"
       hide-default-footer
       disable-sort
       disable-hover
@@ -89,22 +89,22 @@ import noticeService from 'Api/notice/notice.service'
 import dayjs from 'dayjs'
 
 const IN_FORM = {
-  IN_NTC_ID: null,
-  IN_ADM_SYS_ID: null,
-  IN_NTC_ST_CD: null,
-  IN_NTC_SJ: null,
-  IN_NTC_CN: null,
-  IN_NTC_IMG_URL: null,
-  IN_NTC_EXP_YN: null,
-  IN_NTC_PRD_STR: null,
-  IN_PUP_EXP_YN: null,
-  IN_PUP_EXP_STR: null,
-  IN_PUP_EXP_END: null,
-  IN_TOP_EXP_YN: null,
-  IN_TOP_EXP_STR: null,
-  IN_TOP_EXP_END: null,
-  IN_PSH_ALR_YN: null,
-  IN_SAVE_TYP: 'D' // 삭제
+  IN_NTC_ID: null, // 공지사항 ID
+  IN_ADM_SYS_ID: null, // 관리자 시스템 ID
+  IN_NTC_ST_CD: null, // 공지사항 유형코드
+  IN_NTC_SJ: null, // 공지사항 제목
+  IN_NTC_CN: null, // 공지사항 내용
+  IN_NTC_IMG_URL: null, // 공지사항 내용 이미지 URL
+  IN_NTC_EXP_YN: null, // 앱 팝업 노출 유무
+  IN_NTC_PRD_STR: null, // 공지 기간 시작일
+  IN_PUP_EXP_YN: null, // 앱 팝업 노출 유무
+  IN_PUP_EXP_STR: null, // 앱 팝업 노출 시작일
+  IN_PUP_EXP_END: null, // 앱 팝업 노출 종료일
+  IN_TOP_EXP_YN: null, // 앱 상단 노출 유무
+  IN_TOP_EXP_STR: null, // 앱 상단 노출 시작일
+  IN_TOP_EXP_END: null, // 앱 상단 노출 종료일
+  IN_PSH_ALR_YN: null, // 앱 푸시 알림 유무
+  IN_SAVE_TYP: 'D' // 저장타입(U,D)
 }
 
 export default {
@@ -134,9 +134,11 @@ export default {
     ],
     noticeList: [],
     searchParam: {
-      title: '',
-      writer: '',
-      date: '',
+      q: {
+        title: '',
+        writer: '',
+        date: ''
+      },
       page: 1,
       size: 10,
       total: 0
@@ -173,9 +175,7 @@ export default {
       }
     },
     clearSearchParam () {
-      this.searchParam.title = ''
-      this.searchParam.writer = ''
-      this.searchParam.date = null
+      this.searchParam.q = {}
     },
     // 공지사항 조회
     getNoticeList () {
