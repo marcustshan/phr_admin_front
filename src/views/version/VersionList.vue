@@ -182,6 +182,7 @@ export default {
           this.versionList = response.data
           // TODO paging
           // this.searchParam.total = response.pagination.total
+          this.searchParam.total = this.versionList.length
         }
       })
     }

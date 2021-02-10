@@ -84,7 +84,6 @@
 
 <script>
 import noticeService from 'Api/notice/notice.service'
-import dayjs from 'dayjs'
 
 const IN_FORM = {
   IN_NTC_ID: null, // 공지사항 ID
@@ -154,7 +153,7 @@ export default {
     deleteNotice (noticeSeq) {
       this.inForm.IN_NTC_ID = noticeSeq
       this.inForm.IN_ADM_SYS_ID = this.user.id
-      this.$dialog.confirm('삭제 하시겠습니까?').then(() => {
+      this.$dialog.confirm('선택한 공지사항을 삭제 하시겠습니까?').then(() => {
         noticeService.modifyNotice(this.inForm).then(() => {
           this.$dialog.alert('삭제 되었습니다.').then(() => {
             this.getNoticeList()
@@ -166,12 +165,14 @@ export default {
     writeNotice () {
       this.$router.push({ path: '/notice/write' })
     },
+    // 페이징 변경
     pageChange (pageNum) {
       if (this.searchParam.page !== pageNum) {
         this.searchParam.page = pageNum
         this.getNoticeList()
       }
     },
+    // 검색조건 초기화
     clearSearchParam () {
       this.searchParam.q = {}
     },
@@ -185,11 +186,9 @@ export default {
           this.noticeList = response.data
           // TODO paging
           // this.searchParam.total = response.pagination.total
+          this.searchParam.total = this.noticeList.length
         }
       })
-    },
-    getDateFormat (date) {
-      return dayjs(date, 'YYYYMMDDHHmmss').format('YYYY-MM-DD')
     }
   }
 }

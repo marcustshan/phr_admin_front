@@ -20,13 +20,14 @@
         </v-col>
       </v-row>
 
+      <v-row>
+        <v-col md="4" cols="2" class="font-weight-bold">
+          <v-icon left color="#43425d">label</v-icon>
+          <v-label>버전 {{isModify ? '수정' : '등록'}}</v-label>
+        </v-col>
+      </v-row>
+
       <div class="inputForm">
-        <v-row>
-          <v-col md="4" cols="2" class="font-weight-bold">
-            <v-icon left color="#43425d">label</v-icon>
-            <v-label>버전 {{isModify ? '수정' : '등록'}}</v-label>
-          </v-col>
-        </v-row>
 
         <v-row>
           <v-col sm="2" align-self="center" class="text-left font-weight-bold">
@@ -284,7 +285,7 @@ export default {
       }
       // 등록, 수정시 param 'IN_' 붙여야함
       this.setParamIn()
-      this.$dialog.confirm((this.isModify ? '수정' : '저장') + ' 하시겠습니까?').then(() => {
+      this.$dialog.confirm((this.isModify ? '등록한 버전을 수정' : (this.form.VER_NM + ' 버전을 등록')) + ' 하시겠습니까?').then(() => {
         if (this.isModify) {
           versionService.modifyVersion(this.inForm)
         } else {

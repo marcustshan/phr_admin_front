@@ -16,14 +16,14 @@
         </v-col>
       </v-row>
 
-      <div class="inputForm">
-        <v-row>
-          <v-col md="4" cols="2" class="font-weight-bold">
-            <v-icon left color="#43425d">label</v-icon>
-            <v-label>자주 묻는 질문</v-label>
-          </v-col>
-        </v-row>
+      <v-row>
+        <v-col md="4" cols="2" class="font-weight-bold mb-3">
+          <v-icon left color="#43425d">label</v-icon>
+          <v-label>자주 묻는 질문</v-label>
+        </v-col>
+      </v-row>
 
+      <div class="inputForm">
         <v-row>
           <v-col sm="2" align-self="center" class="text-left font-weight-bold">
             <v-label>

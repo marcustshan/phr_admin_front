@@ -140,7 +140,7 @@ export default {
     deleteFaq (faqSeq) {
       this.inForm.IN_FAQ_ID = faqSeq
       this.inForm.IN_ADM_SYS_ID = this.user.id
-      this.$dialog.confirm('삭제 하시겠습니까?').then(() => {
+      this.$dialog.confirm('선택한 질문 및 답변을 삭제 하시겠습니까?').then(() => {
         faqService.modifyFaq(this.inForm).then(() => {
           this.$dialog.alert('삭제 되었습니다.').then(() => {
             this.getFaqList()
@@ -162,6 +162,7 @@ export default {
           this.faqList = response.data
           // TODO paging
           // this.searchParam.total = response.pagination.total
+          this.searchParam.total = this.faqList.length
         }
       })
     }

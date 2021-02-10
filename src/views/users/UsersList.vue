@@ -240,6 +240,7 @@ export default {
           this.usersList = response.data
           // TODO paging
           // this.searchParam.total = response.pagination.total
+          this.searchParam.total = this.usersList.length
         }
       })
     }

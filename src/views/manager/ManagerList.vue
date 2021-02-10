@@ -1,31 +1,14 @@
 <template>
   <div class="content-container">
     <div>
-      <v-form lazy-validation>
-        <v-row @keypress.enter="getManagerList">
-          <v-col cols="3">
-            <v-text-field
-              v-model="searchParam.q.title"
-              append-icon="search"
-              clearable
-              label="제목"
-              hide-details
-            ></v-text-field>
-          </v-col>
-        </v-row>
-      </v-form>
       <v-row justify="space-between">
-        <v-col cols="4" align-self="center" class="pr-0">
+        <v-col cols="4" align-self="center">
           <div class="black--text">총 {{searchParam.total}} 건 {{searchParam.page}} / {{pages}} 페이지</div>
         </v-col>
-        <v-col cols="7" align-self="center" class="text-right pl-0">
-          <v-btn outlined rounded color="green" @click="clearSearchParam">
-            <v-icon left>refresh</v-icon>
-            초기화
-          </v-btn>
-          <v-btn class="ml-3" outlined rounded color="primary" @click="getManagerList">
-            <v-icon left>search</v-icon>
-            검색
+        <v-col cols="7" align-self="center" class="text-right">
+          <v-btn small class="ml-3" outlined rounded color="teal darken-1" @click="writeManager">
+            <v-icon left>edit</v-icon>
+            등록
           </v-btn>
         </v-col>
       </v-row>
@@ -35,14 +18,29 @@
       :no-data-text="'검색 결과가 없습니다.'"
       :headers="headers"
       :items="managerList"
-      item-key="hisSeq"
+      item-key="ADM_SYS_ID"
       hide-default-footer
       disable-sort
       disable-hover
       class="bordered condensed click-row history-table"
     >
+      <template v-slot:item.ADM_NM = {item}>
+        <span @click="goDetailPage(item)" class="blue--text pointer text-decoration-underline">
+          {{ item.ADM_NM }}
+        </span>
+      </template>
+      <template v-slot:item.ADM_BLK_YN = {item}>
+        <span @click="item.ADM_BLK_YN === 'Y' ? confirmAction('ADM_BLK_YN', item) : ''" :class="item.ADM_BLK_YN === 'Y' ? 'blue--text pointer text-decoration-underline' : 'text--disabled'">
+          초기화
+        </span>
+      </template>
+      <template v-slot:item.DOR_YN = {item}>
+        <span @click="item.DOR_YN === 'Y' ? confirmAction('DOR_YN', item) : ''" :class="item.DOR_YN === 'Y' ? 'blue--text pointer text-decoration-underline' : 'text--disabled'">
+          해제
+        </span>
+      </template>
       <template v-slot:item.delete="{ item }">
-        <v-btn color="red" outlined dark @click="deleteManager(item.hisSeq)">
+        <v-btn small color="red" outlined dark @click="confirmAction('DELETE', item)">
           <v-icon left>delete_outline</v-icon>
           삭제
         </v-btn>
@@ -61,6 +59,8 @@
 </template>
 
 <script>
+import managerService from 'Api/manager/manager.service'
+
 export default {
   name: 'managerList',
   computed: {
@@ -73,19 +73,16 @@ export default {
   },
   data: () => ({
     headers: [
-      { text: 'No', value: 'hisSeq', align: 'center' },
-      { text: 'ID', value: 'id', align: 'center' },
-      { text: '이름', value: 'name', align: 'center' },
-      { text: '이메일', value: 'email', align: 'center' },
-      { text: '비밀번호 초기화', value: 'reset', align: 'center' },
-      { text: '장기 미접속', value: 'clear', align: 'center' },
+      { text: 'No', value: 'no', align: 'center' },
+      { text: 'ID', value: 'ADM_ID', align: 'center' },
+      { text: '이름', value: 'ADM_NM', align: 'center' },
+      { text: '이메일', value: 'ADM_EML', align: 'center' },
+      { text: '비밀번호 초기화', value: 'ADM_BLK_YN', align: 'center' },
+      { text: '장기 미접속', value: 'DOR_YN', align: 'center' },
       { text: '계정 삭제', value: 'delete', align: 'center' }
     ],
     managerList: [],
     searchParam: {
-      q: {
-        title: null
-      },
       page: 1,
       size: 10,
       total: 0
@@ -103,21 +100,56 @@ export default {
         this.getManagerList()
       }
     },
-    clearSearchParam () {
-      this.searchParam.q = {}
+    // 초기화, 미접속해제, 계정삭제
+    confirmAction (type, item) {
+      let msg = item.ADM_NM + '(' + item.ADM_ID + ') '
+      if (type === 'ADM_BLK_YN') {
+        // 초기화
+        msg += '비밀번호를 초기화 하시겠습니까?'
+      } else if (type === 'DOR_YN') {
+        // 장기 미접속 해제
+        msg += '장기 미접속 제한을 해제하시겠습니까?'
+      } else {
+        // 계정 삭제
+        msg += '계정을 삭제하시겠습니까?<br>삭제된 계정은 복원할 수 없습니다.'
+      }
+      this.$dialog.confirm(msg).then(() => {
+        if (type === 'DELETE') {
+          this.deleteManager(item) // 관리자 삭제
+        }
+      })
     },
-    resetManager () {
+    // 상세페이지 이동
+    goDetailPage (item) {
+      this.$router.push({ path: '/manager/detail', name: 'managerDetail', params: { item: item } })
     },
-    clearManager () {
+    // 관리자 추가
+    writeManager () {
+      this.$router.push({ path: '/manager/write' })
     },
-    deleteManager (his) {
-      console.log(his)
+    // 관리자 삭제
+    deleteManager (item) {
+      const param = { IN_ADM_ID: item.ADM_ID, IN_ADM_EML: item.ADM_EML }
+      console.log(param)
+      managerService.deleteManager(param).then(() => {
+        this.$dialog.alert('삭제 되었습니다.').then(() => {
+          this.getManagerList()
+        })
+      })
     },
+    // 관리자 목록 조회
     getManagerList () {
-      console.log(this.searchParam.q)
-      const tempList = { hisSeq: 1, id: 'master', name: '김길동', email: 'neozen@gmail.com', reset: 'Y', clear: 'Y' }
-      this.managerList.push(tempList)
-      this.searchParam.total = 1
+      managerService.getManagerList().then(response => {
+        if (response.data) {
+          if (typeof response.data === 'object' && Object.keys(response.data).length < 1) {
+            response.data = []
+          }
+          this.managerList = response.data
+          // TODO paging
+          // this.searchParam.total = response.pagination.total
+          this.searchParam.total = this.managerList.length
+        }
+      })
     }
   }
 }

@@ -74,10 +74,10 @@ export default {
         if (!this.$refs.form.validate()) {
           return
         }
-        await this.$store.dispatch('auth/login', {
-          loginId: this.user.id,
-          loginPw: this.user.password
-        })
+        // await this.$store.dispatch('auth/login', {
+        //   loginId: this.user.id,
+        //   loginPw: this.user.password
+        // })
         /*
         this.$axios.post('/login', this.user).then(response => {
           if (response.data.code === '0') {
