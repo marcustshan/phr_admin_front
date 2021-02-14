@@ -5,6 +5,9 @@ import store from './store'
 import vuetify from './plugins/vuetify'
 import VueCryptojs from 'vue-cryptojs'
 
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
+import VueCkeditor from 'vue-ckeditor5'
+
 import VuejsDialog from 'vuejs-dialog'
 import 'vuejs-dialog/dist/vuejs-dialog.min.css'
 
@@ -36,6 +39,46 @@ Vue.use(VueTimepicker)
 Vue.mixin(GlobalMixin)
 
 Vue.config.productionTip = false
+
+ClassicEditor.defaultConfig = {
+  toolbar: {
+    items: [
+      'heading',
+      '|',
+      'bold',
+      'italic',
+      '|',
+      'bulletedList',
+      'numberedList',
+      '|',
+      'insertTable',
+      '|',
+      'undo',
+      'redo'
+    ]
+  },
+  image: {
+    toolbar: [
+      'imageStyle:full',
+      'imageStyle:side',
+      '|',
+      'imageTextAlternative'
+    ]
+  },
+  table: {
+    contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells']
+  },
+  language: 'en'
+}
+// CKEditor
+const options = {
+  editors: {
+    classic: ClassicEditor
+  },
+  name: 'ckeditor'
+}
+
+Vue.use(VueCkeditor.plugin, options)
 
 router.beforeEach((to, from, next) => {
   if (!to.name || to.name.length < 1) {

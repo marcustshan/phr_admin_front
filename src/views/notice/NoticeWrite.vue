@@ -161,7 +161,28 @@
         </v-row>
 
         <v-row>
+          <v-col sm="2" align-self="center" class="font-weight-bold">
+            <v-label>
+              <v-icon left>keyboard_arrow_right</v-icon>이미지</v-label>
+          </v-col>
+          <v-col sm="10">
+            <v-btn
+              elevation="2"
+              color="primary"
+              @click="openImageInput"
+            >
+              이미지 등록
+            </v-btn>
+            <br />
+            <img v-show="showPreviewImage" class="preview-image" id="previewImage" alt="공지사항 이미지" />
+            <input id="noticeImage" class="no-display" type="file" accept="image/*" @change="imageChanged" />
+          </v-col>
+        </v-row>
+
+        <v-row>
           <v-col sm="12">
+            <ckeditor type="classic" v-model="form.NTC_CN"></ckeditor>
+            <!--
             <v-textarea
               class="mt-5"
               outlined
@@ -170,6 +191,7 @@
               :rules="emptyRules"
               v-model="form.NTC_CN"
             ></v-textarea>
+            -->
           </v-col>
         </v-row>
       </div>
@@ -191,8 +213,8 @@ const DEFAULT_FORM = {
   ADM_SYS_ID: null,
   NTC_ST_CD: '1', // 유형
   NTC_IMG_URL: null, // 공지사항 내용 이미지 URL
-  NTC_EXP_YN: 'N', // 앱 게시글 노출여부
-  PUP_EXP_YN: 'N', // 팝업 노출여부
+  NTC_EXP_YN: 'Y', // 앱 게시글 노출여부
+  PUP_EXP_YN: 'Y', // 팝업 노출여부
   TOP_EXP_YN: 'N', // 상단 노출여부
   PSH_ALR_YN: 'N', // 푸시 알림여부
   NTC_PRD_STR: null, // 게시일
@@ -234,7 +256,8 @@ export default {
     inForm: _.cloneDeep(IN_FORM),
     indList: [{ code: '1', codeNm: '일반' }, { code: '2', codeNm: '긴급' }], // 유형(일반,긴급)
     noticeSeq: -1,
-    today: dayjs().format('YYYY-MM-DD HH:mm')
+    today: dayjs().format('YYYY-MM-DD HH:mm'),
+    showPreviewImage: false
   }),
   mounted () {
     // 수정
@@ -244,6 +267,24 @@ export default {
     }
   },
   methods: {
+    // 이미지 등록 버튼 클릭 event
+    openImageInput () {
+      document.getElementById('noticeImage').click()
+    },
+    // 이미지 선택
+    imageChanged ($event) {
+      if ($event.target.files && $event.target.files.length > 0) {
+        const vm = this
+        const reader = new FileReader()
+
+        reader.onload = function (e) {
+          vm.showPreviewImage = true
+          document.getElementById('previewImage').src = e.target.result
+        }
+
+        reader.readAsDataURL($event.target.files[0])
+      }
+    },
     // 공지사항 목록
     goNoticeList () {
       this.$router.push({ path: '/notice/list' })
@@ -292,3 +333,7 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+  .preview-image { margin-top: 5px; max-height: 170px; }
+</style>
