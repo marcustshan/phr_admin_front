@@ -136,12 +136,16 @@ export default {
         writer: '',
         date: ''
       },
+      sysId: null,
       page: 1,
       size: 10,
       total: 0
     }
   }),
   mounted () {
+    if (this.user.ADM_SYS_ID) {
+      this.searchParam.sysId = this.user.ADM_SYS_ID
+    }
     this.getNoticeList()
   },
   methods: {
@@ -152,7 +156,7 @@ export default {
     // 공지사항 삭제
     deleteNotice (noticeSeq) {
       this.inForm.IN_NTC_ID = noticeSeq
-      this.inForm.IN_ADM_SYS_ID = this.user.id
+      this.inForm.IN_ADM_SYS_ID = this.user.ADM_SYS_ID
       this.$dialog.confirm('선택한 공지사항을 삭제 하시겠습니까?').then(() => {
         noticeService.modifyNotice(this.inForm).then(() => {
           this.$dialog.alert('삭제 되었습니다.').then(() => {

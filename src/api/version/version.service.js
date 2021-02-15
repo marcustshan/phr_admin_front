@@ -4,8 +4,8 @@ const service = {
   /**
    * 버전관리 > 목록 조회
    */
-  getVersionList () {
-    return soapUtil.query(soapUtil.STYPE.GETQUERY, 'SELECT', 'N', 'PC_PHR_GET_VERS_ADM', [{ IN_ADM_SYS_ID: '1' }])
+  getVersionList (param) {
+    return soapUtil.query(soapUtil.STYPE.GETQUERY, 'SELECT', 'N', 'PC_PHR_GET_VERS_ADM', [{ IN_ADM_SYS_ID: param.sysId }])
   },
   /**
    * 버전관리 > 상세조회

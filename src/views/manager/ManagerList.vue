@@ -69,6 +69,9 @@ export default {
         return 1
       }
       return Math.ceil(this.searchParam.total / this.searchParam.size)
+    },
+    user () {
+      return this.$store.state.user.userInfo
     }
   },
   data: () => ({
@@ -83,14 +86,23 @@ export default {
     ],
     managerList: [],
     searchParam: {
+      sysId: null,
       page: 1,
       size: 10,
       total: 0
+    },
+    resetForm: {
+      IN_ADM_SYS_ID: null,
+      IN_INIT_ADM_ID: null,
+      IN_ADM_DOB_DT: 1
     }
   }),
   created () {
   },
   mounted () {
+    if (this.user.ADM_SYS_ID) {
+      this.searchParam.sysId = this.user.ADM_SYS_ID
+    }
     this.getManagerList()
   },
   methods: {
@@ -114,8 +126,29 @@ export default {
         msg += '계정을 삭제하시겠습니까?<br>삭제된 계정은 복원할 수 없습니다.'
       }
       this.$dialog.confirm(msg).then(() => {
+        this.resetForm.IN_ADM_SYS_ID = item.ADM_SYS_ID
+        this.resetForm.IN_INIT_ADM_ID = item.ADM_ID
         if (type === 'DELETE') {
-          this.deleteManager(item) // 관리자 삭제
+          // 관리자 삭제
+          this.deleteManager(item)
+        } else if (type === 'ADM_BLK_YN') {
+          // 비밀번호 초기화
+          managerService.resetManagePw(this.resetForm).then(res => {
+            if (res.data.length > 0) {
+              this.$dialog.alert('비밀번호과 초기화 되었습니다.').then(() => {
+                this.getManagerList()
+              })
+            }
+          })
+        } else if (type === 'DOR_YN') {
+          // 장기 미접속 해제
+          managerService.dorYnManage(this.resetForm).then(res => {
+            if (res.data.length > 0) {
+              this.$dialog.alert('장기 미접속이 해제 되었습니다.').then(() => {
+                this.getManagerList()
+              })
+            }
+          })
         }
       })
     },
@@ -130,7 +163,6 @@ export default {
     // 관리자 삭제
     deleteManager (item) {
       const param = { IN_ADM_ID: item.ADM_ID, IN_ADM_EML: item.ADM_EML }
-      console.log(param)
       managerService.deleteManager(param).then(() => {
         this.$dialog.alert('삭제 되었습니다.').then(() => {
           this.getManagerList()
@@ -139,7 +171,7 @@ export default {
     },
     // 관리자 목록 조회
     getManagerList () {
-      managerService.getManagerList().then(response => {
+      managerService.getManagerList(this.searchParam).then(response => {
         if (response.data) {
           if (typeof response.data === 'object' && Object.keys(response.data).length < 1) {
             response.data = []

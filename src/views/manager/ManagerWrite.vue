@@ -103,14 +103,13 @@ import managerService from 'Api/manager/manager.service'
 
 const DEFAULT_FORM = {
   IN_ADM_ID: null, // 관리자 ID
-  IN_ADM_PW: null, // 관리자 비밀번호
   IN_ADM_NM: null, // 관리자 이름
   IN_ADM_DOB_DT: '0', // 관리자 계정종류
   IN_ADM_EML: null // 관리자 이메일
 }
 
 export default {
-  name: 'NoticeWrite',
+  name: 'ManagerWrite',
   computed: {
     user () {
       return this.$store.state.user.userInfo
@@ -129,17 +128,17 @@ export default {
     goManagerList () {
       this.$router.push({ path: '/manager/list' })
     },
-    checkManagerId () {
-      this.errMsg = '존재하는 계정입니다.'
-    },
+    // checkManagerId () {
+    //   this.errMsg = '존재하는 계정입니다.'
+    // },
     // 임시 비밀번호(10자리 난수번호)
-    setRandomPw (range) {
-      let pw = ''
-      for (let i = 0; i < range; i++) {
-        pw += Math.floor(Math.random() * 10)
-      }
-      this.form.IN_ADM_PW = pw
-    },
+    // setRandomPw (range) {
+    //   let pw = ''
+    //   for (let i = 0; i < range; i++) {
+    //     pw += Math.floor(Math.random() * 10)
+    //   }
+    //   this.form.IN_ADM_PW = pw
+    // },
     // 관리자 계정 저장
     saveManager () {
       if (!this.$refs.form.validate()) {
@@ -148,12 +147,24 @@ export default {
       // 계정 유효성 검사
       // this.checkManagerId()
       // 임시비밀번호 생성 (10자리 난수번호)
-      this.setRandomPw(10)
-      console.log(this.form)
+      // this.setRandomPw(10)
       this.$dialog.confirm('계정을 추가 하시겠습니까?').then(() => {
-        managerService.writeManager(this.form)
-        this.$dialog.alert('추가 되었습니다.').then(() => {
-          this.$router.push({ path: '/manager/list' })
+        managerService.writeManager(this.form).then(res => {
+          if (res.data) {
+            const result = res.data[0]
+            if (result.ERROR_YN === 'Y') {
+              this.errMsg = null
+              if (result.ERROR_MSG === 'EXIST_ID') {
+                this.errMsg = '이미 존재하는 계정입니다.'
+              } else if (result.ERROR_MSG === 'EXIST_EMAIL') {
+                this.errMsg = '이미 존재하는 이메일입니다.'
+              }
+            } else {
+              this.$dialog.alert('추가 되었습니다.').then(() => {
+                this.$router.push({ path: '/manager/list' })
+              })
+            }
+          }
         })
       })
     }

@@ -15,32 +15,38 @@ const state = {
     {
       name: '사용자 관리',
       path: '/users',
-      showMenu: true
+      showMenu: true,
+      mstMenu: false
     },
     {
       name: '공지사항',
       path: '/notice',
-      showMenu: true
+      showMenu: true,
+      mstMenu: false
     },
     {
       name: '자주 묻는 질문',
       path: '/faq',
-      showMenu: true
+      showMenu: true,
+      mstMenu: false
     },
     {
       name: '버전 관리',
       path: '/version',
-      showMenu: true
+      showMenu: true,
+      mstMenu: false
     },
     {
       name: '마이 페이지',
       path: '/mypage',
-      showMenu: true
+      showMenu: true,
+      mstMenu: false
     },
     {
       name: '관리자 계정 관리',
       path: '/manager',
-      showMenu: true
+      showMenu: true,
+      mstMenu: true
     }
   ]
 }

@@ -153,6 +153,9 @@ export default {
         return 1
       }
       return Math.ceil(this.searchParam.total / this.searchParam.size)
+    },
+    user () {
+      return this.$store.state.user.userInfo
     }
   },
   data: () => ({
@@ -184,6 +187,7 @@ export default {
         sex: null,
         birth: null
       },
+      sysId: null,
       page: 1,
       size: 10,
       total: 0
@@ -192,6 +196,9 @@ export default {
   created () {
   },
   mounted () {
+    if (this.user.ADM_SYS_ID) {
+      this.searchParam.sysId = this.user.ADM_SYS_ID
+    }
     this.getUsersList()
   },
   methods: {

@@ -108,6 +108,9 @@ export default {
         return 1
       }
       return Math.ceil(this.searchParam.total / this.searchParam.size)
+    },
+    user () {
+      return this.$store.state.user.userInfo
     }
   },
   data: () => ({
@@ -115,6 +118,7 @@ export default {
       searchInd: '1',
       searchStartDt: null,
       searchEndDt: null,
+      sysId: null,
       page: 1,
       size: 10,
       total: 0
@@ -134,6 +138,7 @@ export default {
   mounted () {
     if (this.$route.params.item) {
       this.managerInfo = this.$route.params.item
+      this.searchParam.sysId = this.$route.params.item.ADM_SYS_ID
       this.getManagerDetailList()
     } else {
       this.$router.push({ path: '/manager/list' })

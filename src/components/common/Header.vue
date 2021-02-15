@@ -62,7 +62,7 @@
       <div class="menu_container">
         <v-list dense>
           <template v-for="(parentMenu, parentMenuIndex) in showMenus">
-            <div :key="parentMenuIndex">
+            <div :key="parentMenuIndex" v-if="user.ADM_DOB_DT === '1' ? true : parentMenu.mstMenu === false">
               <div
                 class="white--text px-6 py-4 menu_item"
                 :class="[parentMenuIndex !== 0 ? 'border-top' : '', getCurrentMenuClass(parentMenu)]"
@@ -109,9 +109,9 @@
       <v-row no-gutters>
         <v-col cols="12" class="text-right">
           <p>
-            <span>관리자(master00)</span>
+            <span>{{ user.ADM_NM }}({{ user.ADM_ID }})</span>
             <v-divider vertical light class="mx-6 white--text"></v-divider>
-            <a href="#layer_logout" class="d_layer_open">로그아웃</a>
+            <span class="blue--text pointer text-decoration-underline" @click="logout">로그아웃</span>
           </p>
         </v-col>
       </v-row>
@@ -174,9 +174,8 @@ export default {
       this.$router.push('/')
     },
     logout () {
-      this.$dialog.confirm('로그아웃 하시겠습니까?').then(() => {
-        this.$store.dispatch('setUserInfo', {})
-        this.$router.push({ name: 'login' })
+      this.$dialog.confirm('나의건강기록 관리자 시스템<br>로그아웃 하시겠습니까?').then(() => {
+        this.$store.dispatch('user/logout')
       })
     },
     isCurrentMenu (menu) {

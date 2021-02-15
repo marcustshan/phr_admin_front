@@ -2,7 +2,7 @@
   <v-app class="app-container">
     <Header v-if="!isLoginView" />
     <v-main class="mainWrap">
-      <div class="mainTitle ml-3">{{ pageTitle }}</div>
+      <div class="mainTitle ml-3" v-if="!isLoginView">{{ pageTitle }}</div>
       <transition name="router-anim" :enter-active-class="`animated slideInUp`">
         <router-view></router-view>
       </transition>

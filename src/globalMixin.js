@@ -30,6 +30,12 @@ const globalMixin = {
       ],
       siteRules: [
         v => (!v || /^[0-9a-zA-Z\\.]+$/.test(v)) || '영문, 숫자만 입력 가능합니다.'
+      ],
+      idRules: [
+        v => !!v || '아이디를 입력해주세요.'
+      ],
+      passwordRules: [
+        v => !!v || '비밀번호를 입력해주세요.'
       ]
     }
   },

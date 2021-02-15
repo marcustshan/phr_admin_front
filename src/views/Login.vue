@@ -24,12 +24,15 @@
             id="password"
             class="mt-2"
             :rules="passwordRules"
-            v-model="user.password"
+            v-model="user.pw"
             light="light"
             prepend-icon="lock"
             label="비밀번호"
             type="password"
           ></v-text-field>
+          <div class="red--text justify-center" v-if="statusMsg">
+            <span>{{ statusMsg }}</span>
+          </div>
           <!--
           <v-checkbox
             v-model="user.rememberId"
@@ -47,52 +50,128 @@
           </v-btn>
         </v-form>
       </v-flex>
+
+      <v-dialog
+        v-model="dialog"
+        transition="dialog-top-transition"
+        width="500"
+      >
+        <v-card>
+          <v-card-text class="pt-4">
+            <v-row dense>
+              <v-col cols="8">
+                <v-text-field
+                  v-model="verificationCode"
+                  clearable
+                  label="인증번호를 입력하세요."
+                  :disabled="!sendMsg"
+                  maxlength="4"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="4" class="pt-3 pl-5">
+                <v-btn x-large min-width="130" max-height="40" @click="sendCode" class="login_button white--text">
+                  인증번호 발송
+                </v-btn>
+              </v-col>
+            </v-row>
+            <v-row dense v-if="sendMsg">
+              <v-col cols="12">
+                <div class="red--text">
+                  <span><v-icon left size="20">mail_outline</v-icon>가입시 등록한 이메일로 인증번호가 전송되었습니다.</span>
+                </div>
+              </v-col>
+            </v-row>
+          </v-card-text>
+
+          <v-card-actions class="justify-center">
+            <v-btn large min-width="130" max-height="40" @click="submit" class="login_button white--text">
+              인증번호 확인
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-layout>
   </v-container>
 </template>
 
 <script>
+// import loginService from 'Api/user/user.service'
+
 export default {
   name: 'Login',
   components: {},
   data: () => ({
     user: {
-      id: '',
-      password: '',
+      id: 'test_adm',
+      pw: '1234',
       rememberId: false
     },
-    idRules: [
-      v => !!v || '아이디를 입력해주세요.'
-    ],
-    passwordRules: [
-      v => !!v || '비밀번호를 입력해주세요.'
-    ]
+    dialog: false,
+    verificationCode: null,
+    sendMsg: false,
+    statusMsg: null,
+    systemId: null
   }),
   methods: {
+    // 로그인 버튼
     async fnLogin () {
       try {
+        this.sendMsg = false
         if (!this.$refs.form.validate()) {
           return
         }
-        // await this.$store.dispatch('auth/login', {
-        //   loginId: this.user.id,
-        //   loginPw: this.user.password
-        // })
-        /*
-        this.$axios.post('/login', this.user).then(response => {
-          if (response.data.code === '0') {
-            this.$store.dispatch('user/setUserInfo', response.data.user)
-            if (this.user.rememberId) {
-              localStorage.setItem('PHR_REMEMBER_ID', this.user.id)
-            } else {
-              localStorage.removeItem('PHR_REMEMBER_ID')
-            }
-          } else {
-            this.$dialog.alert(response.data.msg)
-          }
+        // 1차 로그인 인증
+        const res = await this.$store.dispatch('user/preLogin', {
+          IN_ADM_ID: this.user.id,
+          IN_ADM_PW: this.user.pw
         })
-        */
-        await this.$router.push({ path: '/main', name: 'main' })
+        this.statusMsg = null
+        if (res.ERROR_YN === 'Y') {
+          if (res.ERROR_MSG === 'NO-MANAGER') {
+            this.statusMsg = '등록되지 않는 아이디 입니다.'
+          } else if (res.ERROR_MSG === 'DORMANCY') {
+            this.$dialog.alert('장기 미 접속 시 로그인 이용이 제한됩니다.<br>관리자 문의 부탁드립니다.')
+          } else if (res.ERROR_MSG === 'BLOCK') {
+            this.$dialog.alert('로그인 5회 연속 오류로 인하여 로그인이 제한되었습니다.<br>관리자 문의 부탁드립니다.')
+          } else if (res.ERROR_MSG === 'WRONG-PWD') {
+            this.statusMsg = '로그인 5회 연속 오류 시 로그인이 제한됩니다. (' + res.ERROR_CNT + '/5)'
+          }
+        } else {
+          // 인증번호 dialog
+          this.systemId = res.ADM_SYS_ID
+          this.dialog = true
+        }
+      } catch (err) {
+        this.$dialog.alert(err.msg)
+      }
+    },
+    // 인증번호 발송
+    async sendCode () {
+      try {
+        this.sendMsg = true
+        const res = await this.$store.dispatch('user/emailVerify', {
+          certNum: this.systemId
+        })
+        this.verificationCode = res.CERT_NUM
+      } catch (err) {
+        this.$dialog.alert(err.msg)
+      }
+    },
+    // 인증번호 확인 후 로그인 처리
+    async submit () {
+      try {
+        if (this.verificationCode === null) {
+          this.$dialog.alert('인증번호를 입력하세요.')
+        } else {
+          const res = await this.$store.dispatch('user/login', {
+            IN_ADM_ID: this.user.id,
+            IN_ADM_PW: this.user.pw,
+            IN_CERT_NUM: this.verificationCode
+          })
+          if (Object.keys(res).length > 0) {
+            await this.$router.push({ path: '/main', name: 'main' })
+          }
+        }
       } catch (err) {
         this.$dialog.alert(err.msg)
       }

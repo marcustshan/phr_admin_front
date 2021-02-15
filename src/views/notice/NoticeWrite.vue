@@ -7,7 +7,7 @@
             <thead class="detailTable">
             <tr>
               <th class="text-center">등록자</th>
-              <td>{{ user.id }}</td>
+              <td>{{ user.ADM_ID }}</td>
               <th class="text-center">등록일시</th>
               <td>{{ today }}</td>
             </tr>
@@ -291,7 +291,7 @@ export default {
     },
     // 공지사항 상세조회
     getNoticeDetail (noticeSeq) {
-      const param = { IN_ADM_SYS_ID: this.user.id, IN_NTC_ID: noticeSeq }
+      const param = { IN_ADM_SYS_ID: this.user.ADM_SYS_ID, IN_NTC_ID: noticeSeq }
       noticeService.getNoticeDetail(param).then((response) => {
         if (response.data && response.data.length > 0) {
           this.form = response.data[0]
@@ -323,7 +323,7 @@ export default {
           this.inForm['IN_' + key] = this.form[key]
         }
       })
-      this.inForm.IN_ADM_SYS_ID = this.user.id
+      this.inForm.IN_ADM_SYS_ID = this.user.ADM_SYS_ID
       // 수정시
       if (this.isModify) {
         this.inForm.IN_NTC_ID = this.noticeSeq

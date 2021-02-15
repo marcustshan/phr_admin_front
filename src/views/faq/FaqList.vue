@@ -110,6 +110,7 @@ export default {
     ],
     faqList: [],
     searchParam: {
+      sysId: null,
       title: null,
       page: 1,
       size: 10,
@@ -117,6 +118,9 @@ export default {
     }
   }),
   mounted () {
+    if (this.user.ADM_SYS_ID) {
+      this.searchParam.sysId = this.user.ADM_SYS_ID
+    }
     // faq 목록 조회
     this.getFaqList()
   },
@@ -139,7 +143,7 @@ export default {
     // faq 삭제
     deleteFaq (faqSeq) {
       this.inForm.IN_FAQ_ID = faqSeq
-      this.inForm.IN_ADM_SYS_ID = this.user.id
+      this.inForm.IN_ADM_SYS_ID = this.user.ADM_SYS_ID
       this.$dialog.confirm('선택한 질문 및 답변을 삭제 하시겠습니까?').then(() => {
         faqService.modifyFaq(this.inForm).then(() => {
           this.$dialog.alert('삭제 되었습니다.').then(() => {

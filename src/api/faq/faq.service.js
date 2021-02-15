@@ -4,8 +4,8 @@ const service = {
   /**
    * 자주묻는질문 > 목록 조회
    */
-  getFaqList () {
-    return soapUtil.query(soapUtil.STYPE.GETQUERY, 'SELECT', 'N', 'PC_PHR_GET_FAQ_ADM', [{ IN_ADM_SYS_ID: '1' }])
+  getFaqList (param) {
+    return soapUtil.query(soapUtil.STYPE.GETQUERY, 'SELECT', 'N', 'PC_PHR_GET_FAQ_ADM', [{ IN_ADM_SYS_ID: param.sysId }])
   },
   /**
    * 자주묻는질문 > 상세조회

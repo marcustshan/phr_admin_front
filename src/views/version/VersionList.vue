@@ -141,6 +141,9 @@ export default {
     }
   }),
   mounted () {
+    if (this.user.ADM_SYS_ID) {
+      this.searchParam.sysId = this.user.ADM_SYS_ID
+    }
     this.getVersionList()
   },
   methods: {
@@ -159,7 +162,7 @@ export default {
     // 버전관리 삭제
     deleteVersion (versionSeq) {
       this.inForm.IN_VER_ID = versionSeq
-      this.inForm.IN_ADM_SYS_ID = this.user.id
+      this.inForm.IN_ADM_SYS_ID = this.user.ADM_SYS_ID
       this.$dialog.confirm('삭제 하시겠습니까?').then(() => {
         versionService.modifyVersion(this.inForm).then(() => {
           this.$dialog.alert('삭제 되었습니다.').then(() => {
