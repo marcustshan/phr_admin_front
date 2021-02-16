@@ -6,15 +6,15 @@
           <thead class="detailTable">
           <tr>
             <th class="text-center">관리자</th>
-            <td colspan="5">{{ this.managerInfo.ADM_ID }}({{ this.managerInfo.ADM_NM }})</td>
+            <td colspan="5">{{ managerInfo.ADM_ID }}({{ managerInfo.ADM_NM }})</td>
           </tr>
           <tr>
             <th class="text-center">최근로그인</th>
-            <td>최근로그인 날짜~</td>
+            <td>{{ managerInfo.LAST_LOGIN_DT }}</td>
             <th class="text-center">최근 로그아웃</th>
-            <td>최근로그아웃 날짜~</td>
+            <td>{{ managerInfo.LAST_LOGOUT_DT }}</td>
             <th class="text-center">IP</th>
-            <td>127.0.0.1</td>
+            <td>{{ managerInfo.LAST_CONECT_IP }}</td>
           </tr>
           </thead>
         </v-simple-table>
@@ -133,18 +133,33 @@ export default {
     endDt: null,
     detailList: [],
     searchList: [{ commCdNm: '전체', commCd: '1' }, { commCdNm: '건강검진 이력 다운로드', commCd: '2' }],
-    managerInfo: {}
+    managerInfo: {},
+    detailForm: {
+      IN_ADM_SYS_ID: null,
+      IN_MNGR_SYS_NO: null
+    }
   }),
   mounted () {
     if (this.$route.params.item) {
-      this.managerInfo = this.$route.params.item
+      this.detailForm.IN_ADM_SYS_ID = this.user.ADM_SYS_ID
+      this.detailForm.IN_MNGR_SYS_NO = this.$route.params.item.ADM_SYS_ID
       this.searchParam.sysId = this.$route.params.item.ADM_SYS_ID
-      this.getManagerDetailList()
+      this.getManagerDetail()
     } else {
       this.$router.push({ path: '/manager/list' })
     }
   },
   methods: {
+    // 상세 조회
+    getManagerDetail () {
+      managerService.getManagerDetail(this.detailForm).then(res => {
+        if (res.data) {
+          this.managerInfo = res.data[0]
+        }
+        // 관리자 수행내역 목록 조회
+        this.getManagerDetailList()
+      })
+    },
     // 관리자 수행내역 목록 조회
     getManagerDetailList () {
       managerService.getManagerDetailList(this.searchParam).then(response => {

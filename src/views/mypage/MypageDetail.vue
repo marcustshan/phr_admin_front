@@ -82,6 +82,7 @@
 
 <script>
 import userService from 'Api/user/user.service'
+import managerService from 'Api/manager/manager.service'
 
 export default {
   name: 'MypageDetail',
@@ -101,15 +102,30 @@ export default {
       IN_ADM_ID: null,
       IN_ADM_PW: null,
       IN_ADM_EML: null
+    },
+    detailForm: {
+      IN_ADM_SYS_ID: null,
+      IN_MNGR_SYS_NO: null
     }
   }),
   mounted () {
     if (this.user) {
-      this.form.IN_ADM_ID = this.user.ADM_ID
-      this.form.IN_ADM_EML = this.user.ADM_EML
+      this.detailForm.IN_ADM_SYS_ID = this.user.ADM_SYS_ID
+      this.detailForm.IN_MNGR_SYS_NO = this.user.ADM_SYS_ID
+      this.getMypageDetail()
     }
   },
   methods: {
+    // 마이페이지 상세조회
+    getMypageDetail () {
+      managerService.getManagerDetail(this.detailForm).then(res => {
+        if (res.data) {
+          const result = res.data[0]
+          this.form.IN_ADM_ID = result.ADM_ID
+          this.form.IN_ADM_EML = result.ADM_EML
+        }
+      })
+    },
     // Capslock Check
     checkCapsLock (e) {
       this.capsLock = e.getModifierState('CapsLock')

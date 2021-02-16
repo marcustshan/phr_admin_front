@@ -8,6 +8,12 @@ const service = {
     return soapUtil.query(soapUtil.STYPE.GETQUERY, 'SELECT', 'N', 'PC_PHR_GET_ADM_INFO', [{ IN_ADM_SYS_ID: param.sysId }])
   },
   /**
+   * 관리자 계정관리 > 상세 조회
+   */
+  getManagerDetail (params) {
+    return soapUtil.query(soapUtil.STYPE.SETQUERY, 'SELECT', 'N', 'PC_PHR_GET_ADM_DTL', params)
+  },
+  /**
    * 관리자 계정관리 > 상세 - 수행내역목록조회
    */
   getManagerDetailList (param) {
