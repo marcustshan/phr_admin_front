@@ -64,6 +64,7 @@ $border-basic: 1px solid rgba(0,0,0,0.12)!important;
   th {
     border: $border-basic;
     background-color: #f6f6f6;
+    width: 20%;
   }
   td {
     border: $border-basic;
@@ -71,20 +72,20 @@ $border-basic: 1px solid rgba(0,0,0,0.12)!important;
 }
 
 // 공지사항
-.notice {
-  tr {
-    th {
-      //width: 19.5%;
-      width: 15%;
-    }
-    td {
-      width: 25%;
-    }
-    .small {
-      width: 15%;
-    }
-  }
-}
+//.notice {
+//  tr {
+//    th {
+//      //width: 19.5%;
+//      width: 15%;
+//    }
+//    td {
+//      width: 25%;
+//    }
+//    .small {
+//      width: 15%;
+//    }
+//  }
+//}
 
 .inputForm {
   .row {

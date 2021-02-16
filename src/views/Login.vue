@@ -95,8 +95,6 @@
 </template>
 
 <script>
-// import loginService from 'Api/user/user.service'
-
 export default {
   name: 'Login',
   components: {},

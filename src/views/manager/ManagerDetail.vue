@@ -145,7 +145,7 @@ export default {
     }
   },
   methods: {
-    // 사용자 관리 상세 목록 조회
+    // 관리자 수행내역 목록 조회
     getManagerDetailList () {
       managerService.getManagerDetailList(this.searchParam).then(response => {
         if (response.data) {

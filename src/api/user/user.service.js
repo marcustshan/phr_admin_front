@@ -18,6 +18,12 @@ const service = {
    */
   login (param) {
     return soapUtil.query(soapUtil.STYPE.GETQUERY, 'SELECT', 'N', 'PC_PHR_GET_ADM_LGN_SCD', param)
+  },
+  /**
+   * 마이페이지 정보 수정
+   */
+  modifyUserInfo (param) {
+    return soapUtil.query(soapUtil.STYPE.SETQUERY, 'SELECT', 'N', 'PC_PHR_SET_ADM_UPD', param)
   }
 }
 
