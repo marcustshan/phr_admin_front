@@ -128,26 +128,11 @@ export default {
     goManagerList () {
       this.$router.push({ path: '/manager/list' })
     },
-    // checkManagerId () {
-    //   this.errMsg = '존재하는 계정입니다.'
-    // },
-    // 임시 비밀번호(10자리 난수번호)
-    // setRandomPw (range) {
-    //   let pw = ''
-    //   for (let i = 0; i < range; i++) {
-    //     pw += Math.floor(Math.random() * 10)
-    //   }
-    //   this.form.IN_ADM_PW = pw
-    // },
     // 관리자 계정 저장
     saveManager () {
       if (!this.$refs.form.validate()) {
         return
       }
-      // 계정 유효성 검사
-      // this.checkManagerId()
-      // 임시비밀번호 생성 (10자리 난수번호)
-      // this.setRandomPw(10)
       this.$dialog.confirm('계정을 추가 하시겠습니까?').then(() => {
         managerService.writeManager(this.form).then(res => {
           if (res.data) {

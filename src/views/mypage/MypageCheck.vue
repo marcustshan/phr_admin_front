@@ -14,6 +14,7 @@
           @keydown="checkCapsLock"
           @change="$emit('input', password)"
           label="현재 비밀번호를 입력해주세요."
+          @keypress.enter="goDetailMypage"
           clearable
         >
         </v-text-field>
