@@ -150,7 +150,8 @@ export default {
         const res = await this.$store.dispatch('user/emailVerify', {
           certNum: this.systemId
         })
-        this.verificationCode = res.CERT_NUM
+        // TODO 임시
+        console.log('인증번호 임시 : ', res.CERT_NUM)
       } catch (err) {
         this.$dialog.alert(err.msg)
       }

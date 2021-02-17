@@ -1,6 +1,5 @@
 <template>
   <div class="content-container">
-    <div>
       <v-form lazy-validation>
         <v-row @keypress.enter="getUsersList" dense>
           <v-col cols="3">
@@ -50,7 +49,6 @@
           </v-btn>
         </v-col>
       </v-row>
-    </div>
 
     <v-data-table
       :no-data-text="'검색 결과가 없습니다.'"
@@ -61,8 +59,8 @@
       disable-hover
       class="bordered condensed click-row history-table"
     >
-      <template v-slot:item.no="{ index }">
-        {{index}}
+      <template v-slot:item.ROW_NUM ="{item}">
+        {{item.ROW_NUM}}
       </template>
       <template v-slot:item.USR_GND_CD = {item}>
         {{item.USR_GND_CD === 'M' ? '남' : '여'}}
@@ -72,51 +70,71 @@
           {{item.LSH_LGN_DTM}}
         </span>
       </template>
-      <template v-slot:item.HIRA_AGR_YN = {item}>
-        <span @click="item.HIRA_AGR_YN === 'Y' ? openDialog('HIRA_AGR', item) : ''" :class="item.HIRA_AGR_YN === 'Y' ? 'blue--text pointer text-decoration-underline' : ''">
-          {{item.HIRA_AGR_YN === 'Y' ? '동의' : '미동의'}}
-        </span>
-      </template>
-      <template v-slot:item.NHIS_AGR_YN = {item}>
-          <span @click="item.NHIS_AGR_YN === 'Y' ? openDialog('NHIS_AGR', item) : ''" :class="item.NHIS_AGR_YN === 'Y' ? 'blue--text pointer text-decoration-underline' : ''">
-          {{item.NHIS_AGR_YN === 'Y' ? '동의' : '미동의'}}
-        </span>
-      </template>
-      <template v-slot:item.KDCA_AGR_YN = {item}>
-        <span @click="item.KDCA_AGR_YN === 'Y' ? openDialog('KDCA_AGR', item) : ''" :class="item.KDCA_AGR_YN === 'Y' ? 'blue--text pointer text-decoration-underline' : ''">
-          {{item.KDCA_AGR_YN === 'Y' ? '동의' : '미동의'}}
-        </span>
+      <template v-slot:item.AGREE_YN = {item}>
+          <span class="blue--text pointer text-decoration-underline" @click="openDialog(item)">보기</span>
       </template>
     </v-data-table>
 
     <!-- 사용자 동의기관 Dialog -->
-    <v-dialog
-      v-model="dialog"
-      width="600"
-    >
+    <v-dialog v-model="dialog" width="1000">
       <v-card>
-        <v-card-title class="headline grey lighten-2 justify-center">
-          사용자 동의기관
+        <v-card-title class="headline justify-center primary white--text">
+          사용자 동의내역
         </v-card-title>
         <v-card-text class="pt-4">
+          <v-row class="justify-end" dense no-gutters>
+            <v-col cols="4">
+              <v-simple-table>
+                <thead class="detailTable">
+                <tr>
+                  <th class="text-center">사용자</th>
+                  <td>{{ dialogForm.USR_NM }}({{ dialogForm.USR_ID }})</td>
+                </tr>
+                </thead>
+              </v-simple-table>
+            </v-col>
+          </v-row>
           <v-row>
             <v-col sm="12">
-              <v-simple-table dense>
+              <v-simple-table>
                 <thead class="detailTable">
-                  <tr>
-                    <th class="text-center">사용자</th>
-                    <td>{{ dialogForm.name }}({{ dialogForm.id }})</td>
-                    <th class="text-center">동의기관</th>
-                    <td>{{ dialogForm.organ }}</td>
-                  </tr>
-                  <tr style="height: 50px">
-                    <th class="text-center">동의일시</th>
-                    <td colspan="3">{{ dialogForm.agreeDt }}</td>
-                  </tr>
-                  <tr style="height: 150px">
-                    <th class="text-center">연계항목</th>
-                    <td colspan="3">{{ dialogForm.list }}</td>
-                  </tr>
+                <tr>
+                  <th class="text-center">동의기관</th>
+                  <th class="text-center">기관동의일시</th>
+                  <th class="text-center">기관동의여부</th>
+                  <th class="text-center">연계항목</th>
+                  <th class="text-center">항목동의일시</th>
+                  <th class="text-center">항목동의여부</th>
+                </tr>
+                <tr>
+                    <th class="text-center">건강보험심사 평가원</th>
+                    <td class="text-center">{{ dialogForm.HIRA_AGR_DT }}</td>
+                    <td class="text-center">{{ dialogForm.HIRA_AGR_YN === 'Y' ? '동의' : '미동의'}}</td>
+                    <th class="text-center">투약이력</th>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                </tr>
+                <tr>
+                    <th rowspan="2" class="text-center">건강보험공단</th>
+                    <td rowspan="2" class="text-center">{{ dialogForm.NHIS_AGR_DT}}</td>
+                    <td rowspan="2" class="text-center">{{ dialogForm.NHIS_AGR_YN === 'Y' ? '동의' : '미동의'}}</td>
+                    <th class="text-center">진료이력</th>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                  <th class="text-center">건강검진</th>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <th class="text-center">질병관리청</th>
+                  <td class="text-center">{{ dialogForm.KDCA_AGR_DT }}</td>
+                  <td class="text-center">{{ dialogForm.KDCA_AGR_YN === 'Y' ? '동의' : '미동의'}}</td>
+                  <th class="text-center">예방접종</th>
+                  <td></td>
+                  <td></td>
+                </tr>
                 </thead>
               </v-simple-table>
             </v-col>
@@ -145,6 +163,17 @@
 <script>
 import usersService from 'Api/users/users.service'
 
+const DIALOG_FORM = {
+  USR_ID: null,
+  USR_NM: null,
+  HIRA_AGR_DT: null,
+  HIRA_AGR_YN: null,
+  NHIS_AGR_DT: null,
+  NHIS_AGR_YN: null,
+  KDCA_AGR_DT: null,
+  KDCA_AGR_YN: null
+}
+
 export default {
   name: 'UsersList',
   computed: {
@@ -160,25 +189,17 @@ export default {
   },
   data: () => ({
     headers: [
-      { text: 'No', value: 'no', align: 'center', sortable: false },
+      { text: 'No', value: 'ROW_NUM', align: 'center', sortable: false },
       { text: '아이디', value: 'USR_ID', align: 'center' },
       { text: '이름', value: 'USR_NM', align: 'center' },
       { text: '성별', value: 'USR_GND_CD', align: 'center' },
       { text: '생년월일', value: 'USR_DOB_DT', align: 'center' },
       { text: '가입일시', value: 'JOIN_DTM', align: 'center' },
       { text: '접속일시', value: 'LSH_LGN_DTM', align: 'center' },
-      { text: '건강보험 심사평가원', value: 'HIRA_AGR_YN', align: 'center', sortable: false },
-      { text: '건강보험 공단', value: 'NHIS_AGR_YN', align: 'center', sortable: false },
-      { text: '질병관리형', value: 'KDCA_AGR_YN', align: 'center', sortable: false }
+      { text: '동의내역', value: 'AGREE_YN', align: 'center' }
     ],
     dialog: false,
-    dialogForm: {
-      id: null,
-      name: null,
-      agreeDt: null,
-      organ: null,
-      list: ''
-    },
+    dialogForm: _.cloneDeep(DIALOG_FORM),
     usersList: [],
     searchParam: {
       q: {
@@ -216,25 +237,9 @@ export default {
       this.$router.push({ path: '/users/detail', name: 'usersDetail', params: { item: item } })
     },
     // 동의 기관 팝업
-    openDialog (type, item) {
+    openDialog (item) {
       this.dialogForm = {}
-      this.dialogForm.id = item.USR_ID
-      this.dialogForm.name = item.USR_NM
-
-      if (type === 'HIRA_AGR') {
-        // 건강보험심사평가원
-        this.dialogForm.organ = '건강보험심사평가원'
-        this.dialogForm.list = '투약이력, 진료이력'
-      } else if (type === 'NHIS_AGR') {
-        // 건강보험 공단
-        this.dialogForm.organ = '건강보험 공단'
-        this.dialogForm.list = '건강검진'
-      } else if (type === 'KDCA_AGR') {
-        // 질병관리청
-        this.dialogForm.organ = '질병관리청'
-        this.dialogForm.list = '예방접종'
-      }
-      this.dialogForm.agreeDt = item[type + '_DT']
+      this.dialogForm = _.cloneDeep(item)
       this.dialog = !this.dialog
     },
     // 사용자 목록 조회
@@ -245,9 +250,7 @@ export default {
             response.data = []
           }
           this.usersList = response.data
-          // TODO paging
-          // this.searchParam.total = response.pagination.total
-          this.searchParam.total = this.usersList.length
+          this.searchParam.total = response.headers['paging-total-count']
         }
       })
     }

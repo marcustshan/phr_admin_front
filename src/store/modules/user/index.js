@@ -9,12 +9,15 @@ import userService from 'Api/user/user.service'
 
 // user.js
 const state = {
-  // userInfo: { id: 1, name: '한태식' },
+  apiToken: null,
   userInfo: null,
   isLogged: false
 }
 
 const getters = {
+  apiToken: state => {
+    return state.apiToken
+  },
   isLogged: state => {
     let logYn = false
     if (state.userInfo !== null) {
@@ -44,8 +47,9 @@ const actions = {
   async login ({ commit }, { IN_ADM_ID, IN_ADM_PW, IN_CERT_NUM }) {
     const res = await userService.login({ IN_ADM_ID, IN_ADM_PW, IN_CERT_NUM })
     if (res.data) {
+      // token 정보 저장
+      commit('setApiToken', res.headers['api-token'])
       // 사용자 정보 store에 저장
-      // commit('setJWTToken', res.headers['jwt-header'])
       commit('setUserInfo', res.data[0])
       return Promise.resolve(res.data[0])
     }
@@ -56,9 +60,9 @@ const actions = {
   },
   // 로그아웃
   async logout ({ commit }) {
-    // commit('setJWTToken', null)
+    commit('setApiToken', null)
     commit('setUserInfo', null)
-    router.push('/login')
+    await router.push('/login')
     return Promise.resolve()
   }
 }
@@ -70,6 +74,9 @@ const mutations = {
       id: null,
       name: null
     }
+  },
+  setApiToken (state, token) {
+    state.apiToken = token
   }
 }
 

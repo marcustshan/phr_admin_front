@@ -6,19 +6,19 @@
           <thead class="detailTable">
           <tr>
             <th class="text-center">사용자</th>
-            <td colspan="3">{{ this.userInfo.USR_ID }}({{ this.userInfo.USR_NM }})</td>
+            <td colspan="3">{{ userInfo.USR_ID }}({{ userInfo.USR_NM }})</td>
           </tr>
           <tr>
             <th class="text-center">성별</th>
-            <td>{{ this.userInfo.USR_GND_CD === 'M' ? '남자' : '여자' }}</td>
+            <td>{{ userInfo.USR_GND_CD === 'M' ? '남자' : '여자' }}</td>
             <th class="text-center">생년월일</th>
-            <td>{{ this.userInfo.USR_DOB_DT }}</td>
+            <td>{{ userInfo.USR_DOB_DT }}</td>
           </tr>
           <tr>
             <th class="text-center">가입일시</th>
-            <td>{{ this.userInfo.JOIN_DTM }}</td>
+            <td>{{ userInfo.JOIN_DTM }}</td>
             <th class="text-center">접속일시</th>
-            <td>{{ this.userInfo.LSH_LGN_DTM }}</td>
+            <td>{{ userInfo.LSH_LGN_DTM }}</td>
           </tr>
           </thead>
         </v-simple-table>

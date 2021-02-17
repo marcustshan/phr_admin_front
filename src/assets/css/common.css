@@ -12,7 +12,7 @@ input[type="password"] {font-family:맑은고딕, Malgun Gothic, dotum, gulim, s
 .app-container {background-color: #f0f0f7 !important;}
 
 /* Content Container */
-.content-container {min-height: 100%; background-color: #F4F7FA; padding: 20px 40px;}
+.content-container {min-height: 89%; background-color: #F4F7FA; padding: 20px 40px;}
 
 /* Table Header */
 .v-data-table-header th {background-color: #fafafa !important; color: #464D69 !important; font-weight: 600 !important; border-right: 1px solid #ccc;}

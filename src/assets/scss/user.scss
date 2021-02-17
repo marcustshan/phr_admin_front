@@ -44,11 +44,12 @@ $border-basic: 1px solid rgba(0,0,0,0.12)!important;
   font-size: 26px;
   font-weight: 800;
   //margin: 2% 0%;
-  margin: 2% 0% 1%;
+  margin: 1% 0% 1%;
 }
 
 .mainWrap {
-  margin: 0% 2% 7%;
+  //margin: 0% 2% 1%;
+  margin: 1%;
   .content-container {
     background-color: #fff;
   }
@@ -59,12 +60,12 @@ $border-basic: 1px solid rgba(0,0,0,0.12)!important;
 }
 
 // 상세 테이블
-.detailTable tr {
+.detailTable tr{
   border: $border-basic;
   th {
     border: $border-basic;
     background-color: #f6f6f6;
-    width: 20%;
+    min-width: 10%;
   }
   td {
     border: $border-basic;

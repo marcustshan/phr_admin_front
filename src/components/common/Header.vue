@@ -171,7 +171,7 @@ export default {
       this.$router.push(menu.path)
     },
     goMain () {
-      this.$router.push('/')
+      this.$router.push('/main')
     },
     logout () {
       this.$dialog.confirm('나의건강기록 관리자 시스템<br>로그아웃 하시겠습니까?').then(() => {

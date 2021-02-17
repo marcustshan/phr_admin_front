@@ -64,7 +64,7 @@
         </v-btn>
       </template>
       <template v-slot:[`item.delete`]="{ item }">
-        <v-btn small color="red" outlined dark @click="deleteNotice(item.NTC_ID)">
+        <v-btn small color="red" rounded outlined dark @click="deleteNotice(item.NTC_ID)">
           <v-icon left>delete_outline</v-icon>
           삭제
         </v-btn>
