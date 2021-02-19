@@ -53,6 +53,9 @@
           <v-col sm="2" class="pb-0">
             <v-text-field v-model="form.VER_CODE" :rules="numberRules.concat(emptyRules)" dense></v-text-field>
           </v-col>
+          <v-col align-self="center" class="grey--text">
+            <small>최신버전 검토하기 위한 앱의 내부 버전 코드 (예: 1)</small>
+          </v-col>
         </v-row>
 
         <v-row>
@@ -63,6 +66,9 @@
           <v-col sm="2" class="pb-0">
             <v-text-field v-model="form.VER_NM" :rules="emptyRules.concat(versionRules)" dense hint="예시) 1.2"></v-text-field>
           </v-col>
+          <v-col align-self="center" class="grey--text">
+            <small>사용자에게 공개되는 앱의 배포 버전 (예: 1.0)</small>
+          </v-col>
         </v-row>
 
         <v-row>
@@ -72,8 +78,8 @@
           </v-col>
           <v-col sm="3" class="pb-0">
             <v-radio-group row v-model="form.DTB_MODE" class="mt-1 pt-0" hide-details dense>
-              <v-radio label="운영" value="PROD"></v-radio>
-              <v-radio label="개발" value="DEV"></v-radio>
+              <v-radio label="운영" value="P"></v-radio>
+              <v-radio label="개발" value="D"></v-radio>
             </v-radio-group>
           </v-col>
         </v-row>
@@ -134,28 +140,6 @@
               </div>
             </div>
           </v-col>
-<!--          <v-col sm="1">
-            <v-select
-              class="pt-0"
-              v-model="form.IN_MOB_TP_CD"
-              :items="timeList"
-              hide-details
-              item-text="codeNm"
-              item-value="code"
-            ></v-select>
-          </v-col>
-          <div class="mr-3 mt-5">시</div>
-          <v-col sm="1">
-            <v-select
-              class="pt-0"
-              v-model="form.IN_MOB_TP_CD"
-              :items="minList"
-              hide-details
-              item-text="codeNm"
-              item-value="code"
-            ></v-select>
-          </v-col>
-          <div class="mt-5">분</div>-->
         </v-row>
       </div>
       <v-row>
@@ -179,7 +163,7 @@ const DEFAULT_FORM = {
   PRGM_MGMT_NO: null, // 프로그램 관리번호
   PRGM_NM: null, // 프로그램 명
   MOB_TP_CD: 'Android', // 모바일 코드 (Android, IOS)
-  DTB_MODE: 'PROD', // 배포모드(운영,개발)
+  DTB_MODE: 'P', // 배포모드(운영,개발)
   FRC_UPD_YN: 'Y', // 강제 업데이트 여부
   UPD_AVL_DTM: null, // 업데이트 가능일시
   VER_REG_DT: null, // 버전 등록일시

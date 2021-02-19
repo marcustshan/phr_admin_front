@@ -1,36 +1,33 @@
 <template>
   <div class="content-container">
-      <v-form lazy-validation>
-        <v-row @keypress.enter="getUsersList" dense>
-          <v-col cols="3">
+    <div>
+        <v-form ref="form" lazy-validation autocomplete="off">
+        <v-row dense>
+          <v-col cols="1" class="ml-auto">
+            <v-select
+              v-model="searchParam.type"
+              :items="searchInd"
+              hide-details
+              item-text="codeNm"
+              item-value="code"
+            ></v-select>
+          </v-col>
+          <v-col cols="2" class="ml-5">
             <v-text-field
-              v-model="searchParam.q.id"
-              append-icon="search"
+              v-model="searchParam.search"
+              @keypress.enter="getUsersList"
               clearable
-              label="아이디"
+              autocomplete="off"
+              hide-details
             ></v-text-field>
           </v-col>
-          <v-col cols="3">
-            <v-text-field
-              v-model="searchParam.q.name"
-              append-icon="search"
-              clearable
-              label="이름"
-            ></v-text-field>
-          </v-col>
-          <v-col cols="3">
-            <v-text-field
-              v-model="searchParam.q.sex"
-              append-icon="search"
-              clearable
-              label="성별"
-            ></v-text-field>
-          </v-col>
-          <v-col cols="3">
-            <date-picker
-              v-model="searchParam.q.birth"
-              label="생년월일"
-            ></date-picker>
+          <v-col cols="1" align-self="end" class="text-right">
+            <v-btn small outlined class="black--text" @click="getUsersList">
+              <v-icon>search</v-icon>
+            </v-btn>
+            <v-btn small outlined class="black--text ml-2" color="#43425d" @click="clearSearchParam(searchParam)">
+              <v-icon>refresh</v-icon>
+            </v-btn>
           </v-col>
         </v-row>
       </v-form>
@@ -38,23 +35,14 @@
         <v-col cols="4" align-self="center">
           <div class="black--text">총 {{searchParam.total}} 건 {{searchParam.page}} / {{pages}} 페이지</div>
         </v-col>
-        <v-col cols="7" align-self="center" class="text-right">
-          <v-btn small outlined rounded color="green" @click="clearSearchParam">
-            <v-icon left>refresh</v-icon>
-            초기화
-          </v-btn>
-          <v-btn small class="ml-3" outlined rounded color="primary" @click="getUsersList">
-            <v-icon left>search</v-icon>
-            검색
-          </v-btn>
-        </v-col>
       </v-row>
+    </div>
 
     <v-data-table
       :no-data-text="'검색 결과가 없습니다.'"
       :headers="headers"
       :items="usersList"
-      item-key="USR_ID"
+      item-key="ROW_NUM"
       hide-default-footer
       disable-hover
       class="bordered condensed click-row history-table"
@@ -63,7 +51,7 @@
         {{item.ROW_NUM}}
       </template>
       <template v-slot:item.USR_GND_CD = {item}>
-        {{item.USR_GND_CD === 'M' ? '남' : '여'}}
+        {{item.USR_GND_CD === 'M' ? '남자' : '여자'}}
       </template>
       <template v-slot:item.LSH_LGN_DTM = {item}>
         <span @click="goDetailPage(item)" class="blue--text pointer text-decoration-underline">
@@ -88,7 +76,7 @@
                 <thead class="detailTable">
                 <tr>
                   <th class="text-center">사용자</th>
-                  <td>{{ dialogForm.USR_NM }}({{ dialogForm.USR_ID }})</td>
+                  <td>{{ dialogForm.USR_NM }}({{ USR_ID }})</td>
                 </tr>
                 </thead>
               </v-simple-table>
@@ -108,32 +96,32 @@
                 </tr>
                 <tr>
                     <th class="text-center">건강보험심사 평가원</th>
-                    <td class="text-center">{{ dialogForm.HIRA_AGR_DT }}</td>
-                    <td class="text-center">{{ dialogForm.HIRA_AGR_YN === 'Y' ? '동의' : '미동의'}}</td>
+                    <td class="text-center">{{ isEmpty(dialogForm.HIRA_AGR_DT) ? '-' : dialogForm.HIRA_AGR_DT }}</td>
+                    <td class="text-center">{{ dialogForm.HIRA_AGR_YN === 'Y' ? '동의' : '미동의' }}</td>
                     <th class="text-center">투약이력</th>
-                    <td class="text-center"></td>
-                    <td class="text-center"></td>
+                    <td class="text-center">{{ isEmpty(dialogForm.MEDIC_AGR_DT) ? '-' : dialogForm.MEDIC_AGR_DT }}</td>
+                    <td class="text-center">{{ dialogForm.MEDIC_AGR_YN === 'Y' ? '동의' : '미동의' }}</td>
                 </tr>
                 <tr>
                     <th rowspan="2" class="text-center">건강보험공단</th>
-                    <td rowspan="2" class="text-center">{{ dialogForm.NHIS_AGR_DT}}</td>
-                    <td rowspan="2" class="text-center">{{ dialogForm.NHIS_AGR_YN === 'Y' ? '동의' : '미동의'}}</td>
+                    <td rowspan="2" class="text-center">{{ isEmpty(dialogForm.NHIS_AGR_DT) ? '-' : dialogForm.NHIS_AGR_DT }}</td>
+                    <td rowspan="2" class="text-center">{{ dialogForm.NHIS_AGR_YN === 'Y' ? '동의' : '미동의' }}</td>
                     <th class="text-center">진료이력</th>
-                    <td></td>
-                    <td></td>
+                    <td class="text-center">{{ isEmpty(dialogForm.TREAT_AGR_DT) ? '-' : dialogForm.TREAT_AGR_DT }}</td>
+                    <td class="text-center">{{ dialogForm.TREAT_AGR_YN === 'Y' ? '동의' : '미동의' }}</td>
                 </tr>
                 <tr>
                   <th class="text-center">건강검진</th>
-                  <td></td>
-                  <td></td>
+                  <td class="text-center">{{ isEmpty(dialogForm.HEALT_AGR_DT) ? '-' : dialogForm.HEALT_AGR_DT }}</td>
+                  <td class="text-center">{{ dialogForm.HEALT_AGR_YN === 'Y' ? '동의' : '미동의' }}</td>
                 </tr>
                 <tr>
                   <th class="text-center">질병관리청</th>
-                  <td class="text-center">{{ dialogForm.KDCA_AGR_DT }}</td>
-                  <td class="text-center">{{ dialogForm.KDCA_AGR_YN === 'Y' ? '동의' : '미동의'}}</td>
+                  <td class="text-center">{{ isEmpty(dialogForm.KDCA_AGR_DT) ? '-' : dialogForm.KDCA_AGR_DT }}</td>
+                  <td class="text-center">{{ dialogForm.KDCA_AGR_YN === 'Y' ? '동의' : '미동의' }}</td>
                   <th class="text-center">예방접종</th>
-                  <td></td>
-                  <td></td>
+                  <td class="text-center">{{ isEmpty(dialogForm.VACCI_AGR_DT) ? '-' : dialogForm.VACCI_AGR_DT }}</td>
+                  <td class="text-center">{{ dialogForm.VACCI_AGR_YN === 'Y' ? '동의' : '미동의' }}</td>
                 </tr>
                 </thead>
               </v-simple-table>
@@ -164,7 +152,6 @@
 import usersService from 'Api/users/users.service'
 
 const DIALOG_FORM = {
-  USR_ID: null,
   USR_NM: null,
   HIRA_AGR_DT: null,
   HIRA_AGR_YN: null,
@@ -181,7 +168,7 @@ export default {
       if (this.searchParam.size == null || this.searchParam.total == null || this.searchParam.total === 0) {
         return 1
       }
-      return Math.ceil(this.searchParam.total / this.searchParam.size)
+      return Number(this.searchParam.total) !== 0 ? Math.ceil(this.searchParam.total / this.searchParam.size) : 1
     },
     user () {
       return this.$store.state.user.userInfo
@@ -198,16 +185,14 @@ export default {
       { text: '접속일시', value: 'LSH_LGN_DTM', align: 'center' },
       { text: '동의내역', value: 'AGREE_YN', align: 'center' }
     ],
+    USR_ID: null,
     dialog: false,
     dialogForm: _.cloneDeep(DIALOG_FORM),
     usersList: [],
+    searchInd: [{ code: 'ALL', codeNm: '전체' }, { code: 'USR_ID', codeNm: '아이디' }],
     searchParam: {
-      q: {
-        id: null,
-        name: null,
-        sex: null,
-        birth: null
-      },
+      type: 'ALL',
+      search: null,
       sysId: null,
       page: 1,
       size: 10,
@@ -229,17 +214,19 @@ export default {
         this.getUsersList()
       }
     },
-    clearSearchParam () {
-      this.searchParam.q = {}
-    },
     // 접속일시 팝업
     goDetailPage (item) {
       this.$router.push({ path: '/users/detail', name: 'usersDetail', params: { item: item } })
     },
     // 동의 기관 팝업
     openDialog (item) {
-      this.dialogForm = {}
-      this.dialogForm = _.cloneDeep(item)
+      item.ADM_SYS_ID = this.user.ADM_SYS_ID
+      usersService.getUserDetail(item).then(res => {
+        if (res.data) {
+          this.dialogForm = _.cloneDeep(res.data[0])
+        }
+      })
+      this.USR_ID = item.USR_ID
       this.dialog = !this.dialog
     },
     // 사용자 목록 조회

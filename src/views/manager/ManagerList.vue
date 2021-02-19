@@ -5,8 +5,8 @@
         <v-col cols="4" align-self="center">
           <div class="black--text">총 {{searchParam.total}} 건 {{searchParam.page}} / {{pages}} 페이지</div>
         </v-col>
-        <v-col cols="7" align-self="center" class="text-right">
-          <v-btn small class="ml-3" outlined rounded color="teal darken-1" @click="writeManager">
+        <v-col cols="1" align-self="end" class="text-center ml-auto">
+          <v-btn small min-width="100px" class="white--text" color="#43425d" @click="writeManager">
             <v-icon left>edit</v-icon>
             등록
           </v-btn>
@@ -40,10 +40,7 @@
         </span>
       </template>
       <template v-slot:item.delete="{ item }">
-        <v-btn small color="red" outlined dark @click="confirmAction('DELETE', item)">
-          <v-icon left>delete_outline</v-icon>
-          삭제
-        </v-btn>
+        <span class="red--text pointer" @click="confirmAction('DELETE', item)">삭제</span>
       </template>
     </v-data-table>
 
@@ -68,7 +65,7 @@ export default {
       if (this.searchParam.size == null || this.searchParam.total == null || this.searchParam.total === 0) {
         return 1
       }
-      return Math.ceil(this.searchParam.total / this.searchParam.size)
+      return Number(this.searchParam.total) !== 0 ? Math.ceil(this.searchParam.total / this.searchParam.size) : 1
     },
     user () {
       return this.$store.state.user.userInfo
@@ -76,7 +73,7 @@ export default {
   },
   data: () => ({
     headers: [
-      { text: 'No', value: 'no', align: 'center' },
+      { text: 'No', value: 'ROW_NUM', align: 'center' },
       { text: 'ID', value: 'ADM_ID', align: 'center' },
       { text: '이름', value: 'ADM_NM', align: 'center' },
       { text: '이메일', value: 'ADM_EML', align: 'center' },
@@ -177,9 +174,7 @@ export default {
             response.data = []
           }
           this.managerList = response.data
-          // TODO paging
-          // this.searchParam.total = response.pagination.total
-          this.searchParam.total = this.managerList.length
+          this.searchParam.total = response.headers['paging-total-count']
         }
       })
     }

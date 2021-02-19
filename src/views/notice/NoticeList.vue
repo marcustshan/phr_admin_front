@@ -1,49 +1,44 @@
 <template>
   <div class="content-container">
     <div>
-      <v-form lazy-validation>
-        <v-row @keypress.enter="getNoticeList" dense>
-          <v-col cols="3">
+      <v-form ref="form" lazy-validation autocomplete="off">
+        <v-row dense>
+          <v-col cols="1" class="ml-auto">
+            <v-select
+              v-model="searchParam.type"
+              :items="searchInd"
+              hide-details
+              item-text="codeNm"
+              item-value="code"
+            ></v-select>
+          </v-col>
+          <v-col cols="2" class="ml-5">
             <v-text-field
-              v-model="searchParam.q.title"
-              append-icon="search"
+              v-model="searchParam.search"
+              @keypress.enter="getNoticeList"
               clearable
-              label="제목"
+              hide-details
             ></v-text-field>
           </v-col>
-          <v-col cols="3">
-            <v-text-field
-              v-model="searchParam.q.writer"
-              append-icon="search"
-              clearable
-              label="작성자"
-            ></v-text-field>
+          <v-col cols="1" align-self="end" class="text-right">
+            <v-btn small outlined class="black--text" @click="getNoticeList">
+              <v-icon>search</v-icon>
+            </v-btn>
+            <v-btn small outlined class="black--text ml-2" color="#43425d" @click="clearSearchParam(searchParam)">
+              <v-icon>refresh</v-icon>
+            </v-btn>
           </v-col>
-          <v-col cols="3">
-            <date-picker
-              v-model="searchParam.q.date"
-              label="작성일"
-            ></date-picker>
+          <v-col cols="1" align-self="end" class="text-center">
+            <v-btn small min-width="100px" class="white--text" color="#43425d" @click="writeNotice">
+              <v-icon left>edit</v-icon>
+              등록
+            </v-btn>
           </v-col>
         </v-row>
       </v-form>
       <v-row justify="space-between">
         <v-col cols="4" align-self="center">
           <div class="black--text">총 {{searchParam.total}} 건 {{searchParam.page}} / {{pages}} 페이지</div>
-        </v-col>
-        <v-col cols="7" align-self="center" class="text-right">
-          <v-btn small outlined rounded color="green" @click="clearSearchParam">
-            <v-icon left>refresh</v-icon>
-            초기화
-          </v-btn>
-          <v-btn small class="ml-3" outlined rounded color="primary" @click="getNoticeList">
-            <v-icon left>search</v-icon>
-            검색
-          </v-btn>
-          <v-btn small class="ml-3" outlined rounded color="teal darken-1" @click="writeNotice">
-            <v-icon left>edit</v-icon>
-            등록
-          </v-btn>
         </v-col>
       </v-row>
     </div>
@@ -59,15 +54,10 @@
       class="bordered condensed click-row history-table"
     >
       <template v-slot:item.modify="{ item }">
-        <v-btn small color="accent" rounded outlined @click="modifyNotice(item)">
-          <v-icon small>check</v-icon>수정
-        </v-btn>
+        <span class="blue--text pointer" @click="modifyNotice(item)">수정</span>
       </template>
       <template v-slot:[`item.delete`]="{ item }">
-        <v-btn small color="red" rounded outlined dark @click="deleteNotice(item.NTC_ID)">
-          <v-icon left>delete_outline</v-icon>
-          삭제
-        </v-btn>
+        <span class="red--text pointer" @click="deleteNotice(item.NTC_ID)">삭제</span>
       </template>
     </v-data-table>
 
@@ -111,7 +101,7 @@ export default {
       if (this.searchParam.size == null || this.searchParam.total == null || this.searchParam.total === 0) {
         return 1
       }
-      return Math.ceil(this.searchParam.total / this.searchParam.size)
+      return Number(this.searchParam.total) !== 0 ? Math.ceil(this.searchParam.total / this.searchParam.size) : 1
     },
     user () {
       return this.$store.state.user.userInfo
@@ -120,7 +110,7 @@ export default {
   data: () => ({
     inForm: _.cloneDeep(IN_FORM),
     headers: [
-      { text: 'No', value: 'NTC_ID', align: 'center' },
+      { text: 'No', value: 'ROW_NUM', align: 'center' },
       { text: '제목', value: 'NTC_SJ', align: 'center' },
       { text: '등록자', value: 'ADM_ID', align: 'center' },
       { text: '등록일시', value: 'FSR_DTM', align: 'center' },
@@ -130,12 +120,10 @@ export default {
       { text: '삭제', value: 'delete', align: 'center' }
     ],
     noticeList: [],
+    searchInd: [{ code: 'ALL', codeNm: '전체' }, { code: 'NTC_SJ', codeNm: '제목' }, { code: 'ADM_ID', codeNm: '등록자' }],
     searchParam: {
-      q: {
-        title: '',
-        writer: '',
-        date: ''
-      },
+      type: 'ALL',
+      search: null,
       sysId: null,
       page: 1,
       size: 10,
@@ -176,10 +164,6 @@ export default {
         this.getNoticeList()
       }
     },
-    // 검색조건 초기화
-    clearSearchParam () {
-      this.searchParam.q = {}
-    },
     // 공지사항 조회
     getNoticeList () {
       noticeService.getNoticeList(this.searchParam).then(response => {
@@ -188,9 +172,7 @@ export default {
             response.data = []
           }
           this.noticeList = response.data
-          // TODO paging
-          // this.searchParam.total = response.pagination.total
-          this.searchParam.total = this.noticeList.length
+          this.searchParam.total = response.headers['paging-total-count']
         }
       })
     }

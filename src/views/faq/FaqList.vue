@@ -1,35 +1,44 @@
 <template>
   <div class="content-container">
     <div>
-      <v-form lazy-validation>
-        <v-row @keypress.enter="getFaqList" dense>
-          <v-col cols="3">
+      <v-form ref="form" lazy-validation autocomplete="off">
+        <v-row dense>
+          <v-col cols="1" class="ml-auto">
+            <v-select
+              v-model="searchParam.type"
+              :items="searchInd"
+              hide-details
+              item-text="codeNm"
+              item-value="code"
+            ></v-select>
+          </v-col>
+          <v-col cols="2" class="ml-5">
             <v-text-field
-              v-model="searchParam.title"
-              append-icon="search"
+              v-model="searchParam.search"
+              @keypress.enter="getFaqList"
               clearable
-              label="제목"
+              hide-details
             ></v-text-field>
+          </v-col>
+          <v-col cols="1" align-self="end" class="text-right">
+            <v-btn small outlined class="black--text" @click="getFaqList">
+              <v-icon>search</v-icon>
+            </v-btn>
+            <v-btn small outlined class="black--text ml-2" color="#43425d" @click="clearSearchParam(searchParam)">
+              <v-icon>refresh</v-icon>
+            </v-btn>
+          </v-col>
+          <v-col cols="1" align-self="end" class="text-center">
+            <v-btn small min-width="100px" class="white--text" color="#43425d" @click="writeFaq">
+              <v-icon left>edit</v-icon>
+              등록
+            </v-btn>
           </v-col>
         </v-row>
       </v-form>
       <v-row justify="space-between">
         <v-col cols="4" align-self="center">
           <div class="black--text">총 {{searchParam.total}} 건 {{searchParam.page}} / {{pages}} 페이지</div>
-        </v-col>
-        <v-col cols="7" align-self="center" class="text-right">
-          <v-btn small outlined rounded color="green" @click="clearSearchParam">
-            <v-icon left>refresh</v-icon>
-            초기화
-          </v-btn>
-          <v-btn small class="ml-3" outlined rounded color="primary" @click="getFaqList">
-            <v-icon left>search</v-icon>
-            검색
-          </v-btn>
-          <v-btn small class="ml-3" outlined rounded color="teal darken-1" @click="writeFaq">
-            <v-icon left>edit</v-icon>
-            등록
-          </v-btn>
         </v-col>
       </v-row>
     </div>
@@ -48,26 +57,14 @@
           {{item.FAQ_ST_CD === 'A' ? '계정' : '서비스이용'}}
       </template>
       <template v-slot:item.modify="{ item }">
-        <v-btn small color="accent" rounded outlined @click="modifyFaq(item)">
-          <v-icon small>check</v-icon>수정
-        </v-btn>
+        <span class="blue--text pointer" @click="modifyFaq(item)">수정</span>
       </template>
       <template v-slot:item.delete="{ item }">
-        <v-btn small color="red" outlined dark @click="deleteFaq(item.FAQ_ID)">
-          <v-icon left>delete_outline</v-icon>
-          삭제
-        </v-btn>
+        <span class="red--text pointer" @click="deleteFaq(item.FAQ_ID)">삭제</span>
       </template>
     </v-data-table>
 
-    <v-pagination
-      :value="searchParam.page"
-      :total-visible="10"
-      :length="pages"
-      circle
-      class="mt-3"
-      @input="pageChange($event)"
-    ></v-pagination>
+    <v-pagination :value="searchParam.page" :total-visible="10" :length="pages" circle class="mt-3" @input="pageChange($event)" ></v-pagination>
   </div>
 </template>
 
@@ -92,7 +89,7 @@ export default {
       if (this.searchParam.size == null || this.searchParam.total == null || this.searchParam.total === 0) {
         return 1
       }
-      return Math.ceil(this.searchParam.total / this.searchParam.size)
+      return Number(this.searchParam.total) !== 0 ? Math.ceil(this.searchParam.total / this.searchParam.size) : 1
     },
     user () {
       return this.$store.state.user.userInfo
@@ -100,18 +97,21 @@ export default {
   },
   data: () => ({
     inForm: _.cloneDeep(IN_FORM),
+    searchInd: [{ code: 'ALL', codeNm: '전체' }, { code: 'FAQ_SJ', codeNm: '제목' }, { code: 'ADM_ID', codeNm: '등록자' }],
     headers: [
-      { text: 'No', value: 'FAQ_ID', align: 'center' },
+      { text: 'No', value: 'ROW_NUM', align: 'center' },
       { text: '유형', value: 'FAQ_ST_CD', align: 'center' },
       { text: '질문 제목', value: 'FAQ_SJ', align: 'center' },
+      { text: '등록자', value: 'ADM_ID', align: 'center' },
       { text: '등록일시', value: 'FSR_DTM', align: 'center' },
       { text: '수정', value: 'modify', align: 'center' },
       { text: '삭제', value: 'delete', align: 'center' }
     ],
     faqList: [],
     searchParam: {
+      type: 'ALL',
+      search: null,
       sysId: null,
-      title: null,
       page: 1,
       size: 10,
       total: 0
@@ -131,10 +131,6 @@ export default {
         this.searchParam.page = pageNum
         this.getFaqList()
       }
-    },
-    // 검색조건 초기화
-    clearSearchParam () {
-      this.searchParam.title = null
     },
     // 자주묻는 질문 수정
     modifyFaq (item) {
@@ -164,9 +160,7 @@ export default {
             response.data = []
           }
           this.faqList = response.data
-          // TODO paging
-          // this.searchParam.total = response.pagination.total
-          this.searchParam.total = this.faqList.length
+          this.searchParam.total = response.headers['paging-total-count']
         }
       })
     }

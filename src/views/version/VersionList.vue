@@ -1,51 +1,44 @@
 <template>
   <div class="content-container">
     <div>
-      <v-form lazy-validation>
-        <v-row @keypress.enter="getVersionList" dense>
-          <v-col cols="3">
+      <v-form ref="form" lazy-validation autocomplete="off">
+        <v-row dense>
+          <v-col cols="1" class="ml-auto">
+            <v-select
+              v-model="searchParam.type"
+              :items="searchInd"
+              hide-details
+              item-text="codeNm"
+              item-value="code"
+            ></v-select>
+          </v-col>
+          <v-col cols="2" class="ml-5">
             <v-text-field
-              v-model="searchParam.q.type"
-              append-icon="search"
+              v-model="searchParam.search"
+              @keypress.enter="getVersionList"
               clearable
-              label="유형"
+              hide-details
             ></v-text-field>
           </v-col>
-          <v-col cols="3">
-            <v-text-field
-              v-model="searchParam.q.version"
-              append-icon="search"
-              clearable
-              label="버전"
-            ></v-text-field>
+          <v-col cols="1" align-self="end" class="text-right">
+            <v-btn small outlined class="black--text" @click="getVersionList">
+              <v-icon>search</v-icon>
+            </v-btn>
+            <v-btn small outlined class="black--text ml-2" color="#43425d" @click="clearSearchParam(searchParam)">
+              <v-icon>refresh</v-icon>
+            </v-btn>
           </v-col>
-          <v-col cols="3">
-            <v-text-field
-              v-model="searchParam.q.mode"
-              append-icon="search"
-              clearable
-              label="배포모드"
-            ></v-text-field>
+          <v-col cols="1" align-self="end" class="text-center">
+            <v-btn small min-width="100px" class="white--text" color="#43425d" @click="writeVersion">
+              <v-icon left>edit</v-icon>
+              등록
+            </v-btn>
           </v-col>
         </v-row>
       </v-form>
       <v-row justify="space-between">
         <v-col cols="4" align-self="center">
           <div class="black--text">총 {{searchParam.total}} 건 {{searchParam.page}} / {{pages}} 페이지</div>
-        </v-col>
-        <v-col cols="7" align-self="center" class="text-right">
-          <v-btn small outlined rounded color="green" @click="clearSearchParam">
-            <v-icon left>refresh</v-icon>
-            초기화
-          </v-btn>
-          <v-btn small class="ml-3" outlined rounded color="primary" @click="getVersionList">
-            <v-icon left>search</v-icon>
-            검색
-          </v-btn>
-          <v-btn small class="ml-3" outlined rounded color="teal darken-1" @click="writeVersion">
-            <v-icon left>edit</v-icon>
-            등록
-          </v-btn>
         </v-col>
       </v-row>
     </div>
@@ -60,16 +53,14 @@
       disable-hover
       class="bordered condensed click-row history-table"
     >
+      <template v-slot:item.DTB_MODE="{ item }">
+        {{ item.DTB_MODE === 'D' ? '개발' : '운영' }}
+      </template>
       <template v-slot:item.modify="{ item }">
-        <v-btn small color="accent" rounded outlined @click="modifyVersion(item)">
-          <v-icon small>check</v-icon>수정
-        </v-btn>
+        <span class="blue--text pointer" @click="modifyVersion(item)">수정</span>
       </template>
       <template v-slot:item.delete="{ item }">
-        <v-btn small color="red" outlined dark @click="deleteVersion(item.VER_ID)">
-          <v-icon left>delete_outline</v-icon>
-          삭제
-        </v-btn>
+        <span class="red--text pointer" @click="deleteVersion(item.VER_ID)">삭제</span>
       </template>
     </v-data-table>
 
@@ -111,7 +102,7 @@ export default {
       if (this.searchParam.size == null || this.searchParam.total == null || this.searchParam.total === 0) {
         return 1
       }
-      return Math.ceil(this.searchParam.total / this.searchParam.size)
+      return Number(this.searchParam.total) !== 0 ? Math.ceil(this.searchParam.total / this.searchParam.size) : 1
     },
     user () {
       return this.$store.state.user.userInfo
@@ -119,22 +110,21 @@ export default {
   },
   data: () => ({
     inForm: _.cloneDeep(IN_FORM),
+    searchInd: [{ code: 'ALL', codeNm: '전체' }, { code: 'MOB_TP_CD', codeNm: '유형' }, { code: 'DTB_MODE', codeNm: '배포모드' }, { code: 'ADM_ID', codeNm: '등록자' }],
     headers: [
-      { text: 'No', value: 'VER_ID', align: 'center' },
+      { text: 'No', value: 'ROW_NUM', align: 'center' },
       { text: '유형', value: 'MOB_TP_CD', align: 'center' },
       { text: '버전', value: 'VER_NM', align: 'center' },
       { text: '배포모드', value: 'DTB_MODE', align: 'center' },
+      { text: '등록자', value: 'ADM_ID', align: 'center' },
       { text: '등록일시', value: 'FSR_DTM', align: 'center' },
       { text: '수정', value: 'modify', align: 'center' },
       { text: '삭제', value: 'delete', align: 'center' }
     ],
     versionList: [],
     searchParam: {
-      q: {
-        type: null,
-        version: null,
-        mode: null
-      },
+      type: 'ALL',
+      search: null,
       page: 1,
       size: 10,
       total: 0
@@ -152,9 +142,6 @@ export default {
         this.searchParam.page = pageNum
         this.getVersionList()
       }
-    },
-    clearSearchParam () {
-      this.searchParam.q = {}
     },
     modifyVersion (item) {
       this.$router.push({ path: `/version/modify/${item.VER_ID}` })
@@ -183,9 +170,7 @@ export default {
             response.data = []
           }
           this.versionList = response.data
-          // TODO paging
-          // this.searchParam.total = response.pagination.total
-          this.searchParam.total = this.versionList.length
+          this.searchParam.total = response.headers['paging-total-count']
         }
       })
     }

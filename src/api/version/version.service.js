@@ -5,7 +5,12 @@ const service = {
    * 버전관리 > 목록 조회
    */
   getVersionList (param) {
-    return soapUtil.query(soapUtil.STYPE.GETQUERY, 'SELECT', 'N', 'PC_PHR_GET_VERS_ADM', [{ IN_ADM_SYS_ID: param.sysId }])
+    return soapUtil.query(soapUtil.STYPE.GETQUERY, 'SELECT', 'N', 'PC_PHR_GET_VERS_ADM', [{
+      IN_ADM_SYS_ID: param.sysId,
+      IN_CURR_PAGE_NO: param.page,
+      IN_SEARCH_TYPE: param.type,
+      IN_SEARCH_CONTENT: param.search
+    }])
   },
   /**
    * 버전관리 > 상세조회

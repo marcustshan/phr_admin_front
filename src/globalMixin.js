@@ -40,6 +40,13 @@ const globalMixin = {
     }
   },
   methods: {
+    // 검색조건 초기화
+    clearSearchParam (param) {
+      param.type = 'ALL'
+      param.search = null
+      param.startDt = null
+      param.endDt = null
+    },
     isEmpty (value) {
       if (this.trimAll(value) === '' || value === null || value === undefined || (value !== null && typeof value === 'object' && !Object.keys(value).length)) {
         return true

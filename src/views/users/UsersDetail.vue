@@ -31,44 +31,50 @@
       </v-col>
     </v-row>
 
-    <div>
-      <v-row @keypress.enter="getUsersDetailList">
-        <v-col cols="3">
+    <v-form ref="form" lazy-validation autocomplete="off">
+      <v-row dense>
+        <v-col cols="1" class="ml-auto">
           <v-select
-            v-model="searchParam.searchInd"
+            v-model="searchParam.type"
             :items="searchList"
             item-text="commCdNm"
             item-value="commCd"
+            hide-details
           ></v-select>
         </v-col>
-        <v-col cols="3">
+        <v-col cols="2" class="ml-5">
           <date-picker
-            v-model='searchParam.searchStartDt'
+            v-model='searchParam.startDt'
             format="YYYY-MM-DD"
             label="시작일"
+            hide-details
           >
           </date-picker>
         </v-col>
-        <v-col cols="3">
+        <v-col cols="2" class="ml-5">
           <date-picker
-            v-model="searchParam.searchEndDt"
-            :min="searchParam.searchStartDt"
+            v-model="searchParam.endDt"
+            :min="searchParam.startDt"
             format="YYYY-MM-DD"
+            hide-details
             label="종료일"
           ></date-picker>
         </v-col>
-        <v-col cols="3" align-self="center" class="text-right pl-0">
-          <v-btn outlined rounded color="green" @click="clearSearchParam">
-            <v-icon left>refresh</v-icon>
-            초기화
+        <v-col cols="1" align-self="end" class="text-right">
+          <v-btn small outlined class="black--text" @click="getUsersDetailList">
+            <v-icon>search</v-icon>
           </v-btn>
-          <v-btn class="ml-3" outlined rounded color="primary" @click="getUsersDetailList">
-            <v-icon left>search</v-icon>
-            검색
+          <v-btn small outlined class="black--text ml-1" color="#43425d" @click="clearSearchParam(searchParam)">
+            <v-icon>refresh</v-icon>
           </v-btn>
         </v-col>
       </v-row>
-    </div>
+      <v-row justify="space-between">
+        <v-col cols="4" align-self="center">
+          <div class="black--text">총 {{searchParam.total}} 건 {{searchParam.page}} / {{pages}} 페이지</div>
+        </v-col>
+      </v-row>
+    </v-form>
 
     <v-data-table
       :no-data-text="'검색 결과가 없습니다.'"
@@ -80,6 +86,12 @@
       disable-hover
       class="bordered condensed click-row history-table"
     >
+      <template v-slot:item.EXC_TP = {item}>
+        {{ item.EXC_TP }} ({{ item.DTL_CD_NM }})
+      </template>
+      <template v-slot:item.DWN_DT = {item}>
+        {{ date(item.DWN_DT) }}
+      </template>
     </v-data-table>
 
     <v-row>
@@ -103,6 +115,7 @@
 
 <script>
 import usersService from 'Api/users/users.service'
+import dayjs from 'dayjs'
 
 export default {
   name: 'UsersDetail',
@@ -111,7 +124,7 @@ export default {
       if (this.searchParam.size == null || this.searchParam.total == null || this.searchParam.total === 0) {
         return 1
       }
-      return Math.ceil(this.searchParam.total / this.searchParam.size)
+      return Number(this.searchParam.total) !== 0 ? Math.ceil(this.searchParam.total / this.searchParam.size) : 1
     },
     user () {
       return this.$store.state.user.userInfo
@@ -119,25 +132,25 @@ export default {
   },
   data: () => ({
     searchParam: {
-      searchInd: '1',
-      searchStartDt: null,
-      searchEndDt: null,
+      type: 'ALL',
+      startDt: null,
+      endDt: null,
       sysId: null,
       userId: null,
       page: 1,
       size: 10,
       total: 0
     },
+    searchList: [{ commCdNm: '전체', commCd: 'ALL' }, { commCdNm: '파일공유', commCd: 'S' }, { commCdNm: '다운로드', commCd: 'N' }, { commCdNm: '파일통합', commCd: 'Y' }],
     headers: [
-      { text: 'No', value: 'no', align: 'center', width: '8%' },
-      { text: '수행내역', value: 'content', align: 'center' },
-      { text: '수행일시', value: 'date', align: 'center' }
+      { text: 'No', value: 'ROW_NUM', align: 'center', width: '8%' },
+      { text: '수행내역', value: 'EXC_TP', align: 'center' },
+      { text: '수행일시', value: 'DWN_DT', align: 'center' }
     ],
     searchInd: '1',
     startDt: null,
     endDt: null,
     detailList: [],
-    searchList: [{ commCdNm: '전체', commCd: '1' }, { commCdNm: '건강검진 이력 다운로드', commCd: '2' }],
     userInfo: {}
   }),
   mounted () {
@@ -153,37 +166,46 @@ export default {
     }
   },
   methods: {
+    // 날짜 format
+    date (value, format = 'YYYY-MM-DD HH:mm:ss') {
+      if (!value) {
+        return ''
+      } else if (!dayjs(value).isValid()) {
+        return '날짜 형식이 맞지 않습니다.'
+      }
+      return dayjs(value).format(format)
+    },
     // 사용자 관리 상세 목록 조회
     getUsersDetailList () {
-      usersService.getUsersDetailList(this.searchParam).then(response => {
-        if (response.data) {
-          if (typeof response.data === 'object' && Object.keys(response.data).length < 1) {
-            response.data = []
+      if (this.checkValidate()) {
+        usersService.getUsersDetailList(this.searchParam).then(response => {
+          if (response.data) {
+            if (typeof response.data === 'object' && Object.keys(response.data).length < 1) {
+              response.data = []
+            }
+            this.detailList = response.data
+            this.searchParam.total = response.headers['paging-total-count']
           }
-          this.detailList = response.data
-          // TODO
-          // this.searchParam.total = response.pagination.total
-        }
-        // 임시
-        // const tempList = [
-        //   { no: '3', content: '파일공유 (투약이력, 진료이력, 건강검진)', date: '2020-10-20 17:22:00' },
-        //   { no: '2', content: '파일공유 (진료이력)', date: '2020-10-20 17:22:00' },
-        //   { no: '1', content: '다운로드 (건강검진)', date: '2020-10-20 17:22:00' }
-        // ]
-        // this.detailList = tempList
-      })
+        })
+      }
+    },
+    // 날짜 입력 유효성 검사
+    checkValidate () {
+      if (!this.isEmpty(this.searchParam.startDt) && this.isEmpty(this.searchParam.endDt)) {
+        this.$dialog.alert('종료일을 입력해주세요.')
+        return false
+      }
+      if (this.isEmpty(this.searchParam.startDt) && !this.isEmpty(this.searchParam.endDt)) {
+        this.$dialog.alert('시작일을 입력해주세요.')
+        return false
+      }
+      return true
     },
     pageChange (pageNum) {
       if (this.searchParam.page !== pageNum) {
         this.searchParam.page = pageNum
         this.getUsersDetailList()
       }
-    },
-    // 초기화
-    clearSearchParam () {
-      this.searchParam.searchInd = '1'
-      this.searchParam.searchStartDt = null
-      this.searchParam.searchEndDt = null
     }
   }
 }

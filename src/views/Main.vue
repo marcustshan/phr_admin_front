@@ -4,7 +4,7 @@
       <v-col cols="12">
         <v-list-item>
           <v-list-item-content>
-            <v-list-item-title class="text-h4 blue-grey--text">
+            <v-list-item-title class="text-h5 blue-grey--text">
               나의건강기록 관리자시스템에 오신 것을 환영합니다.
             </v-list-item-title>
             <v-list-item-subtitle class="pt-5 pl-1 text-h6">

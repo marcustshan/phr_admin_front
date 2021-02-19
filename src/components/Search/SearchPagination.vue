@@ -1,6 +1,6 @@
 <template>
   <div class="text-center mt-3">
-    <v-pagination :value="searchParam.page" :total-visible="totalVisible" :length="pages" :circle="circle" @input="pageChange($event)"></v-pagination>
+    <v-pagination :value="searchParam.page" :total-visible="totalVisible" :length="pages" circle @input="pageChange($event)"></v-pagination>
   </div>
 </template>
 
