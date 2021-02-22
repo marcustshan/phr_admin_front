@@ -24,10 +24,15 @@ module.exports = {
   ],
   devServer: {
     proxy: {
+      '/api/upload': {
+        target: 'http://175.106.94.17:8080/MGPHR_Service/MGPHR_Service.svc/web/FileUploadNotice',
+        changeOrigin: true,
+        logLevel: 'debug'
+      },
       '/api/admin': {
         target: 'http://175.106.94.17:8080/MGPHR_Service/MGPHR_Service.svc?wsdl'
       }
     },
-    port: 8090
+    port: 8097
   }
 }

@@ -22,8 +22,6 @@ import GlobalMixin from './globalMixin'
 // global components
 import GlobalComponents from './globalComponents'
 
-import axios from 'axios'
-
 import './lib/VuetifyCss'
 
 // 공통 CSS
@@ -95,40 +93,6 @@ router.beforeEach((to, from, next) => {
 
   next()
 })
-
-const service = axios.create({
-  baseURL: store.getters.baseUrl, // api의 base_url
-  headers: {
-    Accept: 'application/json',
-    'Content-type': 'application/json;charset=utf-8'
-  },
-  timeout: store.state.common.timeout // 요청 제한 시간 (10초)
-})
-
-// 요청(request) 인터셉터
-service.interceptors.request.use(
-  (config) => {
-    store.dispatch('common/setShowProgress', true)
-    return config
-  },
-  (error) => {
-    store.dispatch('common/setShowProgress', false)
-    Promise.reject(error)
-  }
-)
-
-// 응답(response) 인터셉터
-service.interceptors.response.use(
-  (response) => {
-    store.dispatch('common/setShowProgress', false)
-    return Promise.resolve(response)
-  },
-  (error) => {
-    store.dispatch('common/setShowProgress', false)
-    return Promise.reject(error)
-  }
-)
-Vue.prototype.$axios = service
 
 Vue.use(VuejsDialog, {
   html: true,

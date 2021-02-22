@@ -257,7 +257,8 @@ export default {
     indList: [{ code: '1', codeNm: '일반' }, { code: '2', codeNm: '긴급' }], // 유형(일반,긴급)
     noticeSeq: -1,
     today: dayjs().format('YYYY-MM-DD HH:mm'),
-    showPreviewImage: false
+    showPreviewImage: false,
+    uploadFile: undefined
   }),
   mounted () {
     // 수정
@@ -280,9 +281,21 @@ export default {
         reader.onload = function (e) {
           vm.showPreviewImage = true
           document.getElementById('previewImage').src = e.target.result
+
+          const base64String = e.target.result
+          const base64 = base64String.substring(base64String.indexOf(',') + 1)
+          vm.uploadFile = new Uint8Array(base64)
         }
 
         reader.readAsDataURL($event.target.files[0])
+
+        /*
+        this.uploadFile = new FormData()
+        const file = $event.target.files[0]
+        console.log(file)
+        this.uploadFile.append('uploadFile', file, file.name)
+        console.log(this.uploadFile)
+        */
       }
     },
     // 공지사항 목록
@@ -303,6 +316,13 @@ export default {
       if (!this.$refs.form.validate()) {
         return
       }
+
+      console.log(this.uploadFile)
+      noticeService.uploadFile(this.uploadFile).then(response => {
+        console.log(response)
+      })
+
+      /*
       // 등록, 수정시 param 'IN_' 붙여야함
       this.setParamIn()
       this.$dialog.confirm((this.isModify ? '수정' : '저장') + ' 하시겠습니까?').then(() => {
@@ -315,6 +335,7 @@ export default {
           this.$router.push({ path: '/notice/list' })
         })
       })
+      */
     },
     // 저장, 수정시 param 명 변경
     setParamIn () {

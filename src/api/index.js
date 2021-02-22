@@ -22,6 +22,15 @@ api.interceptors.request.use(
     if (!config.noShowProgress) {
       store.dispatch('common/setShowLoading', true)
     }
+    if (config.url.indexOf('/api/upload') > -1) {
+      config.baseURL = '/api/upload'
+      config.url = ''
+      config.headers['Content-Type'] = 'text/plain'
+      config.headers.Accept = '*/*'
+    } else {
+      config.baseURL = '/api/admin'
+    }
+    console.log(config)
     if (store.getters['user/apiToken']) {
       config.headers['api-token'] = store.getters['user/apiToken'] // 각 요청에 실제 상황에 따라 사용자 지정 토큰을 전달하게 합니다.
     }

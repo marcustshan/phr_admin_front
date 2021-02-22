@@ -1,4 +1,4 @@
-import { soapUtil } from 'Api'
+import { soapUtil, api } from 'Api'
 
 const service = {
   /**
@@ -29,6 +29,15 @@ const service = {
    */
   modifyNotice (params) {
     return soapUtil.query(soapUtil.STYPE.SETQUERY, 'SELECT', 'N', 'PC_PHR_SET_NTC_UPD', params)
+  },
+  /**
+   * 공지사항 > 파일 업로드
+   */
+  uploadFile (formData) {
+    const uploadUrl = '/api/upload'
+    const params = { stream: formData }
+    console.log(params)
+    return api.post(uploadUrl, 'dsafewafewafewafewafewafewafewafewa')
   }
 }
 
