@@ -22,11 +22,10 @@ api.interceptors.request.use(
     if (!config.noShowProgress) {
       store.dispatch('common/setShowLoading', true)
     }
-    if (config.url.indexOf('/api/upload') > -1) {
-      config.baseURL = '/api/upload'
-      config.url = ''
-      config.headers['Content-Type'] = 'text/plain'
-      config.headers.Accept = '*/*'
+    if (config.url.indexOf('/file/upload/notice') > -1) {
+      config.baseURL = ''
+      config.url = '/file/upload/notice'
+      config.headers['Content-Type'] = 'multipart/form-data'
     } else {
       config.baseURL = '/api/admin'
     }
@@ -50,7 +49,11 @@ api.interceptors.response.use(
       store.dispatch('common/setShowLoading', false)
     }
 
-    response.data = JSON.parse(soapUtil.parseResponse(response.data))
+    try {
+      response.data = JSON.parse(soapUtil.parseResponse(response.data))
+    } catch (ex) {
+      console.error(ex)
+    }
     console.log('index response : ', response.data)
     if (response.data) {
       if (response.data.RESULT) {

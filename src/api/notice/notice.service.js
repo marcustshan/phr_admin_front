@@ -33,11 +33,10 @@ const service = {
   /**
    * 공지사항 > 파일 업로드
    */
-  uploadFile (formData) {
-    const uploadUrl = '/api/upload'
-    const params = { stream: formData }
-    console.log(params)
-    return api.post(uploadUrl, 'dsafewafewafewafewafewafewafewafewa')
+  async uploadFile (fileData) {
+    const uploadUrl = '/file/upload/notice'
+    const response = await api.post(uploadUrl, fileData)
+    return response
   }
 }
 

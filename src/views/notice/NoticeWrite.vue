@@ -175,6 +175,7 @@
             </v-btn>
             <br />
             <img v-show="showPreviewImage" class="preview-image" id="previewImage" alt="공지사항 이미지" />
+            <img v-show="!showPreviewImage && form.NTC_IMG_URL" class="uploaded-image" :src="`${downloadHostUrl}/web/GetImage/notice/${form.NTC_IMG_URL}`" :alt="form.NTC_SJ">
             <input id="noticeImage" class="no-display" type="file" accept="image/*" @change="imageChanged" />
           </v-col>
         </v-row>
@@ -206,6 +207,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 import noticeService from 'Api/notice/notice.service'
 import dayjs from 'dayjs'
 
@@ -244,6 +247,9 @@ const IN_FORM = {
 export default {
   name: 'NoticeWrite',
   computed: {
+    ...mapGetters({
+      downloadHostUrl: 'common/downloadHostUrl'
+    }),
     user () {
       return this.$store.state.user.userInfo
     },
@@ -282,20 +288,10 @@ export default {
           vm.showPreviewImage = true
           document.getElementById('previewImage').src = e.target.result
 
-          const base64String = e.target.result
-          const base64 = base64String.substring(base64String.indexOf(',') + 1)
-          vm.uploadFile = new Uint8Array(base64)
+          vm.uploadFile = e.target.result
         }
 
         reader.readAsDataURL($event.target.files[0])
-
-        /*
-        this.uploadFile = new FormData()
-        const file = $event.target.files[0]
-        console.log(file)
-        this.uploadFile.append('uploadFile', file, file.name)
-        console.log(this.uploadFile)
-        */
       }
     },
     // 공지사항 목록
@@ -317,15 +313,16 @@ export default {
         return
       }
 
-      console.log(this.uploadFile)
-      noticeService.uploadFile(this.uploadFile).then(response => {
-        console.log(response)
-      })
-
-      /*
       // 등록, 수정시 param 'IN_' 붙여야함
       this.setParamIn()
-      this.$dialog.confirm((this.isModify ? '수정' : '저장') + ' 하시겠습니까?').then(() => {
+      this.$dialog.confirm((this.isModify ? '수정' : '저장') + ' 하시겠습니까?').then(async () => {
+        if (this.uploadFile) {
+          const uploadResponse = await noticeService.uploadFile(this.uploadFile)
+          if (uploadResponse.data && uploadResponse.data.FileUploadNoticeResult) {
+            const fileName = uploadResponse.data.FileUploadNoticeResult
+            this.inForm.IN_NTC_IMG_URL = fileName
+          }
+        }
         if (this.isModify) {
           noticeService.modifyNotice(this.inForm)
         } else {
@@ -335,7 +332,6 @@ export default {
           this.$router.push({ path: '/notice/list' })
         })
       })
-      */
     },
     // 저장, 수정시 param 명 변경
     setParamIn () {
@@ -357,4 +353,5 @@ export default {
 
 <style scoped>
   .preview-image { margin-top: 5px; max-height: 170px; }
+  .uploaded-image { max-height: 200px; margin-top: 5px; }
 </style>
