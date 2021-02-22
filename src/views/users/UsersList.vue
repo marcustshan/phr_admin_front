@@ -12,22 +12,23 @@
               item-value="code"
             ></v-select>
           </v-col>
-          <v-col cols="2" class="ml-5">
+          <v-col cols="3" class="ml-2">
             <v-text-field
               v-model="searchParam.search"
               @keypress.enter="getUsersList"
               clearable
               autocomplete="off"
               hide-details
-            ></v-text-field>
-          </v-col>
-          <v-col cols="1" align-self="end" class="text-right">
-            <v-btn small outlined class="black--text" @click="getUsersList">
-              <v-icon>search</v-icon>
-            </v-btn>
-            <v-btn small outlined class="black--text ml-2" color="#43425d" @click="clearSearchParam(searchParam)">
-              <v-icon>refresh</v-icon>
-            </v-btn>
+            >
+              <template v-slot:append-outer>
+                <v-btn small outlined class="black--text" @click="getUsersList">
+                  <v-icon>search</v-icon>
+                </v-btn>
+                <v-btn small outlined class="black--text ml-2" color="#43425d" @click="clearSearchParam(searchParam)">
+                  <v-icon>refresh</v-icon>
+                </v-btn>
+              </template>
+            </v-text-field>
           </v-col>
         </v-row>
       </v-form>

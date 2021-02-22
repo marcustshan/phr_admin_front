@@ -12,23 +12,24 @@
               item-value="code"
             ></v-select>
           </v-col>
-          <v-col cols="2" class="ml-5">
-            <v-text-field
-              v-model="searchParam.search"
-              @keypress.enter="getNoticeList"
-              clearable
-              hide-details
-            ></v-text-field>
+          <v-col cols="3" class="ml-2">
+              <v-text-field
+                v-model="searchParam.search"
+                @keypress.enter="getNoticeList"
+                clearable
+                hide-details
+              >
+                <template v-slot:append-outer>
+                  <v-btn small outlined class="black--text" @click="getNoticeList">
+                    <v-icon>search</v-icon>
+                  </v-btn>
+                  <v-btn small outlined class="black--text ml-2" color="#43425d" @click="clearSearchParam(searchParam)">
+                    <v-icon>refresh</v-icon>
+                  </v-btn>
+                </template>
+              </v-text-field>
           </v-col>
-          <v-col cols="1" align-self="end" class="text-right">
-            <v-btn small outlined class="black--text" @click="getNoticeList">
-              <v-icon>search</v-icon>
-            </v-btn>
-            <v-btn small outlined class="black--text ml-2" color="#43425d" @click="clearSearchParam(searchParam)">
-              <v-icon>refresh</v-icon>
-            </v-btn>
-          </v-col>
-          <v-col cols="1" align-self="end" class="text-center">
+          <v-col cols="1" align-self="end" class="text-center mb-1">
             <v-btn small min-width="100px" class="white--text" color="#43425d" @click="writeNotice">
               <v-icon left>edit</v-icon>
               등록

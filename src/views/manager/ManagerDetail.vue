@@ -44,28 +44,29 @@
             format="YYYY-MM-DD"
             label="시작일"
             hide-details
-            aria-autocomplete="none"
           >
           </date-picker>
         </v-col>
-        <v-col cols="2" class="ml-5">
+        <v-col cols="3" class="ml-5">
           <date-picker
             v-model="searchParam.endDt"
             :min="searchParam.startDt"
             format="YYYY-MM-DD"
             hide-details
             label="종료일"
-            aria-autocomplete="none"
+            :btnYn="true"
+            :clickFn="getManagerDetailList"
+            @refreshFn="clearSearchParam(searchParam)"
           ></date-picker>
         </v-col>
-        <v-col cols="1" align-self="end" class="text-right">
-          <v-btn small outlined class="black--text" @click="getManagerDetailList">
+<!--        <v-col cols="1" align-self="end" class="text-right">
+          <v-btn small outlined class="black&#45;&#45;text" @click="getManagerDetailList">
             <v-icon>search</v-icon>
           </v-btn>
-          <v-btn small outlined class="black--text ml-1" color="#43425d" @click="clearSearchParam(searchParam)">
+          <v-btn small outlined class="black&#45;&#45;text ml-1" color="#43425d" @click="clearSearchParam(searchParam)">
             <v-icon>refresh</v-icon>
           </v-btn>
-        </v-col>
+        </v-col>-->
       </v-row>
       <v-row justify="space-between">
         <v-col cols="4" align-self="center">

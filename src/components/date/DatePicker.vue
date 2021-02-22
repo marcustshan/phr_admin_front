@@ -22,7 +22,16 @@
         :disabled="disabled"
         v-on="on"
         :rules="[ validateDateField(inputDate) || errorMessage ]"
-      ></v-text-field>
+      >
+        <template v-slot:append-outer v-if="btnYn">
+          <v-btn small outlined class="black--text ml-2" @click="clickFn">
+            <v-icon>search</v-icon>
+          </v-btn>
+          <v-btn small outlined class="black--text ml-2" color="#43425d" @click="$emit('refreshFn')">
+            <v-icon>refresh</v-icon>
+          </v-btn>
+        </template>
+      </v-text-field>
     </template>
     <v-date-picker
       :value="pickerDate"
@@ -51,6 +60,15 @@ export default {
     event: 'change'
   },
   props: {
+    btnYn: {
+      type: Boolean
+    },
+    clickFn: {
+      type: Function
+    },
+    searchParam: {
+      type: Object
+    },
     /**
      * 날짜 [YYYYMMDD]
      */

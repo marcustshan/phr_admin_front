@@ -42,7 +42,7 @@
             hide-details
           ></v-select>
         </v-col>
-        <v-col cols="2" class="ml-5">
+        <v-col cols="2" class="ml-3">
           <date-picker
             v-model='searchParam.startDt'
             format="YYYY-MM-DD"
@@ -51,23 +51,26 @@
           >
           </date-picker>
         </v-col>
-        <v-col cols="2" class="ml-5">
+        <v-col cols="3" class="ml-3">
           <date-picker
             v-model="searchParam.endDt"
             :min="searchParam.startDt"
+            :btnYn="true"
+            :clickFn="getUsersDetailList"
+            @refreshFn="clearSearchParam(searchParam)"
             format="YYYY-MM-DD"
             hide-details
             label="종료일"
           ></date-picker>
         </v-col>
-        <v-col cols="1" align-self="end" class="text-right">
-          <v-btn small outlined class="black--text" @click="getUsersDetailList">
+<!--        <v-col cols="1" align-self="end" class="text-right">
+          <v-btn small outlined class="black&#45;&#45;text" @click="getUsersDetailList">
             <v-icon>search</v-icon>
           </v-btn>
-          <v-btn small outlined class="black--text ml-1" color="#43425d" @click="clearSearchParam(searchParam)">
+          <v-btn small outlined class="black&#45;&#45;text ml-1" color="#43425d" @click="clearSearchParam(searchParam)">
             <v-icon>refresh</v-icon>
           </v-btn>
-        </v-col>
+        </v-col>-->
       </v-row>
       <v-row justify="space-between">
         <v-col cols="4" align-self="center">
