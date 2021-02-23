@@ -135,12 +135,29 @@ export default {
     if (this.user.ADM_SYS_ID) {
       this.searchParam.sysId = this.user.ADM_SYS_ID
     }
+    // 검색조건 유지
+    if (this.$route.params.item) {
+      this.searchParam.page = this.$route.params.item.page
+      this.searchParam.type = this.$route.params.item.type
+      this.searchParam.search = this.$route.params.item.search
+    }
     this.getNoticeList()
   },
   methods: {
     // 공지사항 수정
     modifyNotice (item) {
-      this.$router.push({ path: `/notice/modify/${item.NTC_ID}` })
+      this.$router.push({
+        path: '/notice/modify',
+        name: 'noticeModify',
+        params: {
+          noticeSeq: item.NTC_ID,
+          q: {
+            page: this.searchParam.page,
+            type: this.searchParam.type,
+            search: this.searchParam.search
+          }
+        }
+      })
     },
     // 공지사항 삭제
     deleteNotice (noticeSeq) {
@@ -167,6 +184,9 @@ export default {
     },
     // 공지사항 조회
     getNoticeList () {
+      if (!this.isEmpty(this.searchParam.search)) {
+        this.searchParam.page = 1
+      }
       noticeService.getNoticeList(this.searchParam).then(response => {
         if (response.data) {
           if (typeof response.data === 'object' && Object.keys(response.data).length < 1) {

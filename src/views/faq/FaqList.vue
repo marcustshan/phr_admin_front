@@ -122,6 +122,12 @@ export default {
     if (this.user.ADM_SYS_ID) {
       this.searchParam.sysId = this.user.ADM_SYS_ID
     }
+    // 검색조건 유지
+    if (this.$route.params.item) {
+      this.searchParam.page = this.$route.params.item.page
+      this.searchParam.type = this.$route.params.item.type
+      this.searchParam.search = this.$route.params.item.search
+    }
     // faq 목록 조회
     this.getFaqList()
   },
@@ -135,7 +141,18 @@ export default {
     },
     // 자주묻는 질문 수정
     modifyFaq (item) {
-      this.$router.push({ path: `/faq/modify/${item.FAQ_ID}` })
+      this.$router.push({
+        path: '/faq/modify',
+        name: 'faqModify',
+        params: {
+          faqSeq: item.FAQ_ID,
+          q: {
+            page: this.searchParam.page,
+            type: this.searchParam.type,
+            search: this.searchParam.search
+          }
+        }
+      })
     },
     // faq 삭제
     deleteFaq (faqSeq) {
@@ -155,6 +172,9 @@ export default {
     },
     // faq 목록 조회
     getFaqList () {
+      if (!this.isEmpty(this.searchParam.search)) {
+        this.searchParam.page = 1
+      }
       faqService.getFaqList(this.searchParam).then(response => {
         if (response.data) {
           if (typeof response.data === 'object' && Object.keys(response.data).length < 1) {

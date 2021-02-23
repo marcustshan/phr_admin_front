@@ -132,7 +132,7 @@ export default {
           // 비밀번호 초기화
           managerService.resetManagePw(this.resetForm).then(res => {
             if (res.data.length > 0) {
-              this.$dialog.alert('비밀번호과 초기화 되었습니다.').then(() => {
+              this.$dialog.alert('비밀번호가 초기화 되었습니다.').then(() => {
                 this.getManagerList()
               })
             }

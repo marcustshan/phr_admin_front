@@ -140,7 +140,7 @@ export default {
   methods: {
     // FAQ 목록
     goFaqList () {
-      this.$router.push({ path: '/faq/list' })
+      this.$router.push({ path: '/faq/list', name: 'faqList', params: { item: this.$route.params.q } })
     },
     // FAQ 상세조회
     getFaqDetail (faqSeq) {

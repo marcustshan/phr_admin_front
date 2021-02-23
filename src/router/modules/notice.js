@@ -28,7 +28,7 @@ export default {
       }
     },
     {
-      path: 'modify/:noticeSeq',
+      path: 'modify',
       component: NoticeWrite,
       name: 'noticeModify',
       meta: {

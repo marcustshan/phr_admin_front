@@ -135,6 +135,12 @@ export default {
     if (this.user.ADM_SYS_ID) {
       this.searchParam.sysId = this.user.ADM_SYS_ID
     }
+    // 검색조건 유지
+    if (this.$route.params.item) {
+      this.searchParam.page = this.$route.params.item.page
+      this.searchParam.type = this.$route.params.item.type
+      this.searchParam.search = this.$route.params.item.search
+    }
     this.getVersionList()
   },
   methods: {
@@ -145,7 +151,18 @@ export default {
       }
     },
     modifyVersion (item) {
-      this.$router.push({ path: `/version/modify/${item.VER_ID}` })
+      this.$router.push({
+        path: '/version/modify',
+        name: 'versionModify',
+        params: {
+          versionSeq: item.VER_ID,
+          q: {
+            page: this.searchParam.page,
+            type: this.searchParam.type,
+            search: this.searchParam.search
+          }
+        }
+      })
     },
     // 버전관리 삭제
     deleteVersion (versionSeq) {
@@ -165,6 +182,9 @@ export default {
     },
     // 버전관리 목록 조회
     getVersionList () {
+      if (!this.isEmpty(this.searchParam.search)) {
+        this.searchParam.page = 1
+      }
       versionService.getVersionList(this.searchParam).then(response => {
         if (response.data) {
           if (typeof response.data === 'object' && Object.keys(response.data).length < 1) {

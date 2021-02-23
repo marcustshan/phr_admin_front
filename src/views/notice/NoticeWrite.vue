@@ -173,6 +173,7 @@
             >
               이미지 등록
             </v-btn>
+<!--            <v-btn class="ml-2" color="error" v-if="uploadFile" @click="deleteImage">삭제</v-btn>-->
             <br />
             <img v-show="showPreviewImage" class="preview-image" id="previewImage" alt="공지사항 이미지" />
             <img v-show="!showPreviewImage && form.NTC_IMG_URL" class="uploaded-image" :src="`${downloadHostUrl}/web/GetImage/notice/${form.NTC_IMG_URL}`" :alt="form.NTC_SJ">
@@ -211,7 +212,7 @@ import dayjs from 'dayjs'
 
 const DEFAULT_FORM = {
   ADM_SYS_ID: null,
-  NTC_ST_CD: '1', // 유형
+  NTC_ST_CD: 'G', // 유형
   NTC_IMG_URL: null, // 공지사항 내용 이미지 URL
   NTC_EXP_YN: 'Y', // 앱 게시글 노출여부
   PUP_EXP_YN: 'Y', // 팝업 노출여부
@@ -257,7 +258,7 @@ export default {
   data: () => ({
     form: _.cloneDeep(DEFAULT_FORM),
     inForm: _.cloneDeep(IN_FORM),
-    indList: [{ code: '1', codeNm: '일반' }, { code: '2', codeNm: '긴급' }], // 유형(일반,긴급)
+    indList: [{ code: 'G', codeNm: '일반' }, { code: 'E', codeNm: '긴급' }], // 유형(일반,긴급)
     noticeSeq: -1,
     editorValid: false, // ckeditor 유효성
     today: dayjs().format('YYYY-MM-DD HH:mm'),
@@ -272,6 +273,9 @@ export default {
     }
   },
   methods: {
+    // 이미지 삭제
+    deleteImage () {
+    },
     // 이미지 등록 버튼 클릭 event
     openImageInput () {
       document.getElementById('noticeImage').click()
@@ -294,7 +298,7 @@ export default {
     },
     // 공지사항 목록
     goNoticeList () {
-      this.$router.push({ path: '/notice/list' })
+      this.$router.push({ path: '/notice/list', name: 'noticeList', params: { item: this.$route.params.q } })
     },
     // 공지사항 상세조회
     getNoticeDetail (noticeSeq) {

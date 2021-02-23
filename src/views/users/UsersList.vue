@@ -203,9 +203,17 @@ export default {
   created () {
   },
   mounted () {
+    // 관리자 ID
     if (this.user.ADM_SYS_ID) {
       this.searchParam.sysId = this.user.ADM_SYS_ID
     }
+    // 검색조건 유지
+    if (this.$route.params.item) {
+      this.searchParam.page = this.$route.params.item.page
+      this.searchParam.type = this.$route.params.item.type
+      this.searchParam.search = this.$route.params.item.search
+    }
+    // 목록 조회
     this.getUsersList()
   },
   methods: {
@@ -217,6 +225,11 @@ export default {
     },
     // 접속일시 팝업
     goDetailPage (item) {
+      item.q = {
+        page: this.searchParam.page,
+        type: this.searchParam.type,
+        search: this.searchParam.search
+      }
       this.$router.push({ path: '/users/detail', name: 'usersDetail', params: { item: item } })
     },
     // 동의 기관 팝업
@@ -232,6 +245,9 @@ export default {
     },
     // 사용자 목록 조회
     getUsersList () {
+      if (!this.isEmpty(this.searchParam.search)) {
+        this.searchParam.page = 1
+      }
       usersService.getUsersList(this.searchParam).then(response => {
         if (response.data) {
           if (typeof response.data === 'object' && Object.keys(response.data).length < 1) {

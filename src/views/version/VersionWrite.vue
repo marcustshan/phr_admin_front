@@ -235,7 +235,7 @@ export default {
   methods: {
     // 버전관리 목록
     goVersionList () {
-      this.$router.push({ path: '/version/list' })
+      this.$router.push({ path: '/version/list', name: 'versionList', params: { item: this.$route.params.q } })
     },
     // 버전관리 상세조회
     getVersionDetail (versionSeq) {

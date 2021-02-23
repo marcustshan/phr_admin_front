@@ -28,7 +28,7 @@ export default {
       }
     },
     {
-      path: 'modify/:faqSeq',
+      path: 'modify',
       component: FaqWrite,
       name: 'faqModify',
       meta: {

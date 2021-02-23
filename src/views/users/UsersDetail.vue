@@ -63,14 +63,6 @@
             label="종료일"
           ></date-picker>
         </v-col>
-<!--        <v-col cols="1" align-self="end" class="text-right">
-          <v-btn small outlined class="black&#45;&#45;text" @click="getUsersDetailList">
-            <v-icon>search</v-icon>
-          </v-btn>
-          <v-btn small outlined class="black&#45;&#45;text ml-1" color="#43425d" @click="clearSearchParam(searchParam)">
-            <v-icon>refresh</v-icon>
-          </v-btn>
-        </v-col>-->
       </v-row>
       <v-row justify="space-between">
         <v-col cols="4" align-self="center">
@@ -99,9 +91,7 @@
 
     <v-row>
       <v-col cols="12" class="text-right">
-        <router-link to="/users/list">
-          <v-btn outlined color="brown lighten-2">목록</v-btn>
-        </router-link>
+        <v-btn outlined color="brown lighten-2" @click="getUserList">목록</v-btn>
       </v-col>
     </v-row>
 
@@ -163,12 +153,29 @@ export default {
         this.searchParam.sysId = this.user.ADM_SYS_ID
         this.searchParam.userId = this.userInfo.USR_SYS_ID
       }
+      // 사용자 상세 정보
+      this.getUserDetail()
+      // 사용자 수행내역 목록 조회
       this.getUsersDetailList()
     } else {
       this.$router.push({ path: '/users/list' })
     }
   },
   methods: {
+    // 목록
+    getUserList () {
+      this.$router.push({ path: '/users/list', name: 'usersList', params: { item: this.userInfo.q } })
+    },
+    // 사용자 상세정보
+    getUserDetail () {
+      const param = { ADM_SYS_ID: this.searchParam.sysId, USR_SYS_ID: this.searchParam.userId }
+      usersService.getUserDetail(param).then(res => {
+        if (res.data) {
+          this.userInfo.USR_NM = res.data[0].USR_NM
+          this.userInfo.USR_DOB_DT = dayjs(res.data[0].USR_DOB_DT).format('YYMMDD')
+        }
+      })
+    },
     // 날짜 format
     date (value, format = 'YYYY-MM-DD HH:mm:ss') {
       if (!value) {
@@ -204,6 +211,7 @@ export default {
       }
       return true
     },
+    // 페이지 변경시
     pageChange (pageNum) {
       if (this.searchParam.page !== pageNum) {
         this.searchParam.page = pageNum
