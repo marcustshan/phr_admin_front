@@ -148,11 +148,9 @@ export default {
     async sendCode () {
       try {
         this.sendMsg = true
-        const res = await this.$store.dispatch('user/emailVerify', {
+        await this.$store.dispatch('user/emailVerify', {
           certNum: this.systemId
         })
-        // TODO 임시
-        console.log('인증번호 임시 : ', res.CERT_NUM)
       } catch (err) {
         this.$dialog.alert(err.msg)
       }
