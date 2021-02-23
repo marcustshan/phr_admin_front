@@ -13,7 +13,7 @@
         <v-form class="pa-10 login_form" ref="form">
           <v-text-field
             id="id"
-            :rules="idRules"
+            :rules="idEmptyRules"
             v-model="user.id"
             light="light"
             prepend-icon="person"
@@ -23,7 +23,7 @@
           <v-text-field
             id="password"
             class="mt-2"
-            :rules="passwordRules"
+            :rules="passwordEmptyRules"
             v-model="user.pw"
             light="light"
             prepend-icon="lock"

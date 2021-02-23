@@ -59,14 +59,6 @@
             @refreshFn="clearSearchParam(searchParam)"
           ></date-picker>
         </v-col>
-<!--        <v-col cols="1" align-self="end" class="text-right">
-          <v-btn small outlined class="black&#45;&#45;text" @click="getManagerDetailList">
-            <v-icon>search</v-icon>
-          </v-btn>
-          <v-btn small outlined class="black&#45;&#45;text ml-1" color="#43425d" @click="clearSearchParam(searchParam)">
-            <v-icon>refresh</v-icon>
-          </v-btn>
-        </v-col>-->
       </v-row>
       <v-row justify="space-between">
         <v-col cols="4" align-self="center">

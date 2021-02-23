@@ -32,9 +32,12 @@ const globalMixin = {
         v => (!v || /^[0-9a-zA-Z\\.]+$/.test(v)) || '영문, 숫자만 입력 가능합니다.'
       ],
       idRules: [
+        v => (!v || /^[0-9a-zA-Z\\_-]{5,}$/.test(v)) || '영문, 숫자만 입력 가능합니다. (5글자 이상)'
+      ],
+      idEmptyRules: [
         v => !!v || '아이디를 입력해주세요.'
       ],
-      passwordRules: [
+      passwordEmptyRules: [
         v => !!v || '비밀번호를 입력해주세요.'
       ]
     }

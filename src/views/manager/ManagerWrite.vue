@@ -41,7 +41,7 @@
             <v-label><v-icon left>keyboard_arrow_right</v-icon>ID</v-label>
           </v-col>
           <v-col sm="3" class="pb-0">
-            <v-text-field v-model="form.IN_ADM_ID" :rules="emptyRules" dense></v-text-field>
+            <v-text-field v-model="form.IN_ADM_ID" :rules="emptyRules.concat(idRules)" dense></v-text-field>
           </v-col>
         </v-row>
 
