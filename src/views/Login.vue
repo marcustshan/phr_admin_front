@@ -84,7 +84,7 @@
           </v-card-text>
 
           <v-card-actions class="justify-center">
-            <v-btn large min-width="130" max-height="40" @click="submit" class="login_button white--text">
+            <v-btn large min-width="130" max-height="40" @click="submit" class="login_button white--text" :disabled="!sendMsg">
               인증번호 확인
             </v-btn>
           </v-card-actions>
@@ -167,8 +167,10 @@ export default {
             IN_ADM_PW: this.user.pw,
             IN_CERT_NUM: this.verificationCode
           })
-          if (Object.keys(res).length > 0) {
+          if ((res !== undefined) && Object.keys(res).length > 0) {
             await this.$router.push({ path: '/main', name: 'main' })
+          } else {
+            this.$dialog.alert('인증번호가 불일치합니다.')
           }
         }
       } catch (err) {

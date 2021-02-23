@@ -29,7 +29,6 @@ api.interceptors.request.use(
     } else {
       config.baseURL = '/api/admin'
     }
-    console.log(config)
     if (store.getters['user/apiToken']) {
       config.headers['api-token'] = store.getters['user/apiToken'] // 각 요청에 실제 상황에 따라 사용자 지정 토큰을 전달하게 합니다.
     }
@@ -54,7 +53,7 @@ api.interceptors.response.use(
     } catch (ex) {
       console.error(ex)
     }
-    console.log('index response : ', response.data)
+    // console.log('index response : ', response.data)
     if (response.data) {
       if (response.data.RESULT) {
         if (response.data.RESULT.length > 0) {

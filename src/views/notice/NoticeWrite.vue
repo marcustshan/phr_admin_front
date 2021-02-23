@@ -183,16 +183,6 @@
         <v-row>
           <v-col sm="12">
             <ckeditor type="classic" v-model="form.NTC_CN"></ckeditor>
-            <!--
-            <v-textarea
-              class="mt-5"
-              outlined
-              label="내용"
-              height="500"
-              :rules="emptyRules"
-              v-model="form.NTC_CN"
-            ></v-textarea>
-            -->
           </v-col>
         </v-row>
       </div>
