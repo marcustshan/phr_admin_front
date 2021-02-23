@@ -68,8 +68,15 @@
         </v-row>
 
         <v-row>
-          <v-col sm="12">
-            <ckeditor :rules="emptyRules" type="classic" v-model="form.FAQ_CN"></ckeditor>
+          <v-col cols="12">
+            <ckeditor type="classic" v-model="form.FAQ_CN"></ckeditor>
+          </v-col>
+          <v-col cols="12" class="pt-0" v-if="editorValid">
+            <div class="v-text-field__details">
+              <div class="v-messages theme--light error--text" role="alert">
+                <div class="v-messages__wrapper"><div class="v-messages__message">필수 입력항목입니다.</div></div>
+              </div>
+            </div>
           </v-col>
         </v-row>
       </div>
@@ -120,6 +127,7 @@ export default {
     inForm: _.cloneDeep(IN_FORM),
     indList: [{ code: 'A', codeNm: '계정' }, { code: 'S', codeNm: '서비스이용' }], // 유형
     faqSeq: -1,
+    editorValid: false, // ckeditor 유효성
     today: dayjs().format('YYYY-MM-DD HH:mm')
   }),
   mounted () {
@@ -145,20 +153,24 @@ export default {
     },
     // FAQ 저장
     saveFaqDetail () {
-      if (!this.$refs.form.validate()) {
-        return
-      }
-      // 등록, 수정시 param 'IN_' 붙여야함
-      this.setParamIn()
-      this.$dialog.confirm((this.isModify ? '수정' : '저장') + ' 하시겠습니까?').then(() => {
-        if (this.isModify) {
-          faqService.modifyFaq(this.inForm)
+      this.editorValid = false
+      this.validForm(this.$refs.form).then(() => {
+        if (this.isEmpty(this.form.FAQ_CN)) {
+          this.editorValid = true
         } else {
-          faqService.writeFaq(this.inForm)
+          // 등록, 수정시 param 'IN_' 붙여야함
+          this.setParamIn()
+          this.$dialog.confirm((this.isModify ? '수정' : '저장') + ' 하시겠습니까?').then(() => {
+            if (this.isModify) {
+              faqService.modifyFaq(this.inForm)
+            } else {
+              faqService.writeFaq(this.inForm)
+            }
+            this.$dialog.alert((this.isModify ? '수정' : '저장') + ' 되었습니다.').then(() => {
+              this.$router.push({ path: '/faq/list' })
+            })
+          })
         }
-        this.$dialog.alert((this.isModify ? '수정' : '저장') + ' 되었습니다.').then(() => {
-          this.$router.push({ path: '/faq/list' })
-        })
       })
     },
     // 저장, 수정시 param 명 변경

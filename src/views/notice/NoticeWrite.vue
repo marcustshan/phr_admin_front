@@ -181,8 +181,15 @@
         </v-row>
 
         <v-row>
-          <v-col sm="12">
+          <v-col cols="12">
             <ckeditor type="classic" v-model="form.NTC_CN"></ckeditor>
+          </v-col>
+          <v-col cols="12" class="pt-0" v-if="editorValid">
+            <div class="v-text-field__details">
+              <div class="v-messages theme--light error--text" role="alert">
+                <div class="v-messages__wrapper"><div class="v-messages__message">필수 입력항목입니다.</div></div>
+              </div>
+            </div>
           </v-col>
         </v-row>
       </div>
@@ -252,6 +259,7 @@ export default {
     inForm: _.cloneDeep(IN_FORM),
     indList: [{ code: '1', codeNm: '일반' }, { code: '2', codeNm: '긴급' }], // 유형(일반,긴급)
     noticeSeq: -1,
+    editorValid: false, // ckeditor 유효성
     today: dayjs().format('YYYY-MM-DD HH:mm'),
     showPreviewImage: false,
     uploadFile: undefined
@@ -299,28 +307,31 @@ export default {
     },
     // 공지사항 저장
     saveNoticeDetail () {
-      if (!this.$refs.form.validate()) {
-        return
-      }
-
-      // 등록, 수정시 param 'IN_' 붙여야함
-      this.setParamIn()
-      this.$dialog.confirm((this.isModify ? '수정' : '저장') + ' 하시겠습니까?').then(async () => {
-        if (this.uploadFile) {
-          const uploadResponse = await noticeService.uploadFile(this.uploadFile)
-          if (uploadResponse.data && uploadResponse.data.FileUploadNoticeResult) {
-            const fileName = uploadResponse.data.FileUploadNoticeResult
-            this.inForm.IN_NTC_IMG_URL = fileName
-          }
-        }
-        if (this.isModify) {
-          noticeService.modifyNotice(this.inForm)
+      this.editorValid = false
+      this.validForm(this.$refs.form).then(() => {
+        if (this.isEmpty(this.form.NTC_CN)) {
+          this.editorValid = true
         } else {
-          noticeService.writeNotice(this.inForm)
+          // 등록, 수정시 param 'IN_' 붙여야함
+          this.setParamIn()
+          this.$dialog.confirm((this.isModify ? '수정' : '저장') + ' 하시겠습니까?').then(async () => {
+            if (this.uploadFile) {
+              const uploadResponse = await noticeService.uploadFile(this.uploadFile)
+              if (uploadResponse.data && uploadResponse.data.FileUploadNoticeResult) {
+                const fileName = uploadResponse.data.FileUploadNoticeResult
+                this.inForm.IN_NTC_IMG_URL = fileName
+              }
+            }
+            if (this.isModify) {
+              noticeService.modifyNotice(this.inForm)
+            } else {
+              noticeService.writeNotice(this.inForm)
+            }
+            this.$dialog.alert((this.isModify ? '수정' : '저장') + ' 되었습니다.').then(() => {
+              this.$router.push({ path: '/notice/list' })
+            })
+          })
         }
-        this.$dialog.alert((this.isModify ? '수정' : '저장') + ' 되었습니다.').then(() => {
-          this.$router.push({ path: '/notice/list' })
-        })
       })
     },
     // 저장, 수정시 param 명 변경

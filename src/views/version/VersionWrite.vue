@@ -256,27 +256,26 @@ export default {
     },
     // 버전관리 저장
     saveVersionDetail () {
-      if (!this.$refs.form.validate()) {
-        return
-      }
-      if (!this.isEmpty(this.updAvlDtm)) {
-        if (this.isEmpty(this.timeLine.HH) || this.isEmpty(this.timeLine.mm)) {
-          this.checkHour = true
-          return
-        }
-      } else {
-        this.checkHour = false
-      }
-      // 등록, 수정시 param 'IN_' 붙여야함
-      this.setParamIn()
-      this.$dialog.confirm((this.isModify ? '등록한 버전을 수정' : (this.form.VER_NM + ' 버전을 등록')) + ' 하시겠습니까?').then(() => {
-        if (this.isModify) {
-          versionService.modifyVersion(this.inForm)
+      this.validForm(this.$refs.form).then(() => {
+        if (!this.isEmpty(this.updAvlDtm)) {
+          if (this.isEmpty(this.timeLine.HH) || this.isEmpty(this.timeLine.mm)) {
+            this.checkHour = true
+            return
+          }
         } else {
-          versionService.writeVersion(this.inForm)
+          this.checkHour = false
         }
-        this.$dialog.alert((this.isModify ? '수정' : '저장') + ' 되었습니다.').then(() => {
-          this.$router.push({ path: '/version/list' })
+        // 등록, 수정시 param 'IN_' 붙여야함
+        this.setParamIn()
+        this.$dialog.confirm((this.isModify ? '등록한 버전을 수정' : (this.form.VER_NM + ' 버전을 등록')) + ' 하시겠습니까?').then(() => {
+          if (this.isModify) {
+            versionService.modifyVersion(this.inForm)
+          } else {
+            versionService.writeVersion(this.inForm)
+          }
+          this.$dialog.alert((this.isModify ? '수정' : '저장') + ' 되었습니다.').then(() => {
+            this.$router.push({ path: '/version/list' })
+          })
         })
       })
     },

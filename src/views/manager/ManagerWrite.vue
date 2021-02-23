@@ -130,26 +130,25 @@ export default {
     },
     // 관리자 계정 저장
     saveManager () {
-      if (!this.$refs.form.validate()) {
-        return
-      }
-      this.$dialog.confirm('계정을 추가 하시겠습니까?').then(() => {
-        managerService.writeManager(this.form).then(res => {
-          if (res.data) {
-            const result = res.data[0]
-            if (result.ERROR_YN === 'Y') {
-              this.errMsg = null
-              if (result.ERROR_MSG === 'EXIST_ID') {
-                this.errMsg = '이미 존재하는 계정입니다.'
-              } else if (result.ERROR_MSG === 'EXIST_EMAIL') {
-                this.errMsg = '이미 존재하는 이메일입니다.'
+      this.validForm(this.$refs.form).then(() => {
+        this.$dialog.confirm('계정을 추가 하시겠습니까?').then(() => {
+          managerService.writeManager(this.form).then(res => {
+            if (res.data) {
+              const result = res.data[0]
+              if (result.ERROR_YN === 'Y') {
+                this.errMsg = null
+                if (result.ERROR_MSG === 'EXIST_ID') {
+                  this.errMsg = '이미 존재하는 계정입니다.'
+                } else if (result.ERROR_MSG === 'EXIST_EMAIL') {
+                  this.errMsg = '이미 존재하는 이메일입니다.'
+                }
+              } else {
+                this.$dialog.alert('추가 되었습니다.').then(() => {
+                  this.$router.push({ path: '/manager/list' })
+                })
               }
-            } else {
-              this.$dialog.alert('추가 되었습니다.').then(() => {
-                this.$router.push({ path: '/manager/list' })
-              })
             }
-          }
+          })
         })
       })
     }

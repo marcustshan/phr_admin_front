@@ -69,10 +69,10 @@ const globalMixin = {
             this.$dialog.alert('필수 입력값을 확인해 주세요.').then(() => {
               form.$el.getElementsByClassName('error--text')[0].getElementsByTagName('input')[0].focus()
             })
-            reject(new Error('유효성 검사 오류'))
+            // reject(new Error('유효성 검사 오류'))
           }
         } else {
-          reject(new Error('폼 데이터 오류'))
+          // reject(new Error('폼 데이터 오류'))
         }
       })
     },
