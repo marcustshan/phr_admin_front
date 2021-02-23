@@ -159,9 +159,8 @@ const soapUtil = {
       tableParam.Table.push(paramItem)
     }
 
-    const tableParamString = JSON.stringify(tableParam)
+    let tableParamString = JSON.stringify(tableParam)
 
-    /*
     if (window.roomVm && window.roomVm.$jsInterface) {
       tableParamString = window.roomVm.$jsInterface.getEncryptText(tableParamString)
     } else {
@@ -170,7 +169,6 @@ const soapUtil = {
         mode: Vue.CryptoJS.mode.CBC
       }).toString()
     }
-     */
 
     return `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/">
               <soapenv:Header/>
@@ -179,7 +177,7 @@ const soapUtil = {
                 <tem:sType>${sType}</tem:sType>
                 <tem:sInputType>JSON</tem:sInputType>
                 <tem:sOutputType>JSON</tem:sOutputType>
-                <tem:sEncYn>N</tem:sEncYn>
+                <tem:sEncYn>Y</tem:sEncYn>
                 <tem:sParam>
                 <![CDATA[${tableParamString}]]>
                 </tem:sParam>
@@ -193,16 +191,16 @@ const soapUtil = {
   parseResponse: (data) => {
     if (data != null) {
       const jsBody = xjs.xml2js(data, { compact: true, spaces: 4 })
-      const jsonBody = jsBody['s:Envelope']['s:Body'].ServiceReturnCustomTypeResponse.ServiceReturnCustomTypeResult._text
+      let jsonBody = jsBody['s:Envelope']['s:Body'].ServiceReturnCustomTypeResponse.ServiceReturnCustomTypeResult._text
 
-      // if (window.roomVm && window.roomVm.$jsInterface) {
-      //   jsonBody = window.roomVm.$jsInterface.getDecryptText(jsonBody)
-      // } else {
-      //   jsonBody = Vue.CryptoJS.AES.decrypt(jsonBody, Vue.CryptoJS.enc.Utf8.parse(soapUtil.CRYPTO_KEY), {
-      //     iv: Vue.CryptoJS.enc.Utf8.parse(soapUtil.CRYPTO_KEY.substr(0, 16)),
-      //     mode: Vue.CryptoJS.mode.CBC
-      //   }).toString(Vue.CryptoJS.enc.Utf8)
-      // }
+      if (window.roomVm && window.roomVm.$jsInterface) {
+        jsonBody = window.roomVm.$jsInterface.getDecryptText(jsonBody)
+      } else {
+        jsonBody = Vue.CryptoJS.AES.decrypt(jsonBody, Vue.CryptoJS.enc.Utf8.parse(soapUtil.CRYPTO_KEY), {
+          iv: Vue.CryptoJS.enc.Utf8.parse(soapUtil.CRYPTO_KEY.substr(0, 16)),
+          mode: Vue.CryptoJS.mode.CBC
+        }).toString(Vue.CryptoJS.enc.Utf8)
+      }
 
       return jsonBody
     } else {
