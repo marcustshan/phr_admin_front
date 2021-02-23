@@ -51,6 +51,7 @@ const actions = {
       commit('setApiToken', res.headers['api-token'])
       // 사용자 정보 store에 저장
       commit('setUserInfo', res.data[0])
+      commit('setIsLogged', true)
       return Promise.resolve(res.data[0])
     }
   },
@@ -62,6 +63,7 @@ const actions = {
   async logout ({ commit }) {
     commit('setApiToken', null)
     commit('setUserInfo', null)
+    commit('setIsLogged', false)
     await router.push('/login')
     return Promise.resolve()
   }
@@ -69,14 +71,13 @@ const actions = {
 
 const mutations = {
   setUserInfo (state, userInfo) {
-    state.userInfo = userInfo || {
-      loginId: null,
-      id: null,
-      name: null
-    }
+    state.userInfo = userInfo
   },
   setApiToken (state, token) {
     state.apiToken = token
+  },
+  setIsLogged (state, value) {
+    state.isLogged = value
   }
 }
 

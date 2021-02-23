@@ -1,8 +1,8 @@
 <template>
   <v-app class="app-container">
-    <Header v-if="!isLoginView" />
+    <Header v-if="!isLoginView && isLogined" />
     <v-main class="mainWrap">
-      <div class="mainTitle ml-3" v-if="!isLoginView">{{ pageTitle }}</div>
+      <div class="mainTitle ml-3" v-if="!isLoginView && isLogined">{{ pageTitle }}</div>
       <transition name="router-anim" :enter-active-class="`animated slideInUp`">
         <router-view></router-view>
       </transition>
@@ -22,6 +22,9 @@ export default {
     Loading
   },
   computed: {
+    isLogined () {
+      return this.$store.state.user.isLogged
+    },
     isLoginView () {
       return this.$route.name === 'login'
     },

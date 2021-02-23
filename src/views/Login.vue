@@ -64,6 +64,7 @@
                   v-model="verificationCode"
                   clearable
                   label="인증번호를 입력하세요."
+                  @keypress.enter="submit"
                   :disabled="!sendMsg"
                   maxlength="4"
                 ></v-text-field>

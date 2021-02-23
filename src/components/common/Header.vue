@@ -15,50 +15,6 @@
         </span>
       </div>
 
-      <!--
-      <div class="user-info">
-        <v-list-item class="sidebar-profile">
-          <v-list-item-avatar>
-            <v-icon color="black">person</v-icon>
-          </v-list-item-avatar>
-          <v-list-item-content class="ml-4">
-            <v-list-item-title>
-              <span class="font-weight-bold">{{ user.name }}</span>
-            </v-list-item-title>
-          </v-list-item-content>
-          <v-menu
-            bottom
-            offset-y
-            right
-            content-class="userblock-dropdown"
-            nudge-top="-10"
-            nudge-right="0"
-            transition="slide-y-transition"
-          >
-            <template v-slot:activator="{ on }">
-              <v-btn dark icon v-on="on" class="ma-0">
-                <v-icon color="black">more_vert</v-icon>
-              </v-btn>
-            </template>
-            <div class="dropdown-content">
-              <v-list class="dropdown-list">
-                <v-list-item @click="getUserProfile()">
-                  <v-icon class="mr-3">person</v-icon>
-                  <span>정보 수정</span>
-                </v-list-item>
-                <v-list-item @click="logoutUser()">
-                  <v-icon class="mr-3">exit_to_app</v-icon>
-                  <span>로그 아웃</span>
-                </v-list-item>
-              </v-list>
-            </div>
-          </v-menu>
-        </v-list-item>
-      </div>
-
-      <v-divider />
-      -->
-
       <div class="menu_container">
         <v-list dense>
           <template v-for="(parentMenu, parentMenuIndex) in showMenus">
@@ -120,8 +76,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-
 export default {
   name: 'CommonHeader',
   data: () => ({
@@ -129,9 +83,9 @@ export default {
     selectedMenu: {}
   }),
   computed: {
-    ...mapGetters({
-      isLogged: 'user/isLogged'
-    }),
+    isLogged () {
+      return this.$store.state.user.isLogged
+    },
     user () {
       return this.$store.state.user.userInfo
     },
