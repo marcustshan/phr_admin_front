@@ -100,8 +100,8 @@ export default {
   components: {},
   data: () => ({
     user: {
-      id: 'test_adm',
-      pw: '1234',
+      id: '',
+      pw: '',
       rememberId: false
     },
     dialog: false,
