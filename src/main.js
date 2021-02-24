@@ -19,6 +19,9 @@ import 'vue2-timepicker/dist/VueTimepicker.css'
 // Global Mixin
 import GlobalMixin from './globalMixin'
 
+// global filter
+import * as filters from './globalFilter'
+
 // global components
 import GlobalComponents from './globalComponents'
 
@@ -28,6 +31,11 @@ import './lib/VuetifyCss'
 require('./assets/css/common.css')
 
 Vue.use(VueBreadcrumbs)
+
+// global filter
+Object.keys(filters).forEach(key => {
+  Vue.filter(key, filters[key])
+})
 
 Vue.use(VueCryptojs)
 

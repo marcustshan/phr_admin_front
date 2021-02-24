@@ -24,6 +24,12 @@ const service = {
    */
   modifyUserInfo (param) {
     return soapUtil.query(soapUtil.STYPE.SETQUERY, 'SELECT', 'N', 'PC_PHR_SET_ADM_UPD', param)
+  },
+  /**
+   * 로그아웃
+   */
+  logout (param) {
+    soapUtil.query(soapUtil.STYPE.SETQUERY, 'SELECT', 'N', 'PC_PHR_SET_ADM_LOGOUT', param)
   }
 }
 

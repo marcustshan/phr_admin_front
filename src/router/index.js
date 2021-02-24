@@ -7,6 +7,7 @@ import FaqRoutes from './modules/faq'
 import VersionRoutes from './modules/version'
 import MypageRoutes from './modules/mypage'
 import ManagerRoutes from './modules/manager'
+import DashboardRoutes from './modules/dashboard'
 
 // 로그인 화면
 const Login = () => import('Views/Login')
@@ -24,6 +25,7 @@ const routes = [
   VersionRoutes,
   MypageRoutes,
   ManagerRoutes,
+  DashboardRoutes,
   {
     path: '/',
     redirect: '/login'

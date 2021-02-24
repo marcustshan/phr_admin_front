@@ -61,6 +61,10 @@ const actions = {
   },
   // 로그아웃
   async logout ({ commit }) {
+    const param = {
+      IN_ADM_SYS_ID: this.state.user.userInfo.ADM_SYS_ID
+    }
+    await userService.logout(param)
     commit('setApiToken', null)
     commit('setUserInfo', null)
     commit('setIsLogged', false)

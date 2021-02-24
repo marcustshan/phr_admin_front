@@ -2,7 +2,10 @@
   <v-app class="app-container">
     <Header v-if="!isLoginView && isLogined" />
     <v-main class="mainWrap">
-      <div class="mainTitle ml-3" v-if="!isLoginView && isLogined">{{ pageTitle }}</div>
+      <div class="mainTitle ml-3" v-if="!isLoginView && isLogined">
+        {{ pageTitle }}
+        <div class="subTitle ml-5" v-if="subTitle">{{ subTitle }}</div>
+      </div>
       <transition name="router-anim" :enter-active-class="`animated slideInUp`">
         <router-view></router-view>
       </transition>
@@ -30,12 +33,17 @@ export default {
     },
     pageTitle () {
       let pageTitle = ''
-      if (this.$route.meta) {
-        if (this.$route.meta.title) {
-          pageTitle = this.$route.meta.title
-        }
+      if (this.$route.meta && this.$route.meta.title) {
+        pageTitle = this.$route.meta.title
       }
       return pageTitle
+    },
+    subTitle () {
+      let subTitle = ''
+      if (this.$route.meta && this.$route.meta.subTitle) {
+        subTitle = this.$route.meta.subTitle
+      }
+      return subTitle
     }
   },
   data: () => ({

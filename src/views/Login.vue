@@ -127,7 +127,7 @@ export default {
         this.statusMsg = null
         if (res.ERROR_YN === 'Y') {
           if (res.ERROR_MSG === 'NO-MANAGER') {
-            this.statusMsg = '등록되지 않는 아이디 입니다.'
+            this.statusMsg = '등록되지 않은 아이디 입니다.'
           } else if (res.ERROR_MSG === 'DORMANCY') {
             this.$dialog.alert('장기 미 접속 시 로그인 이용이 제한됩니다.<br>관리자 문의 부탁드립니다.')
           } else if (res.ERROR_MSG === 'BLOCK') {
