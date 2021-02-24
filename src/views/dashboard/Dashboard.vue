@@ -9,21 +9,21 @@
       :key="`stat_${itemIndex}`"
       class="mx-auto d-inline-block stat-data-item"
       width="390"
-      height="130"
+      height="120"
     >
       <v-list-item three-line>
         <v-list-item-content>
           <div class="mt-1 mb-4 title">
             {{ item.title }}
           </div>
-          <v-list-item-title class="display-1 mt-3 text-right">
-            {{ statData[item.dataKey] | comma }}{{ item.unit }}
+          <v-list-item-title class="display-1 mt-2 text-right">
+            {{ statData[item.dataKey] | comma }}&nbsp;{{ item.unit }}
           </v-list-item-title>
         </v-list-item-content>
       </v-list-item>
     </v-card>
 
-    <div class="stat-title-container agree">
+    <div class="stat-title-container other">
       <img src="@/assets/img/ico_dashboard_title.png" alt="데이터 활용 동의 건수" />
       데이터 활용 동의 건수
     </div>
@@ -32,15 +32,38 @@
       :key="`agree_${itemIndex}`"
       class="mx-auto d-inline-block stat-data-item"
       width="390"
-      height="130"
+      height="120"
     >
       <v-list-item three-line>
         <v-list-item-content>
           <div class="mt-1 mb-4 title">
             {{ item.title }}
           </div>
-          <v-list-item-title class="display-1 mt-3 text-right">
-            {{ statData[item.dataKey] | comma }}{{ item.unit }}
+          <v-list-item-title class="display-1 mt-2 text-right">
+            {{ statData[item.dataKey] | comma }}&nbsp;{{ item.unit }}
+          </v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+    </v-card>
+
+    <div class="stat-title-container other">
+      <img src="@/assets/img/ico_dashboard_title.png" alt="공유 건수" />
+      공유 건수
+    </div>
+    <v-card
+      v-for="(item, itemIndex) in shareStatDataList"
+      :key="`share_${itemIndex}`"
+      class="mx-auto d-inline-block stat-data-item"
+      width="390"
+      height="120"
+    >
+      <v-list-item three-line>
+        <v-list-item-content>
+          <div class="mt-1 mb-4 title">
+            {{ item.title }}
+          </div>
+          <v-list-item-title class="display-1 mt-2 text-right">
+            {{ statData[item.dataKey] | comma }}&nbsp;{{ item.unit }}
           </v-list-item-title>
         </v-list-item-content>
       </v-list-item>
@@ -61,13 +84,15 @@ export default {
   data: () => ({
     statDataList: [
       { title: '가입자 수', dataKey: 'CNT_REG', unit: '명' },
-      { title: '로그인 사용자 수', dataKey: 'CNT_LOGIN', unit: '명' },
-      { title: '공유 수', dataKey: 'CNT_SHARE', unit: '건' }
+      { title: '로그인 사용자 수', dataKey: 'CNT_LOGIN', unit: '명' }
     ],
     agreeStatDataList: [
       { title: '건강보험심사평가원', dataKey: 'CNT_SIMPYUNG', unit: '건' },
       { title: '건강보험공단', dataKey: 'CNT_GUNBO', unit: '건' },
       { title: '질병관리청', dataKey: 'CNT_JILBYOUNG', unit: '건' }
+    ],
+    shareStatDataList: [
+      { title: '공유 수', dataKey: 'CNT_SHARE', unit: '건' }
     ],
     statData: {}
   }),
@@ -93,6 +118,6 @@ export default {
 .content-container { background-color: #f0f0f7; }
 .stat-title-container { font-size: 1.3rem; line-height: 1.4rem; font-weight: 600; margin-bottom: 15px; }
 .stat-title-container img { margin-right: 5px; }
-.stat-title-container.agree { margin-top: 70px; }
+.stat-title-container.other { margin-top: 60px; }
 .stat-data-item { margin-right: 30px !important; }
 </style>
