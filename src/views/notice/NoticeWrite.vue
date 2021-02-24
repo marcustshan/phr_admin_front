@@ -173,7 +173,7 @@
             >
               이미지 등록
             </v-btn>
-            <v-btn class="ml-2" color="error" v-if="uploadFile" @click="deleteImage">삭제</v-btn>
+            <v-btn class="ml-2" color="error" v-if="uploadFile || form.NTC_IMG_URL" @click="deleteImage">삭제</v-btn>
             <br />
             <img v-show="showPreviewImage" class="preview-image" id="previewImage" alt="공지사항 이미지" />
             <img v-show="!showPreviewImage && form.NTC_IMG_URL" class="uploaded-image" :src="`${downloadHostUrl}/web/GetImage/notice/${form.NTC_IMG_URL}`" :alt="form.NTC_SJ">
@@ -278,7 +278,7 @@ export default {
       this.uploadFile = null
       this.showPreviewImage = false
       document.getElementById('previewImage').src = null
-      this.form.IN_NTC_IMG_URL = null
+      this.form.NTC_IMG_URL = null
     },
     // 이미지 등록 버튼 클릭 event
     openImageInput () {
@@ -310,7 +310,6 @@ export default {
       noticeService.getNoticeDetail(param).then((response) => {
         if (response.data && response.data.length > 0) {
           this.form = response.data[0]
-          console.log(this.form)
         }
       })
     },
