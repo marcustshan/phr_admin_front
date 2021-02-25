@@ -4,7 +4,10 @@
       <v-form ref="form" lazy-validation autocomplete="off">
         <v-row dense>
           <v-col cols="1" class="ml-auto">
+            <!--suppress XmlInvalidId -->
+            <label for="searchInd" class="no-display">검색조건</label>
             <v-select
+              id="searchInd"
               v-model="searchParam.type"
               :items="searchInd"
               hide-details
@@ -18,6 +21,7 @@
               @keypress.enter="getFaqList"
               clearable
               hide-details
+              label="검색"
             >
               <template v-slot:append-outer>
                 <v-btn small outlined class="black--text" @click="getFaqList">
@@ -53,6 +57,7 @@
       disable-sort
       disable-hover
       class="bordered condensed click-row history-table"
+      caption="자주묻는질문 목록"
     >
       <template v-slot:item.FAQ_ST_CD = {item}>
           {{item.FAQ_ST_CD === 'A' ? '계정' : '서비스이용'}}

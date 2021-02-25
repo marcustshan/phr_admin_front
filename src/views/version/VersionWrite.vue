@@ -4,15 +4,16 @@
       <v-row>
         <v-col md="12">
           <v-simple-table dense>
+            <caption>등록자 정보</caption>
             <thead class="detailTable">
             <tr>
-              <th class="text-center">APP명</th>
+              <th class="text-center" scope="col">APP명</th>
               <td colspan="3">나의건강기록 APP</td>
             </tr>
             <tr>
-              <th class="text-center">등록자</th>
+              <th class="text-center" scope="col">등록자</th>
               <td>{{user.ADM_NM}}({{user.ADM_ID}})</td>
-              <th class="text-center">등록일시</th>
+              <th class="text-center" scope="col">등록일시</th>
               <td>{{ today }}</td>
             </tr>
             </thead>
@@ -35,7 +36,10 @@
               <v-icon left>keyboard_arrow_right</v-icon>유형</v-label>
           </v-col>
           <v-col sm="2">
+            <!--suppress XmlInvalidId -->
+            <label for="selectTpCd" class="no-display">유형선택</label>
             <v-select
+              id="selectTpCd"
               class="pt-0"
               v-model="form.MOB_TP_CD"
               :items="typeList"
@@ -51,7 +55,7 @@
             <v-label><v-icon left>keyboard_arrow_right</v-icon>버전코드</v-label>
           </v-col>
           <v-col sm="2" class="pb-0">
-            <v-text-field v-model="form.VER_CODE" :rules="numberRules.concat(emptyRules)" dense></v-text-field>
+            <v-text-field v-model="form.VER_CODE" :rules="numberRules.concat(emptyRules)" dense label="버전코드"></v-text-field>
           </v-col>
           <v-col align-self="center" class="grey--text">
             <small>최신버전 검토하기 위한 앱의 내부 버전 코드 (예: 1)</small>
@@ -64,7 +68,7 @@
               <v-icon left>keyboard_arrow_right</v-icon>버전명</v-label>
           </v-col>
           <v-col sm="2" class="pb-0">
-            <v-text-field v-model="form.VER_NM" :rules="emptyRules.concat(versionRules)" dense hint="예시) 1.2"></v-text-field>
+            <v-text-field v-model="form.VER_NM" :rules="emptyRules.concat(versionRules)" dense hint="예시) 1.2" label="버전명"></v-text-field>
           </v-col>
           <v-col align-self="center" class="grey--text">
             <small>사용자에게 공개되는 앱의 배포 버전 (예: 1.0)</small>
@@ -90,7 +94,7 @@
               <v-icon left>keyboard_arrow_right</v-icon>업데이트 주소</v-label>
           </v-col>
           <v-col sm="3" class="pb-0">
-            <v-text-field dense v-model="form.UPD_URL" :rules="emptyRules.concat(siteRules)" prefix="https://"></v-text-field>
+            <v-text-field dense v-model="form.UPD_URL" :rules="emptyRules.concat(siteRules)" prefix="https://" label="업데이트 주소"></v-text-field>
           </v-col>
         </v-row>
 
@@ -100,7 +104,7 @@
               <v-icon left>keyboard_arrow_right</v-icon>설명</v-label>
           </v-col>
           <v-col sm="3" class="pb-0">
-            <v-text-field dense v-model="form.PRGM_LSH_CNTE" hint="버전에 대한 설명을 작성해주세요."></v-text-field>
+            <v-text-field dense v-model="form.PRGM_LSH_CNTE" hint="버전에 대한 설명을 작성해주세요." label="버전설명"></v-text-field>
           </v-col>
         </v-row>
 
@@ -128,10 +132,12 @@
               :min="minDate"
               format="YYYYMMDD"
               hide-details
+              label="업데이트 일시"
             ></date-picker>
           </v-col>
           <v-col sm="2" class="pt-4">
-            <vue-timepicker v-model="timeLine" hour-label="시" minute-label="분" placeholder="시간선택" @change="checkHour = false"></vue-timepicker>
+            <label for="selectTime" class="no-display">시간선택</label>
+            <vue-timepicker v-model="timeLine" hour-label="시" minute-label="분" placeholder="시간선택" @change="checkHour = false" id="selectTime"></vue-timepicker>
             <div class="v-text-field__details mt-1" v-if="checkHour">
               <div class="v-messages theme--light error--text" role="alert">
                 <div class="v-messages__wrapper">

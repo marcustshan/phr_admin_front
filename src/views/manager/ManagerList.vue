@@ -23,6 +23,7 @@
       disable-sort
       disable-hover
       class="bordered condensed click-row history-table"
+      caption="관리자 계정관리 목록"
     >
       <template v-slot:item.ADM_NM = {item}>
         <span @click="goDetailPage(item)" class="blue--text pointer text-decoration-underline">

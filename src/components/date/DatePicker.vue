@@ -8,7 +8,8 @@
     min-width="290px"
   >
     <template v-slot:activator="{ on }">
-      <input style="opacity: 0; position: absolute;" /><!-- autocomplete 방지 -->
+      <!-- autocomplete 방지 -->
+<!--      <input style="opacity: 0; position: absolute;" />-->
       <v-text-field
         v-model="inputDate"
         append-icon="zmdi zmdi-calendar-note"

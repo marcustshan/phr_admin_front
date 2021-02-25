@@ -4,11 +4,12 @@
       <v-row>
         <v-col md="12">
           <v-simple-table dense>
+            <caption>등록자 정보</caption>
             <thead class="detailTable">
             <tr>
-              <th class="text-center">등록자</th>
+              <th class="text-center" scope="col">등록자</th>
               <td>{{ user.ADM_ID }}</td>
-              <th class="text-center">등록일시</th>
+              <th class="text-center" scope="col">등록일시</th>
               <td>{{ today }}</td>
             </tr>
             </thead>
@@ -30,7 +31,10 @@
               <v-icon left>keyboard_arrow_right</v-icon>유형</v-label>
           </v-col>
           <v-col sm="3" md="3">
+            <!--suppress XmlInvalidId -->
+            <label for="searchInd" class="no-display">유형선택</label>
             <v-select
+              id="searchInd"
               class="pt-0"
               v-model="form.FAQ_ST_CD"
               :items="indList"
@@ -46,7 +50,7 @@
             <v-label>
               <v-icon left>keyboard_arrow_right</v-icon>앱 게시글 노출</v-label>
           </v-col>
-          <v-col sm="3" md="3">
+          <v-col sm="10">
             <v-radio-group row v-model="form.FAQ_EXP_YN" class="mt-2" hide-details>
               <v-radio label="게시글 노출 안함" value="N" class="pr-2"></v-radio>
               <v-radio label="게시글 노출" value="Y"></v-radio>
@@ -63,6 +67,7 @@
             <v-text-field dense
               v-model="form.FAQ_SJ"
               :rules="emptyRules"
+               label="질문제목"
             ></v-text-field>
           </v-col>
         </v-row>

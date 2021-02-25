@@ -9,19 +9,20 @@
     <v-row>
       <v-col md="12">
         <v-simple-table dense>
+          <caption>마이페이지 정보</caption>
           <thead class="detailTable">
           <tr>
-            <th class="text-center">아이디</th>
+            <th class="text-center" scope="col">아이디</th>
             <td>{{ user.ADM_ID }}</td>
           </tr>
           <tr>
-            <th class="text-center">계정종류</th>
+            <th class="text-center" scope="col">계정종류</th>
             <td>{{ user.ADM_DOB_DT === '0' ? '일반' : '마스터' }} 관리자</td>
           </tr>
           <tr>
-            <th class="text-center">이메일</th>
+            <th class="text-center" scope="col">이메일</th>
             <td class="pt-2">
-              <v-text-field v-model="form.IN_ADM_EML" :rules="emptyRules.concat(emailRegex)" dense></v-text-field>
+              <v-text-field v-model="form.IN_ADM_EML" :rules="emptyRules.concat(emailRegex)" dense label="이메일"></v-text-field>
             </td>
           </tr>
           </thead>

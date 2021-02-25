@@ -3,17 +3,18 @@
     <v-row>
       <v-col sm="12">
         <v-simple-table dense>
+          <caption>관리자 계정 상세정보</caption>
           <thead class="detailTable">
           <tr>
-            <th class="text-center">관리자</th>
+            <th class="text-center" scope="col">관리자</th>
             <td colspan="5">{{ managerInfo.ADM_ID }}({{ managerInfo.ADM_NM }})</td>
           </tr>
           <tr>
-            <th class="text-center">최근로그인</th>
+            <th class="text-center" scope="col">최근로그인</th>
             <td>{{ managerInfo.LAST_LOGIN_DT }}</td>
-            <th class="text-center">최근 로그아웃</th>
+            <th class="text-center" scope="col">최근 로그아웃</th>
             <td>{{ managerInfo.LAST_LOGOUT_DT }}</td>
-            <th class="text-center">IP</th>
+            <th class="text-center" scope="col">IP</th>
             <td>{{ managerInfo.LAST_CONECT_IP }}</td>
           </tr>
           </thead>
@@ -76,6 +77,7 @@
       disable-sort
       disable-hover
       class="bordered condensed click-row history-table"
+      caption="관리자 수행내역 목록"
     >
     </v-data-table>
 

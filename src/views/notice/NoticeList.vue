@@ -4,13 +4,17 @@
       <v-form ref="form" lazy-validation autocomplete="off">
         <v-row dense>
           <v-col cols="1" class="ml-auto">
+            <!--suppress XmlInvalidId -->
+            <label for="searchInd" class="no-display">검색조건</label>
             <v-select
+              id="searchInd"
               v-model="searchParam.type"
               :items="searchInd"
               hide-details
               item-text="codeNm"
               item-value="code"
-            ></v-select>
+            >
+            </v-select>
           </v-col>
           <v-col cols="3" class="ml-2">
               <v-text-field
@@ -18,6 +22,7 @@
                 @keypress.enter="getNoticeList"
                 clearable
                 hide-details
+                label="검색"
               >
                 <template v-slot:append-outer>
                   <v-btn small outlined class="black--text" @click="getNoticeList">
@@ -53,6 +58,7 @@
       disable-sort
       disable-hover
       class="bordered condensed click-row history-table"
+      caption="공지사항 목록"
     >
       <template v-slot:item.modify="{ item }">
         <span class="blue--text pointer" @click="modifyNotice(item)">수정</span>
@@ -121,7 +127,7 @@ export default {
       { text: '삭제', value: 'delete', align: 'center' }
     ],
     noticeList: [],
-    searchInd: [{ code: 'ALL', codeNm: '전체' }, { code: 'NTC_SJ', codeNm: '제목' }, { code: 'ADM_ID', codeNm: '등록자' }],
+    searchInd: [{ code: 'ALL', codeNm: '전체', label: '전체' }, { code: 'NTC_SJ', codeNm: '제목', label: '제목' }, { code: 'ADM_ID', codeNm: '등록자', label: '등록자' }],
     searchParam: {
       type: 'ALL',
       search: null,

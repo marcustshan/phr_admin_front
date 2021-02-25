@@ -3,21 +3,22 @@
     <v-row>
       <v-col sm="12">
         <v-simple-table dense>
+          <caption>사용자 상세정보</caption>
           <thead class="detailTable">
           <tr>
-            <th class="text-center">사용자</th>
+            <th class="text-center" scope="col">사용자</th>
             <td colspan="3">{{ userInfo.USR_ID }}({{ userInfo.USR_NM }})</td>
           </tr>
           <tr>
-            <th class="text-center">성별</th>
+            <th class="text-center" scope="col">성별</th>
             <td>{{ userInfo.USR_GND_CD === 'M' ? '남자' : '여자' }}</td>
-            <th class="text-center">생년월일</th>
+            <th class="text-center" scope="col">생년월일</th>
             <td>{{ userInfo.USR_DOB_DT }}</td>
           </tr>
           <tr>
-            <th class="text-center">가입일시</th>
+            <th class="text-center" scope="col">가입일시</th>
             <td>{{ userInfo.JOIN_DTM }}</td>
-            <th class="text-center">접속일시</th>
+            <th class="text-center" scope="col">접속일시</th>
             <td>{{ userInfo.LSH_LGN_DTM }}</td>
           </tr>
           </thead>
@@ -34,7 +35,10 @@
     <v-form ref="form" lazy-validation autocomplete="off">
       <v-row dense>
         <v-col cols="1" class="ml-auto">
+          <!--suppress XmlInvalidId -->
+          <label for="searchInd" class="no-display">검색조건</label>
           <v-select
+            id="searchInd"
             v-model="searchParam.type"
             :items="searchList"
             item-text="commCdNm"
@@ -46,7 +50,7 @@
           <date-picker
             v-model='searchParam.startDt'
             format="YYYY-MM-DD"
-            label="시작일"
+            :label="'시작일'"
             hide-details
           >
           </date-picker>
@@ -60,7 +64,7 @@
             @refreshFn="clearSearchParam(searchParam)"
             format="YYYY-MM-DD"
             hide-details
-            label="종료일"
+            :label="'종료일'"
           ></date-picker>
         </v-col>
       </v-row>
@@ -80,6 +84,7 @@
       disable-sort
       disable-hover
       class="bordered condensed click-row history-table"
+      caption="사용자 수행내역 목록"
     >
       <template v-slot:item.EXC_TP = {item}>
         {{ item.EXC_TP }} ({{ item.DTL_CD_NM }})

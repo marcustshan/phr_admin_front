@@ -16,7 +16,10 @@
             <v-label><v-icon left>keyboard_arrow_right</v-icon>계정유형</v-label>
           </v-col>
           <v-col md="3">
+            <!--suppress XmlInvalidId -->
+            <label for="selectDobDt" class="no-display">유형선택</label>
             <v-select
+              id="selectDobDt"
               class="pt-0"
               v-model="form.IN_ADM_DOB_DT"
               :items="indList"
@@ -32,7 +35,7 @@
             <v-label><v-icon left>keyboard_arrow_right</v-icon>이름</v-label>
           </v-col>
           <v-col sm="3" class="pb-0">
-            <v-text-field v-model="form.IN_ADM_NM" :rules="emptyRules" dense></v-text-field>
+            <v-text-field v-model="form.IN_ADM_NM" :rules="emptyRules" dense label="이름"></v-text-field>
           </v-col>
         </v-row>
 
@@ -41,7 +44,7 @@
             <v-label><v-icon left>keyboard_arrow_right</v-icon>ID</v-label>
           </v-col>
           <v-col sm="3" class="pb-0">
-            <v-text-field v-model="form.IN_ADM_ID" :rules="emptyRules.concat(idRules)" dense></v-text-field>
+            <v-text-field v-model="form.IN_ADM_ID" :rules="emptyRules.concat(idRules)" dense label="아이디"></v-text-field>
           </v-col>
         </v-row>
 
@@ -51,7 +54,7 @@
               <v-icon left>keyboard_arrow_right</v-icon>이메일</v-label>
           </v-col>
           <v-col sm="3" class="pb-0">
-            <v-text-field v-model="form.IN_ADM_EML" :rules="emptyRules.concat(emailRegex)" dense></v-text-field>
+            <v-text-field v-model="form.IN_ADM_EML" :rules="emptyRules.concat(emailRegex)" dense label="이메일"></v-text-field>
           </v-col>
         </v-row>
       </div>

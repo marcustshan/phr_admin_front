@@ -1,14 +1,15 @@
 <template>
   <div class="content-container">
-    <v-form ref="form" lazy-validation>
+    <v-form ref="form" lazy-validation autocomplete="off">
       <v-row>
         <v-col md="12">
           <v-simple-table dense>
+            <caption>등록자 정보</caption>
             <thead class="detailTable">
             <tr>
-              <th class="text-center">등록자</th>
+              <th class="text-center" scope="col">등록자</th>
               <td>{{ user.ADM_ID }}</td>
-              <th class="text-center">등록일시</th>
+              <th class="text-center" scope="col">등록일시</th>
               <td>{{ today }}</td>
             </tr>
             </thead>
@@ -31,7 +32,10 @@
               <v-icon left>keyboard_arrow_right</v-icon>유형</v-label>
           </v-col>
           <v-col sm="3" md="3">
+            <!--suppress XmlInvalidId -->
+            <label for="searchInd" class="no-display">유형선택</label>
             <v-select
+              id="searchInd"
               class="pt-0"
               v-model="form.NTC_ST_CD"
               :items="indList"
@@ -176,7 +180,8 @@
             <v-btn class="ml-2" color="error" v-if="uploadFile || form.NTC_IMG_URL" @click="deleteImage">삭제</v-btn>
             <br />
             <img v-show="showPreviewImage" class="preview-image" id="previewImage" alt="공지사항 이미지" />
-            <img v-show="!showPreviewImage && form.NTC_IMG_URL" class="uploaded-image" :src="`${downloadHostUrl}/web/GetImage/notice/${form.NTC_IMG_URL}`" :alt="form.NTC_SJ">
+            <img v-show="!showPreviewImage && form.NTC_IMG_URL" class="uploaded-image" :src="`${downloadHostUrl}/web/GetImage/notice/${form.NTC_IMG_URL}`" :alt="form.NTC_SJ ? form.NTC_SJ : '공지사항 이미지'">
+            <label for="noticeImage" class="no-display">첨부파일</label>
             <input id="noticeImage" class="no-display" type="file" accept="image/*" @change="imageChanged" />
           </v-col>
         </v-row>
