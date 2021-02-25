@@ -9,15 +9,20 @@
       :key="`stat_${itemIndex}`"
       class="mx-auto d-inline-block stat-data-item"
       width="390"
-      height="120"
+      height="130"
     >
       <v-list-item three-line>
         <v-list-item-content>
-          <div class="mt-1 mb-4 title">
+          <div class="mt-1 title">
             {{ item.title }}
           </div>
-          <v-list-item-title class="display-1 mt-2 text-right">
-            {{ statData[item.dataKey] | comma }}&nbsp;{{ item.unit }}
+          <v-list-item-title class="display-1 text-right">
+            {{ statData[`${item.dataKey}_ALL`] | comma }}&nbsp;{{ item.unit }}
+          </v-list-item-title>
+          <v-list-item-title class="title text-right">
+            (어제 : {{ statData[`${item.dataKey}_YESTERDAY`] | comma }}&nbsp;{{ item.unit }}
+              &nbsp;/&nbsp;
+              오늘 : {{ statData[`${item.dataKey}_TODAY`] | comma }}&nbsp;{{ item.unit }})
           </v-list-item-title>
         </v-list-item-content>
       </v-list-item>
@@ -32,14 +37,14 @@
       :key="`agree_${itemIndex}`"
       class="mx-auto d-inline-block stat-data-item"
       width="390"
-      height="120"
+      height="130"
     >
       <v-list-item three-line>
         <v-list-item-content>
           <div class="mt-1 mb-4 title">
             {{ item.title }}
           </div>
-          <v-list-item-title class="display-1 mt-2 text-right">
+          <v-list-item-title class="display-1 mt-3 text-right">
             {{ statData[item.dataKey] | comma }}&nbsp;{{ item.unit }}
           </v-list-item-title>
         </v-list-item-content>
@@ -55,15 +60,20 @@
       :key="`share_${itemIndex}`"
       class="mx-auto d-inline-block stat-data-item"
       width="390"
-      height="120"
+      height="130"
     >
       <v-list-item three-line>
         <v-list-item-content>
-          <div class="mt-1 mb-4 title">
+          <div class="mt-1 title">
             {{ item.title }}
           </div>
-          <v-list-item-title class="display-1 mt-2 text-right">
-            {{ statData[item.dataKey] | comma }}&nbsp;{{ item.unit }}
+          <v-list-item-title class="display-1 text-right">
+            {{ statData[`${item.dataKey}_ALL`] | comma }}&nbsp;{{ item.unit }}
+          </v-list-item-title>
+          <v-list-item-title class="title text-right">
+            (어제 : {{ statData[`${item.dataKey}_YESTERDAY`] | comma }}&nbsp;{{ item.unit }}
+              &nbsp;/&nbsp;
+              오늘 : {{ statData[`${item.dataKey}_TODAY`] | comma }}&nbsp;{{ item.unit }})
           </v-list-item-title>
         </v-list-item-content>
       </v-list-item>
