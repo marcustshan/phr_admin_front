@@ -1,6 +1,6 @@
 <template>
   <div class="content-container">
-    <v-form ref="form" lazy-validation>
+    <v-form ref="form" lazy-validation autocomplete="off">
 
       <v-row class="pb-3">
         <v-col md="4" cols="2" class="font-weight-bold">

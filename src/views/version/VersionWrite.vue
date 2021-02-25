@@ -1,6 +1,6 @@
 <template>
   <div class="content-container">
-    <v-form ref="form" lazy-validation>
+    <v-form ref="form" lazy-validation autocomplete="off">
       <v-row>
         <v-col md="12">
           <v-simple-table dense>
@@ -136,6 +136,7 @@
             ></date-picker>
           </v-col>
           <v-col sm="2" class="pt-4">
+            <!--suppress XmlInvalidId -->
             <label for="selectTime" class="no-display">시간선택</label>
             <vue-timepicker v-model="timeLine" hour-label="시" minute-label="분" placeholder="시간선택" @change="checkHour = false" id="selectTime"></vue-timepicker>
             <div class="v-text-field__details mt-1" v-if="checkHour">

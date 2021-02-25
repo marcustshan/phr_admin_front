@@ -8,8 +8,9 @@
     min-width="290px"
   >
     <template v-slot:activator="{ on }">
+      <label for="datePickerInput" class="no-display">날짜선택</label>
       <!-- autocomplete 방지 -->
-<!--      <input style="opacity: 0; position: absolute;" />-->
+      <input style="opacity: 0; position: absolute;" id="datePickerInput" />
       <v-text-field
         v-model="inputDate"
         append-icon="zmdi zmdi-calendar-note"
