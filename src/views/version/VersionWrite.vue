@@ -93,8 +93,8 @@
             <v-label>
               <v-icon left>keyboard_arrow_right</v-icon>업데이트 주소</v-label>
           </v-col>
-          <v-col sm="3" class="pb-0">
-            <v-text-field dense v-model="form.UPD_URL" :rules="emptyRules.concat(siteRules)" prefix="https://" label="업데이트 주소"></v-text-field>
+          <v-col sm="4" class="pb-0">
+            <v-text-field dense v-model="form.UPD_URL" :rules="emptyRules" label="업데이트 주소"></v-text-field>
           </v-col>
         </v-row>
 
@@ -103,7 +103,7 @@
             <v-label>
               <v-icon left>keyboard_arrow_right</v-icon>설명</v-label>
           </v-col>
-          <v-col sm="3" class="pb-0">
+          <v-col sm="4" class="pb-0">
             <v-text-field dense v-model="form.PRGM_LSH_CNTE" hint="버전에 대한 설명을 작성해주세요." label="버전설명"></v-text-field>
           </v-col>
         </v-row>
