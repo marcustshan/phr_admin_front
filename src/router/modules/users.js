@@ -34,7 +34,8 @@ export default {
       meta: {
         requiresAuth: false,
         auth: true,
-        title: '사용자관리 > 상세'
+        title: '사용자관리 > 상세',
+        possibleSameMenuMove: true
       }
     }
   ]

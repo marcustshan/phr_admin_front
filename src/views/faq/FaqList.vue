@@ -105,13 +105,13 @@ export default {
     inForm: _.cloneDeep(IN_FORM),
     searchInd: [{ code: 'ALL', codeNm: '전체' }, { code: 'FAQ_SJ', codeNm: '제목' }, { code: 'ADM_ID', codeNm: '등록자' }],
     headers: [
-      { text: 'No', value: 'ROW_NUM', align: 'center' },
-      { text: '유형', value: 'FAQ_ST_CD', align: 'center' },
+      { text: 'No', value: 'ROW_NUM', align: 'center', width: '60' },
+      { text: '유형', value: 'FAQ_ST_CD', align: 'center', width: '130' },
       { text: '질문 제목', value: 'FAQ_SJ', align: 'center' },
-      { text: '등록자', value: 'ADM_ID', align: 'center' },
-      { text: '등록일시', value: 'FSR_DTM', align: 'center' },
-      { text: '수정', value: 'modify', align: 'center' },
-      { text: '삭제', value: 'delete', align: 'center' }
+      { text: '등록자', value: 'ADM_ID', align: 'center', width: '150' },
+      { text: '등록일시', value: 'FSR_DTM', align: 'center', width: '180' },
+      { text: '수정', value: 'modify', align: 'center', width: '80' },
+      { text: '삭제', value: 'delete', align: 'center', width: '80' }
     ],
     faqList: [],
     searchParam: {

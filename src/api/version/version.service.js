@@ -29,6 +29,12 @@ const service = {
    */
   modifyVersion (params) {
     return soapUtil.query(soapUtil.STYPE.SETQUERY, 'SELECT', 'N', 'PC_PHR_SET_VERS_UPD', params)
+  },
+  /**
+   * 버전관리 > 등록된 버전 코드 존재 여부 조회
+   */
+  checkExistVersion (params) {
+    return soapUtil.query(soapUtil.STYPE.SETQUERY, 'SELECT', 'N', 'PC_PHR_GET_VERS_EXIST', params)
   }
 }
 

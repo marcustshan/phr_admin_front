@@ -34,7 +34,8 @@ export default {
       meta: {
         requiresAuth: false,
         auth: true,
-        title: '마이페이지 상세'
+        title: '마이페이지 상세',
+        possibleSameMenuMove: true
       }
     }
   ]

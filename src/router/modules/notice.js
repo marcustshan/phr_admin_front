@@ -34,7 +34,8 @@ export default {
       meta: {
         requiresAuth: false,
         auth: true,
-        title: '공지사항 > 수정'
+        title: '공지사항 > 수정',
+        possibleSameMenuMove: true
       }
     },
     {
@@ -44,7 +45,8 @@ export default {
       meta: {
         requiresAuth: false,
         auth: true,
-        title: '공지사항 > 등록'
+        title: '공지사항 > 등록',
+        possibleSameMenuMove: true
       }
     }
   ]

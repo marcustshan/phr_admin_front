@@ -119,7 +119,7 @@ export default {
   created () {},
   methods: {
     moveMenu (menu) {
-      if (this.isCurrentMenu(menu)) {
+      if (!this.$route.meta.possibleSameMenuMove && this.isCurrentMenu(menu)) {
         return
       }
       this.$router.push(menu.path)
@@ -134,13 +134,18 @@ export default {
     },
     isCurrentMenu (menu) {
       const fullPath = this.$route.fullPath
+      /*
       if (menu.children && menu.children.length > 0) {
         for (const sub of menu.children) {
           if (sub.path === fullPath) {
             return true
           }
         }
-      } else if (this.$route.fullPath.indexOf(menu.path) > -1) {
+      } else if (fullPath.indexOf(menu.path) > -1) {
+        return true
+      }
+      */
+      if (fullPath.indexOf(menu.path) > -1) {
         return true
       }
       return false

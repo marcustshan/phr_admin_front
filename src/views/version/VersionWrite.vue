@@ -93,7 +93,7 @@
             <v-label>
               <v-icon left>keyboard_arrow_right</v-icon>업데이트 주소</v-label>
           </v-col>
-          <v-col sm="4" class="pb-0">
+          <v-col sm="6" class="pb-0">
             <v-text-field dense v-model="form.UPD_URL" :rules="emptyRules" label="업데이트 주소"></v-text-field>
           </v-col>
         </v-row>
@@ -219,6 +219,7 @@ export default {
     }
   },
   data: () => ({
+    originForm: _.cloneDeep(DEFAULT_FORM),
     form: _.cloneDeep(DEFAULT_FORM),
     inForm: _.cloneDeep(IN_FORM),
     typeList: [{ code: 'Android', codeNm: 'Android' }, { code: 'Ios', codeNm: 'Ios' }], // 유형
@@ -250,6 +251,9 @@ export default {
       versionService.getVersionDetail(param).then((response) => {
         if (response.data && response.data.length > 0) {
           this.form = response.data[0]
+          // 원본 데이터 setting
+          this.originForm = _.cloneDeep(this.form)
+          this.minDate = this.form.UPD_AVL_DTM.split(' ')[0]
           // 업데이트 가능일시 set
           const updDate = this.form.UPD_AVL_DTM
           if (!this.isEmpty(updDate) && updDate.length > 10) {
@@ -262,8 +266,8 @@ export default {
       })
     },
     // 버전관리 저장
-    saveVersionDetail () {
-      this.validForm(this.$refs.form).then(() => {
+    async saveVersionDetail () {
+      this.validForm(this.$refs.form).then(async () => {
         if (!this.isEmpty(this.updAvlDtm)) {
           if (this.isEmpty(this.timeLine.HH) || this.isEmpty(this.timeLine.mm)) {
             this.checkHour = true
@@ -272,17 +276,43 @@ export default {
         } else {
           this.checkHour = false
         }
+
+        /*
+          원본 데이터와 저장하려는 데이터의 유형이나 버전 코드, 배포 모드가 바뀐 경우
+          exist check validation
+        */
+        if (Number(this.originForm.VER_CODE) !== Number(this.form.VER_CODE) ||
+            this.originForm.MOB_TP_CD !== this.form.MOB_TP_CD ||
+            this.originForm.DTB_MODE !== this.form.DTB_MODE) {
+          const versionExistParam = {
+            IN_ADM_SYS_ID: this.user.ADM_SYS_ID,
+            IN_VER_CODE: this.form.VER_CODE,
+            IN_MOB_TP_CD: this.form.MOB_TP_CD,
+            IN_DTB_MODE: this.form.DTB_MODE
+          }
+          const versionExistResponse = await versionService.checkExistVersion(versionExistParam)
+          if (versionExistResponse && versionExistResponse.data && versionExistResponse.data[0].EXIST_YN === 'Y') {
+            this.$dialog.alert('이미 등록된 버전 정보가 있습니다.<br />유형과 버전 코드, 배포 모드를 확인해주세요.')
+            return
+          }
+        }
+
         // 등록, 수정시 param 'IN_' 붙여야함
         this.setParamIn()
-        this.$dialog.confirm((this.isModify ? '등록한 버전을 수정' : (this.form.VER_NM + ' 버전을 등록')) + ' 하시겠습니까?').then(() => {
+        let saveResponse
+        this.$dialog.confirm((this.isModify ? '등록한 버전을 수정' : (this.form.VER_NM + ' 버전을 등록')) + ' 하시겠습니까?').then(async () => {
           if (this.isModify) {
-            versionService.modifyVersion(this.inForm)
+            saveResponse = await versionService.modifyVersion(this.inForm)
           } else {
-            versionService.writeVersion(this.inForm)
+            saveResponse = await versionService.writeVersion(this.inForm)
           }
-          this.$dialog.alert((this.isModify ? '수정' : '저장') + ' 되었습니다.').then(() => {
-            this.$router.push({ path: '/version/list' })
-          })
+          if (saveResponse && saveResponse.data && saveResponse.data[0].ROW_COUNT > 0) {
+            this.$dialog.alert((this.isModify ? '수정' : '저장') + ' 되었습니다.').then(() => {
+              this.$router.push({ path: '/version/list' })
+            })
+          } else {
+            this.$dialog.alert('저장 중 오류가 발생했습니다.')
+          }
         })
       })
     },

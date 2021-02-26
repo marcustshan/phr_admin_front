@@ -34,7 +34,8 @@ export default {
       meta: {
         requiresAuth: false,
         auth: true,
-        title: '버전관리 > 수정'
+        title: '버전관리 > 수정',
+        possibleSameMenuMove: true
       }
     },
     {
@@ -44,7 +45,8 @@ export default {
       meta: {
         requiresAuth: false,
         auth: true,
-        title: '버전관리 > 등록'
+        title: '버전관리 > 등록',
+        possibleSameMenuMove: true
       }
     }
   ]

@@ -117,14 +117,14 @@ export default {
   data: () => ({
     inForm: _.cloneDeep(IN_FORM),
     headers: [
-      { text: 'No', value: 'ROW_NUM', align: 'center' },
+      { text: 'No', value: 'ROW_NUM', align: 'center', width: '60' },
       { text: '제목', value: 'NTC_SJ', align: 'center' },
-      { text: '등록자', value: 'ADM_ID', align: 'center' },
-      { text: '등록일시', value: 'FSR_DTM', align: 'center' },
-      { text: '팝업공지', value: 'PUP_EXP_YN', align: 'center' },
-      { text: '상단공지', value: 'TOP_EXP_YN', align: 'center' },
-      { text: '수정', value: 'modify', align: 'center' },
-      { text: '삭제', value: 'delete', align: 'center' }
+      { text: '등록자', value: 'ADM_ID', align: 'center', width: '150' },
+      { text: '등록일시', value: 'FSR_DTM', align: 'center', width: '180' },
+      { text: '팝업공지', value: 'PUP_EXP_YN', align: 'center', width: '90' },
+      { text: '상단공지', value: 'TOP_EXP_YN', align: 'center', width: '90' },
+      { text: '수정', value: 'modify', align: 'center', width: '80' },
+      { text: '삭제', value: 'delete', align: 'center', width: '80' }
     ],
     noticeList: [],
     searchInd: [{ code: 'ALL', codeNm: '전체', label: '전체' }, { code: 'NTC_SJ', codeNm: '제목', label: '제목' }, { code: 'ADM_ID', codeNm: '등록자', label: '등록자' }],

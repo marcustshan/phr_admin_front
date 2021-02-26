@@ -34,7 +34,8 @@ export default {
       meta: {
         requiresAuth: false,
         auth: true,
-        title: '관리자 계정관리 > 상세'
+        title: '관리자 계정관리 > 상세',
+        possibleSameMenuMove: true
       }
     },
     {
@@ -44,7 +45,8 @@ export default {
       meta: {
         requiresAuth: false,
         auth: true,
-        title: '관리자 계정관리 > 등록'
+        title: '관리자 계정관리 > 등록',
+        possibleSameMenuMove: true
       }
     }
   ]
