@@ -56,6 +56,12 @@ const service = {
    */
   dorYnManage (params) {
     return soapUtil.query(soapUtil.STYPE.SETQUERY, 'SELECT', 'N', 'PC_PHR_SET_ADM_DOR_INIT', params)
+  },
+  /**
+   * 관리자 계정관리 > 관리자 계정 유형 변경
+   */
+  modifyManagerAccountType (params) {
+    return soapUtil.query(soapUtil.STYPE.SETQUERY, 'SELECT', 'N', 'PC_PHR_SET_ADM_ACNT_TYPE', params)
   }
 }
 

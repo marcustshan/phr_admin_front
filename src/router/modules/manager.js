@@ -6,6 +6,8 @@ const ManagerList = () => import('Views/manager/ManagerList')
 const ManagerDetail = () => import('Views/manager/ManagerDetail')
 // 관리자 계정관리 등록
 const ManagerWrite = () => import('Views/manager/ManagerWrite')
+// 관리자 계정관리 수정
+const ManagerModify = () => import('Views/manager/ManagerModify')
 
 export default {
   path: '/manager',
@@ -46,6 +48,17 @@ export default {
         requiresAuth: false,
         auth: true,
         title: '관리자 계정관리 > 등록',
+        possibleSameMenuMove: true
+      }
+    },
+    {
+      path: 'modify',
+      component: ManagerModify,
+      name: 'managerModify',
+      meta: {
+        requiresAuth: false,
+        auth: true,
+        title: '관리자 계정관리 > 계정 수정',
         possibleSameMenuMove: true
       }
     }

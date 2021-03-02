@@ -40,6 +40,9 @@
           해제
         </span>
       </template>
+      <template v-slot:item.modify="{ item }">
+        <span class="blue--text pointer" @click="modifyManager(item)">수정</span>
+      </template>
       <template v-slot:item.delete="{ item }">
         <span class="red--text pointer" @click="confirmAction('DELETE', item)">삭제</span>
       </template>
@@ -80,6 +83,7 @@ export default {
       { text: '이메일', value: 'ADM_EML', align: 'center' },
       { text: '비밀번호 초기화', value: 'ADM_BLK_YN', align: 'center' },
       { text: '장기 미접속', value: 'DOR_YN', align: 'center' },
+      { text: '계정 수정', value: 'modify', align: 'center' },
       { text: '계정 삭제', value: 'delete', align: 'center' }
     ],
     managerList: [],
@@ -109,6 +113,22 @@ export default {
         this.searchParam.page = pageNum
         this.getManagerList()
       }
+    },
+    // 계정 수정 (계정 유형)
+    modifyManager (item) {
+      this.$router.push(
+        {
+          path: '/manager/modify',
+          name: 'managerModify',
+          params: {
+            ADM_SYS_ID: item.ADM_SYS_ID,
+            ADM_NM: item.ADM_NM,
+            ADM_ID: item.ADM_ID,
+            ADM_EML: item.ADM_EML,
+            ADM_DOB_DT: item.ADM_DOB_DT
+          }
+        }
+      )
     },
     // 초기화, 미접속해제, 계정삭제
     confirmAction (type, item) {
