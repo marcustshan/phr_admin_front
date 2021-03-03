@@ -120,7 +120,7 @@ export default {
   methods: {
     moveMenu (menu) {
       if (!this.$route.meta.possibleSameMenuMove && this.isCurrentMenu(menu)) {
-        return
+        this.$router.go(this.$route.currentRoute)
       }
       this.$router.push(menu.path)
     },
